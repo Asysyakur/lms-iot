@@ -18,7 +18,15 @@ import {
 
 const page = usePage();
 
-const openedMeeting = ref<number | null>(1);
+const currentMeetingId = page.url.match(
+  /\/meetings\/(\d+)/
+)?.[1];
+
+const openedMeeting = ref<number | null>(
+  currentMeetingId
+    ? Number(currentMeetingId)
+    : null,
+);
 
 const meetings = [
   {
@@ -185,9 +193,12 @@ const toggleMeeting = (id: number) => {
         <!-- MEETINGS -->
         <div v-for="meeting in meetings" :key="meeting.id" class="space-y-2">
           <!-- HEADER -->
-          <button
+          <Link :href="`/meetings/${meeting.id}`"
             class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition hover:bg-white/10"
-            @click="toggleMeeting(meeting.id)">
+            :class="page.url.startsWith(`/meetings/${meeting.id}`)
+                ? 'bg-white/10'
+                : ''
+              ">
             <div class="flex items-center gap-3">
               <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100/10">
                 <BookOpen class="h-4 w-4 text-slate-200" />
@@ -201,7 +212,7 @@ const toggleMeeting = (id: number) => {
             <ChevronDown v-if="openedMeeting === meeting.id" class="h-4 w-4 text-slate-300" />
 
             <ChevronRight v-else class="h-4 w-4 text-slate-300" />
-          </button>
+          </Link>
 
           <!-- SUB MENU -->
           <div v-if="openedMeeting === meeting.id" class="ml-4 border-l border-white/10 pl-4">

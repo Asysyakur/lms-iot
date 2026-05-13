@@ -151,5 +151,77 @@ Route::get('/assessments/{type}/result', function (string $type) {
     );
 })->name('student.assessment.result');
 
+Route::get('/meetings/{meeting}', function ($meeting) {
+
+    return Inertia::render(
+        'student/meetings/Show',
+        [
+            'meetingId' => $meeting,
+        ]
+    );
+})->name('student.meeting.show');
+
+Route::get('/meetings/{meeting}/material', function ($meeting) {
+
+    return Inertia::render(
+        'student/meetings/material/Show',
+        [
+            'meetingId' => $meeting,
+        ]
+    );
+})->name('student.meeting.materials');
+
+Route::get(
+    '/meetings/{meeting}/quiz',
+    fn($meeting) =>
+    Inertia::render(
+        'student/meetings/quizzes/Start',
+        [
+            'meetingId' => $meeting,
+        ]
+    )
+)->name('student.meeting.quiz');
+
+Route::get(
+    '/meetings/{meeting}/quiz/exam',
+    fn($meeting) =>
+    Inertia::render(
+        'student/meetings/quizzes/Exam',
+        [
+            'meetingId' => $meeting,
+        ]
+    )
+)->name('student.meeting.quiz.exam');
+
+Route::get(
+    '/meetings/{meeting}/quiz/review',
+    fn($meeting) =>
+    Inertia::render(
+        'student/meetings/quizzes/Review',
+        [
+            'meetingId' => $meeting,
+        ]
+    )
+)->name('student.meeting.quiz.review');
+
+Route::get('/meetings/{meeting}/practice', function ($meeting) {
+
+    return Inertia::render(
+        'student/meetings/practices/Show',
+        [
+            'meetingId' => $meeting,
+        ]
+    );
+})->name('student.meeting.practice');
+
+Route::get('/meetings/{meeting}/lkpd', function ($meeting) {
+
+    return Inertia::render(
+        'student/meetings/lkpd/Show',
+        [
+            'meetingId' => $meeting,
+        ]
+    );
+})->name('student.meeting.lkpd');
 
 require __DIR__ . '/settings.php';
