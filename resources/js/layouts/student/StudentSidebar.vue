@@ -168,7 +168,7 @@ const toggleMeeting = (id: number) => {
         </Link>
 
         <!-- PRE TEST -->
-        <Link href="/pre-test"
+        <Link href="/assessment/pretest"
           class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-200 transition hover:bg-white/10">
           <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20">
             <ClipboardCheck class="h-4 w-4 text-amber-300" />
@@ -239,7 +239,7 @@ const toggleMeeting = (id: number) => {
         <div class="my-4 border-t border-white/10" />
 
         <!-- POST TEST -->
-        <Link href="/post-test"
+        <Link href="/assessment/posttest"
           class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-200 transition hover:bg-white/10">
           <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/20">
             <FileText class="h-4 w-4 text-emerald-300" />
