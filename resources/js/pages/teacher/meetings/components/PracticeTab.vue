@@ -1,0 +1,42 @@
+<!-- resources/js/pages/teacher/meetings/components/PracticeTab.vue -->
+
+<script setup lang="ts">
+import {
+  Save,
+} from 'lucide-vue-next';
+</script>
+
+<template>
+  <section
+    class="rounded-3xl bg-white p-6 shadow-sm"
+  >
+    <h2
+      class="text-xl font-bold text-slate-800"
+    >
+      🧪 Pengaturan Praktik
+    </h2>
+
+    <div class="mt-6 space-y-5">
+
+      <textarea
+        rows="8"
+        placeholder="Instruksi praktik..."
+        class="w-full rounded-2xl border border-slate-200 p-4"
+      />
+
+      <input
+        type="text"
+        placeholder="Link MakeCode"
+        class="w-full rounded-2xl border border-slate-200 px-4 py-3"
+      />
+
+      <button
+        class="inline-flex items-center gap-2 rounded-2xl bg-purple-500 px-6 py-3 font-semibold text-white transition hover:bg-purple-600"
+      >
+        <Save class="h-5 w-5" />
+
+        Simpan Praktik
+      </button>
+    </div>
+  </section>
+</template>

@@ -9,7 +9,7 @@ Route::inertia('/', 'Welcome', [
 ])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    Route::inertia('/', 'Dashboard')->name('dashboard');
 });
 
 /*
@@ -223,5 +223,52 @@ Route::get('/meetings/{meeting}/lkpd', function ($meeting) {
         ]
     );
 })->name('student.meeting.lkpd');
+
+/*
+    |--------------------------------------------------------------------------
+    | TEACHER DASHBOARD
+    |--------------------------------------------------------------------------
+    */
+
+Route::get('/teacher/dashboard', function () {
+    return Inertia::render('teacher/dashboard/Index');
+})->name('teacher.dashboard');
+
+Route::get('/teacher/students', function () {
+    return Inertia::render('teacher/students/Index');
+})->name('teacher.students');
+
+Route::get(
+    '/teacher/assessments/{type}',
+    function ($type) {
+
+        return Inertia::render(
+            'teacher/assessments/Index',
+            [
+                'type' => $type,
+            ]
+        );
+    }
+)->name('teacher.assessments');
+
+Route::get('/teacher/meetings', function () {
+
+    return Inertia::render(
+        'teacher/meetings/Show'
+    );
+
+})->name('teacher.meeting.show');
+
+Route::get('/teacher/reports', function () {
+    return Inertia::render('teacher/reports/Index');
+})->name('teacher.reports');
+
+Route::get('/teacher/reports/assessments', function () {
+    return Inertia::render('teacher/reports/PrePostReport');
+})->name('teacher.reports.assessments');
+
+Route::get('/teacher/reports/meetings', function () {
+    return Inertia::render('teacher/reports/MeetingReport');
+})->name('teacher.reports.meetings');
 
 require __DIR__ . '/settings.php';
