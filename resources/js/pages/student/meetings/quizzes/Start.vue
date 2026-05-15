@@ -184,7 +184,7 @@ const duration = 20;
         </div>
 
         <Link
-          :href="`/meetings/${meetingId}/quiz/exam`"
+          :href="`/student/meetings/${meetingId}/quiz/exam`"
           class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-8 py-4 font-semibold text-white transition hover:bg-blue-700"
         >
           🚀 Mulai Kuis

@@ -19,7 +19,7 @@ import {
 const page = usePage();
 
 const currentMeetingId = page.url.match(
-  /\/meetings\/(\d+)/
+  /\/student\/meetings\/(\d+)/
 )?.[1];
 
 const openedMeeting = ref<number | null>(
@@ -137,10 +137,10 @@ const toggleMeeting = (id: number) => {
 
 <template>
   <aside
-    class="sticky top-0 flex h-screen w-72 shrink-0 flex-col overflow-y-auto bg-gradient-to-b from-[#071A3D] to-[#0B2B63] text-white">
+    class="sticky top-0 flex h-screen w-72 shrink-0 flex-col overflow-y-auto bg-linear-to-b from-[#071A3D] to-[#0B2B63] text-white">
     <!-- LOGO -->
     <div class="p-6">
-      <Link href="/dashboard" class="flex items-start gap-4">
+      <Link href="/student/dashboard" class="flex items-start gap-4">
         <div
           class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-500 text-lg font-bold shadow-lg">
           IoT
@@ -162,7 +162,7 @@ const toggleMeeting = (id: number) => {
     <div class="flex-1 px-4 pb-6">
       <nav class="space-y-2">
         <!-- DASHBOARD -->
-        <Link href="/dashboard"
+        <Link href="/student/dashboard"
           class="flex items-center justify-between rounded-xl bg-white/10 px-4 py-3 transition hover:bg-white/15">
           <div class="flex items-center gap-3">
             <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/20">
@@ -176,7 +176,7 @@ const toggleMeeting = (id: number) => {
         </Link>
 
         <!-- PRE TEST -->
-        <Link href="/assessment/pretest"
+        <Link href="/student/assessment/pretest"
           class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-200 transition hover:bg-white/10">
           <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20">
             <ClipboardCheck class="h-4 w-4 text-amber-300" />
@@ -193,9 +193,9 @@ const toggleMeeting = (id: number) => {
         <!-- MEETINGS -->
         <div v-for="meeting in meetings" :key="meeting.id" class="space-y-2">
           <!-- HEADER -->
-          <Link :href="`/meetings/${meeting.id}`"
+          <Link :href="`/student/meetings/${meeting.id}`"
             class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition hover:bg-white/10"
-            :class="page.url.startsWith(`/meetings/${meeting.id}`)
+            :class="page.url.startsWith(`/student/meetings/${meeting.id}`)
                 ? 'bg-white/10'
                 : ''
               ">
@@ -250,7 +250,7 @@ const toggleMeeting = (id: number) => {
         <div class="my-4 border-t border-white/10" />
 
         <!-- POST TEST -->
-        <Link href="/assessment/posttest"
+        <Link href="/student/assessment/posttest"
           class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-200 transition hover:bg-white/10">
           <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/20">
             <FileText class="h-4 w-4 text-emerald-300" />

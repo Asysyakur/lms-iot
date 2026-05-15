@@ -62,7 +62,7 @@ const steps: Step[] = [
     completed: true,
     active: false,
 
-    href: '/meetings/1/material',
+    href: '/student/meetings/1/material',
   },
 
   {
@@ -77,7 +77,7 @@ const steps: Step[] = [
     completed: false,
     active: true,
 
-    href: '/meetings/1/quiz',
+    href: '/student/meetings/1/quiz',
   },
 
   {
@@ -92,7 +92,7 @@ const steps: Step[] = [
     completed: false,
     active: false,
 
-    href: '/meetings/1/practice',
+    href: '/student/meetings/1/practice',
   },
 
   {
@@ -119,7 +119,7 @@ const steps: Step[] = [
       <div class="flex flex-col gap-6 xl:flex-row xl:items-start">
         <!-- IMAGE -->
         <div
-          class="flex h-32 w-full items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-cyan-500 xl:h-36 xl:w-48">
+          class="flex h-32 w-full items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-cyan-500 xl:h-36 xl:w-48">
           <img src="https://cdn-icons-png.flaticon.com/512/2103/2103832.png" class="h-24 w-24 object-contain">
         </div>
 

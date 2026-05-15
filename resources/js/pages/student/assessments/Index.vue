@@ -201,7 +201,7 @@ const posttestRules = [
         </div>
 
         <!-- BUTTON -->
-        <Link :href="`/assessments/${props.assessment.type}/exam`" :class="props.assessment.unlocked
+        <Link :href="`/student/assessments/${props.assessment.type}/exam`" :class="props.assessment.unlocked
             ? isPretest
               ? 'bg-blue-600 hover:bg-blue-700'
               : 'bg-emerald-500 hover:bg-emerald-600'
