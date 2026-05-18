@@ -1,189 +1,243 @@
-<!-- resources/js/pages/student/assessments/Exam.vue -->
-
 <script setup lang="ts">
 import StudentSidebarLayout from '@/layouts/student/StudentSidebarLayout.vue';
-import { Lock } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
+import axios from 'axios';
+import { router } from '@inertiajs/vue3';
 
 defineOptions({
   layout: StudentSidebarLayout,
 });
 
 const props = defineProps<{
-  type: 'pretest' | 'posttest';
-  unlocked: boolean;
+  assessment: any;
+  questions: any[];
+  result: any;
+  savedAnswers: any[];
 }>();
 
-const isPretest =
-  props.type === 'pretest';
+const currentQuestionIndex = ref(0);
 
-const title = isPretest
-  ? 'Pre-test'
-  : 'Posttest';
+const answers = ref<Record<number, string>>({});
 
-const questions = Array.from(
-  { length: 25 },
-  (_, i) => i + 1,
-);
+props.savedAnswers.forEach((item) => {
+  answers.value[item.question_id] =
+    item.answer;
+});
 
-const currentQuestion = 7;
+const currentQuestion = computed(() => {
+  return props.questions?.[
+    currentQuestionIndex.value
+  ];
+});
+
+const totalQuestions =
+  props.questions.length;
+
+const answeredCount = computed(() => {
+  return Object.keys(
+    answers.value
+  ).length;
+});
+
+const progress = computed(() => {
+  return (
+    (answeredCount.value /
+      totalQuestions) *
+    100
+  );
+});
+
+const isFirstQuestion = computed(() => {
+  return currentQuestionIndex.value === 0;
+});
+
+const isLastQuestion = computed(() => {
+  return (
+    currentQuestionIndex.value ===
+    totalQuestions - 1
+  );
+});
+
+const selectAnswer = async (
+  option: string
+) => {
+  answers.value[
+    currentQuestion.value.id
+  ] = option;
+
+  await axios.post(
+    '/student/assessments/answer',
+    {
+      assessment_result_id:
+        props.result.id,
+
+      question_id:
+        currentQuestion.value.id,
+
+      answer: option,
+    }
+  );
+};
+
+const nextQuestion = () => {
+  if (
+    currentQuestionIndex.value <
+    totalQuestions - 1
+  ) {
+    currentQuestionIndex.value++;
+  }
+};
+
+const previousQuestion = () => {
+  if (
+    currentQuestionIndex.value > 0
+  ) {
+    currentQuestionIndex.value--;
+  }
+};
+
+const goToQuestion = (index: number) => {
+  currentQuestionIndex.value = index;
+};
+
+const submitExam = async () => {
+  const response = await axios.post(
+    '/student/assessments/submit',
+    {
+      result_id: props.result.id,
+    }
+  );
+
+  router.visit(
+    `/student/assessments/${props.assessment.type}/result`
+  );
+};
 </script>
 
 <template>
-  <div class="space-y-6">
-    <!-- HEADER -->
-    <section class="rounded-3xl bg-[#173B74] p-5 text-white shadow-lg">
-      <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <span :class="isPretest
-              ? 'bg-blue-100 text-blue-700'
-              : 'bg-emerald-100 text-emerald-700'
-            " class="rounded-full px-3 py-1 text-xs font-semibold">
-            {{ title }}
-          </span>
+  <div v-if="currentQuestion" class="grid gap-6 xl:grid-cols-12">
 
-          <h1 class="mt-3 text-2xl font-bold">
-            📝 {{ title }}
-          </h1>
+    <!-- QUESTION -->
+    <div class="rounded-3xl bg-white p-6 shadow-sm xl:col-span-8">
+      <p class="mb-6 text-sm font-semibold text-blue-600">
+        Soal
+        {{ currentQuestionIndex + 1 }}
+      </p>
 
-          <p class="mt-1 text-sm text-slate-300">
-            Kerjakan dengan teliti dan mandiri
-          </p>
-        </div>
+      <h2 class="text-lg font-semibold text-slate-800">
+        {{ currentQuestion.question }}
+      </h2>
 
-        <!-- TIMER -->
-        <div class="rounded-2xl bg-white p-4 text-center text-slate-800">
-          <p class="text-xs text-slate-500">
-            Sisa Waktu
-          </p>
+      <!-- OPTIONS -->
+      <div class="mt-6 space-y-4">
+        <button v-for="option in [
+          'A',
+          'B',
+          'C',
+          'D',
+        ]" :key="option" @click="selectAnswer(option)"
+          class="w-full rounded-2xl border p-4 text-left text-slate-700 transition" :class="answers[currentQuestion.id] === option
+            ? 'border-blue-600 bg-blue-50 text-blue-700'
+            : 'border-slate-200 hover:border-blue-500 hover:bg-slate-50'
+            ">
+          <div class="flex items-start gap-4">
 
-          <h2 class="mt-1 text-3xl font-bold text-blue-600">
-            35:42
-          </h2>
-        </div>
+            <!-- OPTION BADGE -->
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-sm font-bold" :class="answers[currentQuestion.id] === option
+              ? 'border-blue-600 bg-blue-600 text-white'
+              : 'border-slate-300 text-slate-600'
+              ">
+              {{ option }}
+            </div>
+
+            <!-- OPTION TEXT -->
+            <span class="pt-1 text-sm leading-relaxed">
+              {{
+                currentQuestion[
+                `option_${option.toLowerCase()}`
+                ]
+              }}
+            </span>
+          </div>
+        </button>
       </div>
-    </section>
-    <!-- LOCKED -->
-    <div v-if="!props.unlocked" class="rounded-3xl bg-white p-10 shadow-sm">
-      <div class="flex flex-col items-center justify-center text-center">
-        <div class="flex h-24 w-24 items-center justify-center rounded-full bg-orange-100">
-          <Lock class="h-12 w-12 text-orange-500" />
-        </div>
 
-        <h2 class="mt-6 text-3xl font-bold text-slate-800">
-          {{ title }} Belum Tersedia
-        </h2>
+      <!-- FOOTER -->
+      <div class="mt-10 flex items-center justify-between">
 
-        <p class="mt-3 max-w-xl text-sm leading-relaxed text-slate-500">
-          Kamu belum memenuhi syarat untuk
-          membuka {{ title }}.
-        </p>
+        <!-- PREVIOUS -->
+        <button @click="previousQuestion" :disabled="isFirstQuestion"
+          class="rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200" :class="isFirstQuestion
+              ? 'cursor-not-allowed border border-slate-200 bg-slate-100 text-slate-400'
+              : 'border border-slate-200 bg-white text-slate-700 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600'
+            ">
+          ← Sebelumnya
+        </button>
 
-        <div class="mt-8 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-700">
-          ⚠️ Selesaikan seluruh syarat terlebih
-          dahulu sebelum memulai ujian.
-        </div>
+        <!-- NEXT -->
+        <button @click="nextQuestion" :disabled="isLastQuestion"
+          class="rounded-2xl px-5 py-3 text-sm font-semibold transition-all duration-200" :class="isLastQuestion
+              ? 'cursor-not-allowed bg-blue-300 text-white'
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+            ">
+          Selanjutnya →
+        </button>
+
       </div>
     </div>
 
-    <!-- EXAM -->
-    <div v-else class="grid gap-6 xl:grid-cols-12">
+    <!-- SIDEBAR -->
+    <div class="space-y-6 xl:col-span-4">
+      <!-- PROGRESS -->
+      <div class="rounded-3xl bg-white p-6 shadow-sm">
+        <h2 class="font-bold text-slate-800">
+          Progress
+        </h2>
 
-      <!-- CONTENT -->
-      <div class="grid gap-6 xl:grid-cols-12">
-        <!-- QUESTION -->
-        <div class="rounded-3xl bg-white p-6 shadow-sm xl:col-span-8">
-          <p class="mb-6 text-sm font-semibold text-blue-600">
-            Soal 7
-          </p>
+        <p class="mt-1 text-sm text-slate-500">
+          {{ answeredCount }}
+          dari
+          {{ totalQuestions }}
+          soal dijawab
+        </p>
 
-          <div class="rounded-2xl bg-slate-50 p-5 font-mono text-sm">
-            print("Hello World")
-          </div>
-
-          <h2 class="mt-6 text-lg font-semibold text-slate-800">
-            Apa output dari kode di atas?
-          </h2>
-
-          <!-- OPTIONS -->
-          <div class="mt-6 space-y-4">
-            <button
-              class="w-full rounded-2xl border border-slate-200 p-4 text-left transition hover:border-blue-500 hover:bg-blue-50">
-              A. Hello World
-            </button>
-
-            <button
-              class="w-full rounded-2xl border border-slate-200 p-4 text-left transition hover:border-blue-500 hover:bg-blue-50">
-              B. Syntax Error
-            </button>
-
-            <button
-              class="w-full rounded-2xl border border-slate-200 p-4 text-left transition hover:border-blue-500 hover:bg-blue-50">
-              C. Undefined
-            </button>
-
-            <button
-              class="w-full rounded-2xl border border-slate-200 p-4 text-left transition hover:border-blue-500 hover:bg-blue-50">
-              D. Null
-            </button>
-          </div>
-
-          <!-- FOOTER -->
-          <div class="mt-10 flex items-center justify-between">
-            <button class="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold">
-              ← Soal Sebelumnya
-            </button>
-
-            <button class="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white">
-              Soal Selanjutnya →
-            </button>
-          </div>
-        </div>
-
-        <!-- SIDEBAR -->
-        <div class="space-y-6 xl:col-span-4">
-          <!-- PROGRESS -->
-          <div class="rounded-3xl bg-white p-6 shadow-sm">
-            <h2 class="font-bold text-slate-800">
-              Progress
-            </h2>
-
-            <p class="mt-1 text-sm text-slate-500">
-              7 dari 25 soal dijawab
-            </p>
-
-            <div class="mt-4 h-3 overflow-hidden rounded-full bg-slate-200">
-              <div class="h-full w-[28%] rounded-full bg-emerald-500" />
-            </div>
-          </div>
-
-          <!-- NAVIGATION -->
-          <div class="rounded-3xl bg-white p-6 shadow-sm">
-            <h2 class="mb-5 font-bold text-slate-800">
-              Navigasi Soal
-            </h2>
-
-            <div class="grid grid-cols-5 gap-3">
-              <button v-for="number in questions" :key="number"
-                class="flex h-11 w-11 items-center justify-center rounded-xl border text-sm font-semibold transition"
-                :class="number === currentQuestion
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : number <= 6
-                      ? 'bg-emerald-500 text-white border-emerald-500'
-                      : 'border-slate-200 hover:border-blue-500'
-                  ">
-                {{ number }}
-              </button>
-            </div>
-
-            <!-- FINISH -->
-            <button
-              class="mt-8 w-full rounded-2xl bg-red-50 py-3 font-semibold text-red-600 transition hover:bg-red-100">
-              🚨 Selesai dan Kumpulkan
-            </button>
-          </div>
+        <div class="mt-4 h-3 overflow-hidden rounded-full bg-slate-200">
+          <div class="h-full rounded-full bg-emerald-500" :style="{
+            width:
+              progress + '%',
+          }" />
         </div>
       </div>
-      SEMUA CONTENT EXAM KAMU DI SINI
+
+      <!-- NAVIGATION -->
+      <div class="rounded-3xl bg-white p-6 shadow-sm">
+        <h2 class="mb-5 font-bold text-slate-800">
+          Navigasi Soal
+        </h2>
+
+        <div class="grid grid-cols-5 gap-3">
+          <button v-for="(
+question,
+  index
+            ) in questions" :key="question.id" @click="
+              goToQuestion(index)
+              " class="flex h-11 w-11 items-center justify-center rounded-xl border text-sm font-semibold transition"
+            :class="currentQuestionIndex === index
+              ? 'border-blue-600 bg-blue-600 text-white shadow-sm'
+              : answers[question.id]
+                ? 'border-emerald-500 bg-emerald-500 text-white'
+                : 'border-slate-300 bg-white text-slate-700 hover:border-blue-400 hover:text-blue-600'
+              ">
+            {{ index + 1 }}
+          </button>
+        </div>
+
+        <!-- SUBMIT -->
+        <button @click="submitExam"
+          class="mt-8 w-full rounded-2xl bg-red-50 py-3 font-semibold text-red-600 transition hover:bg-red-100">
+          🚨 Selesai dan Kumpulkan
+        </button>
+      </div>
     </div>
   </div>
 </template>

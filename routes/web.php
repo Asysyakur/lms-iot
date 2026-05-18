@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Student\AssessmentController as StudentAssessmentController;
 use App\Http\Controllers\Teacher\AssessmentController;
 use App\Http\Controllers\Teacher\EvaluationController;
 use App\Http\Controllers\Teacher\LkpdController;
@@ -65,39 +66,8 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware([
     'auth',
-    'role:student',
+    'role:student,teacher,admin'
 ])->prefix('student')->group(function () {
-    $assessmentFor = function (string $type): array {
-        abort_unless(in_array($type, ['pretest', 'posttest']), 404);
-
-        return $type === 'pretest' ? [
-            'type' => 'pretest',
-            'title' => 'Pre-test',
-            'description' => 'Uji pemahaman awal sebelum memulai pembelajaran.',
-            'duration' => 30,
-            'total_questions' => 20,
-            'essay_questions' => 5,
-            'unlocked' => true,
-            'requirements' => [
-                ['title' => 'Sudah login sebagai siswa', 'completed' => true],
-                ['title' => 'Sudah masuk ke kelas', 'completed' => true],
-                ['title' => 'Koneksi internet stabil', 'completed' => true],
-            ],
-        ] : [
-            'type' => 'posttest',
-            'title' => 'Post-test',
-            'description' => 'Uji pemahaman akhir setelah semua materi selesai.',
-            'duration' => 45,
-            'total_questions' => 25,
-            'essay_questions' => 5,
-            'unlocked' => false,
-            'requirements' => [
-                ['title' => 'Pre-test selesai', 'completed' => false],
-                ['title' => 'Seluruh materi dibuka', 'completed' => false],
-                ['title' => 'Nilai latihan memenuhi ambang', 'completed' => false],
-            ],
-        ];
-    };
 
     /*
     |--------------------------------------------------------------------------
@@ -119,35 +89,30 @@ Route::middleware([
     */
 
     Route::get(
-        '/assessment/{type}',
-        fn(string $type) => Inertia::render(
-            'student/assessments/Index',
-            [
-                'assessment' => $assessmentFor($type),
-            ]
-        )
-    )->name('student.assessment');
+        '/assessments/{type}',
+        [StudentAssessmentController::class, 'index']
+    );
 
     Route::get(
         '/assessments/{type}/exam',
-        fn(string $type) => Inertia::render(
-            'student/assessments/Exam',
-            [
-                'type' => $assessmentFor($type)['type'],
-                'unlocked' => $assessmentFor($type)['unlocked'],
-            ]
-        )
-    )->name('student.assessment.exam');
+        [StudentAssessmentController::class, 'exam']
+    );
+
+    Route::post(
+        '/assessments/answer',
+        [StudentAssessmentController::class, 'saveAnswer']
+    );
+
+    Route::post(
+        '/assessments/submit',
+        [StudentAssessmentController::class, 'submit']
+    );
 
     Route::get(
         '/assessments/{type}/result',
-        fn(string $type) => Inertia::render(
-            'student/assessments/Result',
-            [
-                'type' => $assessmentFor($type)['type'],
-            ]
-        )
-    )->name('student.assessment.result');
+        [StudentAssessmentController::class, 'result']
+    );
+
 
     /*
     |--------------------------------------------------------------------------

@@ -8,7 +8,6 @@ import {
   AlertCircle,
   ClipboardCheck,
   ShieldCheck,
-  Lock,
 } from 'lucide-vue-next';
 
 defineOptions({
@@ -33,6 +32,18 @@ interface Assessment {
 
 const props = defineProps<{
   assessment: Assessment;
+
+  latestResult: any;
+
+  submittedCount: number;
+
+  remainingAttempts: number;
+
+  isOpened: boolean;
+
+  canTakeExam: boolean;
+
+  openAt: string;
 }>();
 
 const isPretest =
@@ -66,6 +77,9 @@ const posttestRules = [
   'Guru dapat menutup akses sewaktu-waktu',
   'Hasil posttest mempengaruhi nilai akhir',
 ];
+
+const hasSubmitted =
+  props.submittedCount > 0;
 
 </script>
 
@@ -168,51 +182,125 @@ const posttestRules = [
       ? 'border-blue-200 bg-blue-50'
       : 'border-emerald-200 bg-emerald-50'
       " class="rounded-3xl border p-5 shadow-sm">
-      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
 
         <!-- LEFT -->
         <div class="flex items-center gap-4">
 
-          <div :class="isPretest ? 'bg-blue-600' : 'bg-emerald-500'"
-            class="flex h-12 w-12 items-center justify-center rounded-2xl text-white">
-            <ShieldCheck class="h-6 w-6" />
+          <div :class="hasSubmitted
+            ? 'bg-emerald-500'
+            : isPretest
+              ? 'bg-blue-600'
+              : 'bg-emerald-500'
+            " class="flex h-14 w-14 items-center justify-center rounded-2xl text-white">
+            <ShieldCheck class="h-7 w-7" />
           </div>
 
           <div>
-            <h2 :class="isPretest
+
+            <!-- BELUM SUBMIT -->
+            <template v-if="!hasSubmitted">
+
+              <h2 :class="isPretest
                 ? 'text-blue-700'
                 : 'text-emerald-700'
-              " class="font-bold">
-              Siap mengerjakan
-              {{ props.assessment.title }}?
-            </h2>
+                " class="font-bold">
+                Siap mengerjakan
+                {{ props.assessment.title }}?
+              </h2>
 
-            <p :class="isPretest
+              <p :class="isPretest
                 ? 'text-blue-600'
                 : 'text-emerald-600'
-              " class="text-sm">
-              {{
-                props.assessment.unlocked
-                  ? 'Pastikan koneksi stabil dan kerjakan dengan mandiri'
-                  : 'Masih ada syarat yang harus diselesaikan'
-              }}
-            </p>
+                " class="text-sm">
+                {{
+                  props.canTakeExam
+                    ? 'Pastikan koneksi stabil dan kerjakan dengan mandiri'
+                    : 'Masih ada syarat yang harus diselesaikan'
+                }}
+              </p>
+
+            </template>
+
+            <!-- SUDAH SUBMIT -->
+            <template v-else>
+
+              <h2 class="font-bold text-emerald-700">
+                🎉 Assessment sudah dikerjakan
+              </h2>
+
+              <p class="mt-1 text-sm text-emerald-600">
+                Nilai kamu:
+                <span class="font-bold">
+                  {{ latestResult.score }}
+                </span>
+
+                • Benar:
+                <span class="font-bold">
+                  {{ latestResult.correct_answers }}
+                </span>
+
+                • Salah:
+                <span class="font-bold">
+                  {{ latestResult.wrong_answers }}
+                </span>
+              </p>
+
+            </template>
+
           </div>
         </div>
 
         <!-- BUTTON -->
-        <Link :href="`/student/assessments/${props.assessment.type}/exam`" :class="props.assessment.unlocked
-            ? isPretest
-              ? 'bg-blue-600 hover:bg-blue-700'
-              : 'bg-emerald-500 hover:bg-emerald-600'
-            : 'bg-slate-300 text-slate-600 hover:bg-slate-300'
-          " class="inline-flex items-center justify-center rounded-2xl px-6 py-3 font-semibold text-white transition">
-        {{
-          props.assessment.unlocked
-            ? `🚀 Mulai ${props.assessment.title}`
-            : `🔒 Lihat ${props.assessment.title}`
-        }}
-        </Link>
+        <div class="flex flex-col items-end gap-3">
+
+          <!-- BELUM DIBUKA -->
+          <div v-if="!props.isOpened" class="rounded-2xl bg-amber-100 px-5 py-3 text-sm font-semibold text-amber-700">
+            ⏳ Assessment dibuka pada
+            {{ props.openAt }}
+          </div>
+
+          <!-- BELUM MEMENUHI SYARAT -->
+          <div v-else-if="!props.canTakeExam && !hasSubmitted"
+            class="rounded-2xl bg-red-100 px-5 py-3 text-sm font-semibold text-red-700">
+            🚫 Syarat assessment belum terpenuhi
+          </div>
+
+          <!-- ATTEMPT HABIS -->
+          <template v-else-if="props.remainingAttempts <= 0">
+            <div class="flex items-center gap-4">
+              <div class="rounded-2xl bg-red-100 px-5 py-3 text-sm font-semibold text-red-700">
+                🚫 Kesempatan pengerjaan habis
+              </div>
+
+              <Link :href="`/student/assessments/${props.assessment.type}/result`"
+                class="inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-6 py-3 font-semibold text-white transition hover:bg-emerald-600">
+                📊 Lihat Hasil
+              </Link>
+            </div>
+          </template>
+
+          <!-- BISA KERJAKAN -->
+          <template v-else>
+            <div class="flex items-center gap-4">
+              <div class="text-sm text-slate-500">
+                Kesempatan tersisa:
+                <span class="font-bold">
+                  {{ props.remainingAttempts }}
+                </span>
+              </div>
+
+              <Link :href="`/student/assessments/${props.assessment.type}/exam`" :class="isPretest
+                  ? 'bg-blue-600 hover:bg-blue-700'
+                  : 'bg-emerald-500 hover:bg-emerald-600'
+                " class="inline-flex items-center justify-center rounded-2xl px-6 py-3 font-semibold text-white transition">
+                🚀 Mulai
+                {{ props.assessment.title }}
+              </Link>
+            </div>
+          </template>
+
+        </div>
 
       </div>
     </div>

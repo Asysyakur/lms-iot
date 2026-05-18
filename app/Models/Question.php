@@ -22,4 +22,9 @@ class Question extends Model
     {
         return $this->belongsTo(Assessment::class);
     }
+
+    public function answers()
+    {
+        return $this->hasMany(AssessmentAnswer::class);
+    }
 }
