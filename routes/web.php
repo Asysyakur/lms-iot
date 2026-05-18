@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Teacher\AssessmentController;
+use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Teacher\StudentController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -280,14 +282,34 @@ Route::middleware([
 
     Route::get(
         '/assessments/{type}',
-        fn($type) =>
-        Inertia::render(
-            'teacher/assessments/Index',
-            [
-                'type' => $type,
-            ]
-        )
-    )->name('teacher.assessments');
+        [AssessmentController::class, 'index']
+    );
+
+    Route::post(
+        '/assessments/settings',
+        [AssessmentController::class, 'saveSettings']
+    );
+
+    Route::put(
+        '/assessments/settings',
+        [AssessmentController::class, 'saveSettings']
+    );
+
+    Route::post(
+        '/questions',
+        [QuestionController::class, 'store']
+    );
+
+    Route::put(
+        '/questions/{question}',
+        [QuestionController::class, 'update']
+    );
+
+    Route::delete(
+        '/questions/{question}',
+        [QuestionController::class, 'destroy']
+    );
+
 
     /*
     |--------------------------------------------------------------------------

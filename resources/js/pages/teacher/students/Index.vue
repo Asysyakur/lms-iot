@@ -399,7 +399,7 @@ student, index
 
               <!-- ACTION -->
               <td class="px-5 py-4 text-center">
-                <button :disabled="form.processing" @click="
+                <button @click="
                   removeStudent(
                     student.id,
                   )
