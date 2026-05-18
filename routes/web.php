@@ -1,7 +1,13 @@
 <?php
 
 use App\Http\Controllers\Teacher\AssessmentController;
+use App\Http\Controllers\Teacher\EvaluationController;
+use App\Http\Controllers\Teacher\LkpdController;
+use App\Http\Controllers\Teacher\MaterialController;
+use App\Http\Controllers\Teacher\MeetingController;
+use App\Http\Controllers\Teacher\PracticeController;
 use App\Http\Controllers\Teacher\QuestionController;
+use App\Http\Controllers\Teacher\QuizController;
 use App\Http\Controllers\Teacher\StudentController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -320,9 +326,94 @@ Route::middleware([
     Route::get('/meetings', function () {
 
         return Inertia::render(
-            'teacher/meetings/Show'
+            'teacher/meetings/Index'
         );
     })->name('teacher.meetings');
+
+    Route::resource(
+        'meetings',
+        MeetingController::class
+    );
+
+    Route::post(
+        '/',
+        [MeetingController::class, 'store']
+    );
+
+    Route::put(
+        '/{meeting}',
+        [MeetingController::class, 'update']
+    );
+
+    Route::delete(
+        '/{meeting}',
+        [MeetingController::class, 'destroy']
+    );
+
+    Route::post(
+        '/materials',
+        [MaterialController::class, 'store']
+    );
+
+    Route::post(
+        '/quizzes',
+        [QuizController::class, 'store']
+    );
+
+    Route::put(
+        '/quizzes/{quiz}',
+        [QuizController::class, 'update']
+    );
+
+    Route::delete(
+        '/quizzes/{quiz}',
+        [QuizController::class, 'destroy']
+    );
+
+    Route::post(
+        '/practices',
+        [PracticeController::class, 'store']
+    );
+
+    Route::post(
+        '/lkpds',
+        [LkpdController::class, 'store']
+    );
+
+    Route::post(
+        '/evaluations',
+        [EvaluationController::class, 'store']
+    );
+
+    Route::patch(
+        '/meetings/{meeting}/toggle',
+        [MeetingController::class, 'toggle']
+    );
+
+    Route::patch(
+        '/materials/{material}/toggle',
+        [MaterialController::class, 'toggle']
+    );
+
+    Route::patch(
+        '/quizzes/toggle-by-meeting',
+        [QuizController::class, 'toggleByMeeting']
+    );
+
+    Route::patch(
+        '/practices/{practice}/toggle',
+        [PracticeController::class, 'toggle']
+    );
+
+    Route::patch(
+        '/lkpds/{lkpd}/toggle',
+        [LkpdController::class, 'toggle']
+    );
+
+    Route::patch(
+        '/evaluations/{evaluation}/toggle',
+        [EvaluationController::class, 'toggle']
+    );
 
     /*
     |--------------------------------------------------------------------------
