@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Teacher\StudentController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -13,7 +15,6 @@ use Inertia\Inertia;
 Route::get('/', function () {
 
     return Inertia::render('Welcome');
-
 })->name('home');
 
 /*
@@ -45,7 +46,6 @@ Route::middleware(['auth'])->group(function () {
         return redirect()
             ->route('student.dashboard');
     });
-
 });
 
 /*
@@ -101,7 +101,6 @@ Route::middleware([
         return Inertia::render(
             'student/dashboard/Index'
         );
-
     })->name('student.dashboard');
 
     /*
@@ -223,7 +222,6 @@ Route::middleware([
             ]
         )
     )->name('student.meeting.lkpd');
-
 });
 
 /*
@@ -248,7 +246,6 @@ Route::middleware([
         return Inertia::render(
             'teacher/dashboard/Index'
         );
-
     })->name('teacher.dashboard');
 
     /*
@@ -260,11 +257,21 @@ Route::middleware([
     Route::get('/students', function () {
 
         return Inertia::render(
-            'teacher/students/Index'
+            'teacher/students/Index',
+            [
+                'students' => User::where(
+                    'role',
+                    'student'
+                )->latest()->get(),
+            ]
         );
-
     })->name('teacher.students');
 
+    Route::post('/students', [StudentController::class, 'store'])
+        ->name('teacher.students.store');
+
+    Route::delete('/students/{user}', [StudentController::class, 'destroy'])
+        ->name('teacher.students.destroy');
     /*
     |--------------------------------------------------------------------------
     | ASSESSMENTS
@@ -293,7 +300,6 @@ Route::middleware([
         return Inertia::render(
             'teacher/meetings/Show'
         );
-
     })->name('teacher.meetings');
 
     /*
@@ -307,7 +313,6 @@ Route::middleware([
         return Inertia::render(
             'teacher/reports/Index'
         );
-
     })->name('teacher.reports');
 
     Route::get(
@@ -317,7 +322,6 @@ Route::middleware([
             return Inertia::render(
                 'teacher/reports/PrePostReport'
             );
-
         }
     )->name('teacher.reports.assessments');
 
@@ -328,10 +332,8 @@ Route::middleware([
             return Inertia::render(
                 'teacher/reports/MeetingReport'
             );
-
         }
     )->name('teacher.reports.meetings');
-
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
