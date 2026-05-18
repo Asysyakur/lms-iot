@@ -8,6 +8,7 @@ use App\Http\Controllers\Teacher\MeetingController;
 use App\Http\Controllers\Teacher\PracticeController;
 use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Teacher\QuizController;
+use App\Http\Controllers\Teacher\ReportController;
 use App\Http\Controllers\Teacher\StudentController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -429,24 +430,14 @@ Route::middleware([
     })->name('teacher.reports');
 
     Route::get(
-        '/reports/assessments',
-        function () {
-
-            return Inertia::render(
-                'teacher/reports/PrePostReport'
-            );
-        }
-    )->name('teacher.reports.assessments');
+        '/reports/meetings',
+        [ReportController::class, 'meetings']
+    )->name('teacher.reports.meetings');
 
     Route::get(
-        '/reports/meetings',
-        function () {
-
-            return Inertia::render(
-                'teacher/reports/MeetingReport'
-            );
-        }
-    )->name('teacher.reports.meetings');
+        '/reports/assessments',
+        [ReportController::class, 'assessments']
+    )->name('teacher.reports.assessments');
 });
 
 require __DIR__ . '/settings.php';

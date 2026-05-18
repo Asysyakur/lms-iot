@@ -3,6 +3,10 @@
 <script setup lang="ts">
 import TeacherSidebarLayout from '@/layouts/teacher/TeacherSidebarLayout.vue';
 
+const props = defineProps<{
+  meetings: any[];
+}>();
+
 defineOptions({
   layout: TeacherSidebarLayout,
 });

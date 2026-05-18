@@ -3,140 +3,80 @@
 <script setup lang="ts">
 import TeacherSidebarLayout from '@/layouts/teacher/TeacherSidebarLayout.vue';
 
+const props = defineProps<{
+  students: any[];
+}>();
+
 defineOptions({
   layout: TeacherSidebarLayout,
 });
 
-const students = [
-  {
-    name: 'Andi Pratama',
-    pretest: 70,
-    posttest: 88,
-  },
-
-  {
-    name: 'Budi Santoso',
-    pretest: 72,
-    posttest: 84,
-  },
-
-  {
-    name: 'Citra Rahma',
-    pretest: 65,
-    posttest: 80,
-  },
-
-  {
-    name: 'Dina Kusuma',
-    pretest: 86,
-    posttest: 92,
-  },
-];
 </script>
 
 <template>
   <div class="space-y-6">
 
     <!-- HEADER -->
-    <section
-      class="rounded-3xl bg-gradient-to-r from-blue-600 to-cyan-600 p-6 text-white shadow-lg"
-    >
-      <div
-        class="flex items-center justify-between"
-      >
+    <section class="rounded-3xl bg-gradient-to-r from-blue-600 to-cyan-600 p-6 text-white shadow-lg">
+      <div class="flex items-center justify-between">
         <div>
-          <h1
-            class="text-2xl font-bold"
-          >
+          <h1 class="text-2xl font-bold">
             📄 Hasil Pre-test &
             Post-test
           </h1>
 
-          <p
-            class="mt-2 text-blue-100"
-          >
+          <p class="mt-2 text-blue-100">
             Tabel informasi nilai
             pre-test dan post-test
             siswa.
           </p>
         </div>
 
-        <button
-          class="rounded-2xl bg-white px-5 py-3 font-semibold text-blue-700 transition hover:bg-slate-100"
-        >
+        <button class="rounded-2xl bg-white px-5 py-3 font-semibold text-blue-700 transition hover:bg-slate-100">
           ⬇ Download Excel
         </button>
       </div>
     </section>
 
     <!-- TABLE -->
-    <section
-      class="overflow-hidden rounded-3xl bg-white shadow-sm"
-    >
+    <section class="overflow-hidden rounded-3xl bg-white shadow-sm">
       <div class="overflow-x-auto">
-        <table
-          class="min-w-full"
-        >
-          <thead
-            class="bg-slate-900 text-white"
-          >
+        <table class="min-w-full">
+          <thead class="bg-slate-900 text-white">
             <tr>
-              <th
-                class="px-5 py-4 text-left text-sm"
-              >
+              <th class="px-5 py-4 text-left text-sm">
                 No
               </th>
 
-              <th
-                class="px-5 py-4 text-left text-sm"
-              >
+              <th class="px-5 py-4 text-left text-sm">
                 Nama Siswa
               </th>
 
-              <th
-                class="px-5 py-4 text-left text-sm"
-              >
+              <th class="px-5 py-4 text-left text-sm">
                 Nilai Pre-test
               </th>
 
-              <th
-                class="px-5 py-4 text-left text-sm"
-              >
+              <th class="px-5 py-4 text-left text-sm">
                 Nilai Post-test
               </th>
             </tr>
           </thead>
 
           <tbody>
-            <tr
-              v-for="(
-                student,
-                index
-              ) in students"
-              :key="index"
-              class="border-b border-slate-100"
-            >
-              <td
-                class="px-5 py-4 text-sm text-slate-600"
-              >
-                {{ index + 1 }}
+            <tr v-for="student in students" :key="student.id" class="border-b border-slate-100">
+              <td class="px-5 py-4 text-sm text-slate-600">
+                {{ students.indexOf(student) + 1 }}
               </td>
 
-              <td
-                class="px-5 py-4 font-semibold text-slate-700"
-              >
+              <td class="px-5 py-4 font-semibold text-slate-700">
                 {{ student.name }}
               </td>
 
-              <td
-                class="px-5 py-4 text-slate-600"
-              >
+              <td class="px-5 py-4 text-slate-600">
                 {{ student.pretest }}
               </td>
 
-              <td
-                class="px-5 py-4 font-bold text-emerald-600"
-              >
+              <td class="px-5 py-4 font-bold text-emerald-600">
                 {{ student.posttest }}
               </td>
             </tr>
