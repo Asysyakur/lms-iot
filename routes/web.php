@@ -11,6 +11,7 @@ use App\Http\Controllers\Student\MeetingMaterialController;
 use App\Http\Controllers\Teacher\PracticeController;
 use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Teacher\QuizController;
+use App\Http\Controllers\Student\QuizController as StudentQuizController;
 use App\Http\Controllers\Teacher\ReportController;
 use App\Http\Controllers\Teacher\StudentController;
 use App\Models\User;
@@ -139,36 +140,18 @@ Route::middleware([
 
     Route::get(
         '/meetings/{meeting}/quiz',
-        fn($meeting) =>
-        Inertia::render(
-            'student/meetings/quizzes/Start',
-            [
-                'meetingId' => $meeting,
-            ]
-        )
+        [StudentQuizController::class, 'exam']
     )->name('student.meeting.quiz');
 
-    Route::get(
-        '/meetings/{meeting}/quiz/exam',
-        fn($meeting) =>
-        Inertia::render(
-            'student/meetings/quizzes/Exam',
-            [
-                'meetingId' => $meeting,
-            ]
-        )
-    )->name('student.meeting.quiz.exam');
+    Route::post(
+        '/meetings/{meeting}/quiz/submit',
+        [StudentQuizController::class, 'submit']
+    )->name('student.meeting.quiz.submit');
 
     Route::get(
-        '/meetings/{meeting}/quiz/review',
-        fn($meeting) =>
-        Inertia::render(
-            'student/meetings/quizzes/Review',
-            [
-                'meetingId' => $meeting,
-            ]
-        )
-    )->name('student.meeting.quiz.Review');
+        '/meetings/{meeting}/quiz/review/{attempt}',
+        [StudentQuizController::class, 'review']
+    )->name('student.meeting.quiz.review');
 
     Route::get(
         '/meetings/{meeting}/practice',
