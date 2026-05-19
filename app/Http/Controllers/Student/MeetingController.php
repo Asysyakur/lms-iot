@@ -13,21 +13,26 @@ class MeetingController extends Controller
     public function show(Meeting $meeting)
     {
         $steps = [
+
             [
                 'id' => 1,
-
                 'title' => 'Materi',
-
-                'description' =>
-                'Pelajari materi tentang konsep dasar IoT dan pengenalan Micro:bit.',
-
+                'description' => 'Pelajari materi...',
                 'icon' => 'BookOpen',
 
-                'unlocked' => true,
+                'active' => (
+                    $meeting->is_active
+                    &&
+                    $meeting->material?->is_active
+                ),
+
+                'unlocked' => (
+                    $meeting->is_active
+                    &&
+                    $meeting->material?->is_active
+                ),
 
                 'completed' => false,
-
-                'active' => true,
 
                 'href' =>
                 "/student/meetings/{$meeting->id}/material",
@@ -35,19 +40,32 @@ class MeetingController extends Controller
 
             [
                 'id' => 2,
-
                 'title' => 'Kuis',
-
-                'description' =>
-                'Kerjakan kuis untuk menguji pemahaman.',
-
+                'description' => 'Kerjakan kuis...',
                 'icon' => 'ClipboardCheck',
 
-                'unlocked' => false,
+                'active' => (
+                    $meeting->is_active
+                    &&
+                    $meeting->quizzes()
+                    ->where('is_active', true)
+                    ->exists()
+                ),
+
+                'unlocked' => (
+                    $meeting->is_active
+                    &&
+                    $meeting->quizzes()
+                    ->where('is_active', true)
+                    ->exists()
+                    &&
+                    $meeting->materialProgress()
+                    ->where('user_id', auth()->id())
+                    ->where('reflection_completed', true)
+                    ->exists()
+                ),
 
                 'completed' => false,
-
-                'active' => false,
 
                 'href' =>
                 "/student/meetings/{$meeting->id}/quiz",
@@ -55,19 +73,23 @@ class MeetingController extends Controller
 
             [
                 'id' => 3,
-
                 'title' => 'Praktik Mandiri',
-
-                'description' =>
-                'Lakukan praktik Micro:bit.',
-
+                'description' => 'Lakukan praktik...',
                 'icon' => 'Code2',
 
-                'unlocked' => false,
+                'active' => (
+                    $meeting->is_active
+                    &&
+                    $meeting->practice?->is_active
+                ),
+
+                'unlocked' => (
+                    $meeting->is_active
+                    &&
+                    $meeting->practice?->is_active
+                ),
 
                 'completed' => false,
-
-                'active' => false,
 
                 'href' =>
                 "/student/meetings/{$meeting->id}/practice",
@@ -75,21 +97,46 @@ class MeetingController extends Controller
 
             [
                 'id' => 4,
-
                 'title' => 'LKPD',
-
-                'description' =>
-                'Lembar kerja peserta didik.',
-
+                'description' => 'Kerjakan LKPD...',
                 'icon' => 'FileSpreadsheet',
+
+                'teacher_only' => true,
+
+                'active' => (
+                    $meeting->is_active
+                    &&
+                    $meeting->lkpd?->is_active
+                ),
 
                 'unlocked' => false,
 
                 'completed' => false,
 
-                'active' => false,
+                'href' =>
+                "/student/meetings/{$meeting->id}/lkpd",
+            ],
+            
+            [
+                'id' => 5,
+                'title' => 'Evaluasi',
+                'description' => 'Kerjakan evaluasi...',
+                'icon' => 'ClipboardList',
 
                 'teacher_only' => true,
+
+                'active' => (
+                    $meeting->is_active
+                    &&
+                    $meeting->evaluation?->is_active
+                ),
+
+                'unlocked' => false,
+
+                'completed' => false,
+
+                'href' =>
+                "/student/meetings/{$meeting->id}/evaluation",
             ],
         ];
 

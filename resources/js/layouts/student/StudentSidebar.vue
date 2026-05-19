@@ -12,6 +12,7 @@ import {
   FileText,
   FlaskConical,
   FileSpreadsheet,
+  ClipboardList,
   Lock,
   LogOut,
 } from 'lucide-vue-next';

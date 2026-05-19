@@ -12,6 +12,7 @@ import {
   FileSpreadsheet,
   ChevronLeft,
   ChevronRight,
+  ClipboardList,
   Wifi,
 } from 'lucide-vue-next';
 
@@ -46,6 +47,7 @@ const iconMap = {
   ClipboardCheck,
   Code2,
   FileSpreadsheet,
+  ClipboardList,
 };
 
 </script>

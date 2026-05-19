@@ -52,7 +52,12 @@ class HandleInertiaRequests extends Middleware
             [
 
                 'sidebarMeetings' =>
-                Meeting::with('material')
+                Meeting::with([
+                    'material',
+                    'quizzes',
+                    'practice',
+                    'lkpd',
+                ])
                     ->orderBy('id')
                     ->get()
                     ->map(function ($meeting) {
@@ -65,6 +70,9 @@ class HandleInertiaRequests extends Middleware
 
                             'menus' => [
 
+                                /**
+                                 * MATERI
+                                 */
                                 [
                                     'title' => 'Materi',
 
@@ -73,11 +81,16 @@ class HandleInertiaRequests extends Middleware
 
                                     'icon' => 'BookOpen',
 
-                                    'unlocked' =>
-                                    $meeting->material?->is_active
-                                        ?? false,
+                                    'unlocked' => (
+                                        $meeting->is_active
+                                        &&
+                                        $meeting->material?->is_active
+                                    ),
                                 ],
 
+                                /**
+                                 * KUIS
+                                 */
                                 [
                                     'title' => 'Kuis',
 
@@ -88,7 +101,16 @@ class HandleInertiaRequests extends Middleware
                                     'ClipboardCheck',
 
                                     'unlocked' => (
+                                        $meeting->is_active
+                                        &&
                                         $meeting->material?->is_active
+                                        &&
+                                        $meeting->quizzes()
+                                        ->where(
+                                            'is_active',
+                                            true
+                                        )
+                                        ->exists()
                                         &&
                                         $meeting->materialProgress()
                                         ->where(
@@ -103,6 +125,9 @@ class HandleInertiaRequests extends Middleware
                                     ),
                                 ],
 
+                                /**
+                                 * PRAKTIK
+                                 */
                                 [
                                     'title' => 'Praktik',
 
@@ -112,9 +137,16 @@ class HandleInertiaRequests extends Middleware
                                     'icon' =>
                                     'FlaskConical',
 
-                                    'unlocked' => false,
+                                    'unlocked' => (
+                                        $meeting->is_active
+                                        &&
+                                        $meeting->practice?->is_active
+                                    ),
                                 ],
 
+                                /**
+                                 * LKPD
+                                 */
                                 [
                                     'title' => 'LKPD',
 
@@ -124,7 +156,29 @@ class HandleInertiaRequests extends Middleware
                                     'icon' =>
                                     'FileSpreadsheet',
 
-                                    'unlocked' => false,
+                                    'unlocked' => (
+                                        $meeting->is_active
+                                        &&
+                                        $meeting->lkpd?->is_active
+                                    ),
+                                ],
+                                /**
+                                 * EVALUASI
+                                 */
+                                [
+                                    'title' => 'Evaluasi',
+
+                                    'href' =>
+                                    "/student/meetings/{$meeting->id}/evaluation",
+
+                                    'icon' =>
+                                    'ClipboardList',
+
+                                    'unlocked' => (
+                                        $meeting->is_active
+                                        &&
+                                        $meeting->evaluation?->is_active
+                                    ),
                                 ],
                             ],
                         ];
