@@ -6,6 +6,8 @@ use App\Http\Controllers\Teacher\EvaluationController;
 use App\Http\Controllers\Teacher\LkpdController;
 use App\Http\Controllers\Teacher\MaterialController;
 use App\Http\Controllers\Teacher\MeetingController;
+use App\Http\Controllers\Student\MeetingController as StudentMeetingController;
+use App\Http\Controllers\Student\MeetingMaterialController;
 use App\Http\Controllers\Teacher\PracticeController;
 use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Teacher\QuizController;
@@ -122,25 +124,18 @@ Route::middleware([
 
     Route::get(
         '/meetings/{meeting}',
-        fn($meeting) =>
-        Inertia::render(
-            'student/meetings/Show',
-            [
-                'meetingId' => $meeting,
-            ]
-        )
+        [StudentMeetingController::class, 'show']
     )->name('student.meeting.show');
 
     Route::get(
         '/meetings/{meeting}/material',
-        fn($meeting) =>
-        Inertia::render(
-            'student/meetings/material/Show',
-            [
-                'meetingId' => $meeting,
-            ]
-        )
+        [MeetingMaterialController::class, 'show']
     )->name('student.meeting.materials');
+
+    Route::post(
+        '/meetings/{meeting}/material/progress',
+        [MeetingMaterialController::class, 'saveProgress']
+    )->name('student.material.progress');
 
     Route::get(
         '/meetings/{meeting}/quiz',

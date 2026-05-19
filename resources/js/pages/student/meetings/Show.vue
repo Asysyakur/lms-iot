@@ -1,10 +1,6 @@
 <!-- resources/js/pages/student/meetings/Show.vue -->
 
 <script setup lang="ts">
-
-const props = defineProps<{
-  meetingId: string;
-}>();
 import StudentSidebarLayout from '@/layouts/student/StudentSidebarLayout.vue';
 
 import {
@@ -35,81 +31,23 @@ interface Step {
   teacher_only?: boolean;
 }
 
-const meeting = {
-  id: 1,
-  title: 'Pertemuan 1',
-  subtitle: 'Pengenalan IoT & Micro:bit dengan Python',
+const props = defineProps<{
+  meeting: any;
 
-  description:
-    'Pada pertemuan ini, kamu akan mengenal konsep dasar IoT, perangkat Micro:bit, dan cara memprogram menggunakan Python.',
+  steps: Step[];
+}>();
 
-  opened: true,
+const meeting = props.meeting;
 
-  opened_at: '20 Mei 2025 08:00',
-  closed_at: '27 Mei 2025 23:59',
+const steps = props.steps;
+
+const iconMap = {
+  BookOpen,
+  ClipboardCheck,
+  Code2,
+  FileSpreadsheet,
 };
 
-const steps: Step[] = [
-  {
-    id: 1,
-    title: 'Materi',
-    description:
-      'Pelajari materi tentang konsep dasar IoT dan pengenalan Micro:bit.',
-
-    icon: BookOpen,
-
-    unlocked: true,
-    completed: true,
-    active: false,
-
-    href: '/student/meetings/1/material',
-  },
-
-  {
-    id: 2,
-    title: 'Kuis',
-    description:
-      'Kerjakan kuis untuk menguji pemahaman tentang materi.',
-
-    icon: ClipboardCheck,
-
-    unlocked: true,
-    completed: false,
-    active: true,
-
-    href: '/student/meetings/1/quiz',
-  },
-
-  {
-    id: 3,
-    title: 'Praktik Mandiri',
-    description:
-      'Lakukan praktik pemrograman Micro:bit dengan Python.',
-
-    icon: Code2,
-
-    unlocked: false,
-    completed: false,
-    active: false,
-
-    href: '/student/meetings/1/practice',
-  },
-
-  {
-    id: 4,
-    title: 'LKPD (Hanya Guru)',
-    description:
-      'Lembar Kerja Peserta Didik. Hanya dapat dibuka oleh guru.',
-
-    icon: FileSpreadsheet,
-
-    unlocked: false,
-    completed: false,
-    active: false,
-
-    teacher_only: true,
-  },
-];
 </script>
 
 <template>
@@ -182,12 +120,11 @@ const steps: Step[] = [
                 <div class="flex flex-col items-center">
                   <!-- CIRCLE -->
                   <div :class="step.completed
-                      ? 'bg-emerald-500 text-white'
-                      : step.active
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-slate-200 text-slate-500'
-                    "
-                    class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold">
+                    ? 'bg-emerald-500 text-white'
+                    : step.active
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-slate-200 text-slate-500'
+                    " class="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold">
                     <CheckCircle2 v-if="step.completed" class="h-4 w-4" />
 
                     <span v-else>
@@ -229,10 +166,10 @@ const steps: Step[] = [
           <div class="flex items-start gap-4">
             <!-- NUMBER -->
             <div :class="step.completed
-                ? 'bg-emerald-500 text-white'
-                : step.active
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-200 text-slate-500'
+              ? 'bg-emerald-500 text-white'
+              : step.active
+                ? 'bg-blue-600 text-white'
+                : 'bg-slate-200 text-slate-500'
               " class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold">
               {{ step.id }}
             </div>
@@ -241,7 +178,7 @@ const steps: Step[] = [
             <div>
               <div class="flex flex-wrap items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100">
-                  <component :is="step.icon" class="h-5 w-5 text-slate-600" />
+                  <component :is="iconMap[step.icon]" class="h-5 w-5 text-slate-600" />
                 </div>
 
                 <div>

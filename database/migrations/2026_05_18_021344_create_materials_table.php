@@ -28,7 +28,7 @@ return new class extends Migration
 
             $table->text('trigger_question')->nullable();
 
-            $table->text('reflection_question')->nullable();
+            $table->json('reflection_question')->nullable();
 
             $table->boolean('is_active')->default(false);
 

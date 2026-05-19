@@ -1,6 +1,6 @@
 ```vue
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 
 import {
@@ -18,6 +18,11 @@ import {
 
 const page = usePage();
 
+const meetings =
+computed(() =>
+    page.props.sidebarMeetings ?? []
+  );
+  
 const currentMeetingId = page.url.match(
   /\/student\/meetings\/(\d+)/
 )?.[1];
@@ -27,107 +32,6 @@ const openedMeeting = ref<number | null>(
     ? Number(currentMeetingId)
     : null,
 );
-
-const meetings = [
-  {
-    id: 1,
-    title: 'Pertemuan 1',
-    open: true,
-
-    menus: [
-      {
-        title: 'Materi',
-        href: '/meetings/1/material',
-        icon: BookOpen,
-        unlocked: true,
-      },
-      {
-        title: 'Kuis',
-        href: '/meetings/1/quiz',
-        icon: ClipboardCheck,
-        unlocked: false,
-      },
-      {
-        title: 'Praktik',
-        href: '/meetings/1/practice',
-        icon: FlaskConical,
-        unlocked: false,
-      },
-      {
-        title: 'LKPD',
-        href: '/meetings/1/lkpd',
-        icon: FileSpreadsheet,
-        unlocked: false,
-      },
-    ],
-  },
-
-  {
-    id: 2,
-    title: 'Pertemuan 2',
-    open: false,
-
-    menus: [
-      {
-        title: 'Materi',
-        href: '#',
-        icon: BookOpen,
-        unlocked: false,
-      },
-      {
-        title: 'Kuis',
-        href: '#',
-        icon: ClipboardCheck,
-        unlocked: false,
-      },
-      {
-        title: 'Praktik',
-        href: '#',
-        icon: FlaskConical,
-        unlocked: false,
-      },
-      {
-        title: 'LKPD',
-        href: '#',
-        icon: FileSpreadsheet,
-        unlocked: false,
-      },
-    ],
-  },
-
-  {
-    id: 3,
-    title: 'Pertemuan 3',
-    open: false,
-
-    menus: [
-      {
-        title: 'Materi',
-        href: '#',
-        icon: BookOpen,
-        unlocked: false,
-      },
-      {
-        title: 'Kuis',
-        href: '#',
-        icon: ClipboardCheck,
-        unlocked: false,
-      },
-      {
-        title: 'Praktik',
-        href: '#',
-        icon: FlaskConical,
-        unlocked: false,
-      },
-      {
-        title: 'LKPD',
-        href: '#',
-        icon: FileSpreadsheet,
-        unlocked: false,
-      },
-    ],
-  },
-];
 
 const toggleMeeting = (id: number) => {
   openedMeeting.value =

@@ -66,7 +66,7 @@ const calculateTotal = (
   <div class="space-y-6">
 
     <!-- HEADER -->
-    <section class="rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-600 p-6 text-white shadow-lg">
+    <section class="rounded-3xl bg-linear-to-r from-emerald-600 to-teal-600 p-6 text-white shadow-lg">
       <div class="flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold">
@@ -90,7 +90,7 @@ const calculateTotal = (
     <section class="overflow-hidden rounded-3xl bg-white shadow-sm">
       <div class="overflow-x-auto">
 
-        <table class="w-full min-w-[1100px] text-sm">
+        <table class="w-full min-w-275 text-sm">
 
           <thead class="bg-slate-900 text-white">
             <tr>
@@ -158,7 +158,7 @@ const calculateTotal = (
                 {{ student.name }}
               </td>
 
-              <td class="px-3 py-4 min-w-[180px] text-slate-600">
+              <td class="px-3 py-4 min-w-45 text-slate-600">
                 {{ student.pemantik }}
               </td>
 
@@ -171,7 +171,7 @@ const calculateTotal = (
                 {{ student.accessTime }}
               </td>
 
-              <td class="px-3 py-4 min-w-[180px] text-slate-600">
+              <td class="px-3 py-4 min-w-45 text-slate-600">
                 {{ student.reflection }}
               </td>
 
@@ -199,7 +199,7 @@ const calculateTotal = (
                 </button>
               </td>
 
-              <td class="px-3 py-4 min-w-[180px] text-slate-600">
+              <td class="px-3 py-4 min-w-45 text-slate-600">
                 {{ student.evaluation }}
               </td>
 

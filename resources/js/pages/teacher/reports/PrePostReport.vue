@@ -17,7 +17,7 @@ defineOptions({
   <div class="space-y-6">
 
     <!-- HEADER -->
-    <section class="rounded-3xl bg-gradient-to-r from-blue-600 to-cyan-600 p-6 text-white shadow-lg">
+    <section class="rounded-3xl bg-linear-to-r from-blue-600 to-cyan-600 p-6 text-white shadow-lg">
       <div class="flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold">

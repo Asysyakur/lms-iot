@@ -38,7 +38,7 @@ const handleEdit = (question: any) => {
 <template>
   <div class="space-y-8">
     <!-- HEADER -->
-    <section :class="colorClass" class="relative overflow-hidden rounded-3xl bg-gradient-to-r p-8 text-white shadow-xl">
+    <section :class="colorClass" class="relative overflow-hidden rounded-3xl bg-linear-to-r p-8 text-white shadow-xl">
       <div class="absolute right-0 top-0 h-52 w-52 rounded-full bg-white/10" />
 
       <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">

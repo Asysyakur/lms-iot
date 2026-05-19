@@ -38,4 +38,11 @@ class Meeting extends Model
     {
         return $this->hasOne(Evaluation::class);
     }
+
+    public function materialProgress()
+    {
+        return $this->hasMany(
+            \App\Models\MaterialProgress::class
+        );
+    }
 }

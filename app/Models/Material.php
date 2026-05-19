@@ -17,6 +17,10 @@ class Material extends Model
         'is_active',
     ];
 
+    protected $casts = [
+        'reflection_question' => 'array',
+    ];
+
     public function meeting()
     {
         return $this->belongsTo(Meeting::class);

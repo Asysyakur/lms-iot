@@ -25,7 +25,7 @@ const form = useForm({
     props.meeting?.material?.trigger_question ?? '',
 
   reflection_question:
-    props.meeting?.material?.reflection_question ?? '',
+    props.meeting?.material?.reflection_question ?? [''],
 
   pdf_file: null,
 });
@@ -61,7 +61,7 @@ watch(
       props.meeting?.material?.trigger_question ?? '';
 
     form.reflection_question =
-      props.meeting?.material?.reflection_question ?? '';
+      props.meeting?.material?.reflection_question ?? [''];
 
     form.pdf_file = null;
   },
@@ -101,9 +101,15 @@ const submit = async () => {
       form.trigger_question ?? '',
     );
 
-    formData.append(
-      'reflection_question',
-      form.reflection_question ?? '',
+    form.reflection_question.forEach(
+      (question, index) => {
+
+        formData.append(
+          `reflection_question[${index}]`,
+          question
+        );
+
+      }
     );
 
     if (form.pdf_file) {
@@ -112,6 +118,7 @@ const submit = async () => {
         'pdf_file',
         form.pdf_file,
       );
+
     }
 
     const response =
@@ -146,7 +153,9 @@ const submit = async () => {
       showConfirmButton: false,
       timer: 2500,
     });
+
   }
+
 };
 
 const toggleMaterial =
@@ -270,12 +279,33 @@ const toggleMaterial =
 
       <!-- REFLEKSI -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
-          Pertanyaan Refleksi
-        </label>
+        <div class="mb-3 flex items-center justify-between">
+          <label class="block text-sm font-semibold text-slate-700">
+            Pertanyaan Refleksi
+          </label>
 
-        <textarea v-model="form.reflection_question" rows="4" placeholder="Masukkan pertanyaan refleksi..."
-          class="w-full rounded-2xl border border-slate-200 p-4 outline-none transition focus:border-blue-500" />
+          <button type="button" @click="form.reflection_question.push('')"
+            class="rounded-xl bg-blue-100 px-3 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-200">
+            + Tambah Pertanyaan
+          </button>
+        </div>
+
+        <div v-for="(question, index) in form.reflection_question" :key="index" class="mb-4">
+          <div class="mb-2 flex items-center justify-between">
+            <span class="text-sm font-semibold text-slate-600">
+              Pertanyaan {{ index + 1 }}
+            </span>
+
+            <button v-if="form.reflection_question.length > 1" type="button"
+              @click="form.reflection_question.splice(index, 1)"
+              class="text-sm font-semibold text-red-500 hover:text-red-700">
+              Hapus
+            </button>
+          </div>
+
+          <textarea v-model="form.reflection_question[index]" rows="3" placeholder="Masukkan pertanyaan refleksi..."
+            class="w-full rounded-2xl border border-slate-200 p-4 outline-none transition focus:border-blue-500" />
+        </div>
       </div>
 
       <!-- BUTTON -->

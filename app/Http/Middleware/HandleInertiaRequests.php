@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\Meeting;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -33,15 +34,102 @@ class HandleInertiaRequests extends Middleware
      *
      * @return array<string, mixed>
      */
+    // public function share(Request $request): array
+    // {
+    //     return [
+    //         ...parent::share($request),
+    //         'name' => config('app.name'),
+    //         'auth' => [
+    //             'user' => $request->user(),
+    //         ],
+    //         'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+    //     ];
+    // }
     public function share(Request $request): array
     {
-        return [
-            ...parent::share($request),
-            'name' => config('app.name'),
-            'auth' => [
-                'user' => $request->user(),
-            ],
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-        ];
+        return array_merge(
+            parent::share($request),
+            [
+
+                'sidebarMeetings' =>
+                Meeting::with('material')
+                    ->orderBy('id')
+                    ->get()
+                    ->map(function ($meeting) {
+
+                        return [
+
+                            'id' => $meeting->id,
+
+                            'title' => $meeting->title,
+
+                            'menus' => [
+
+                                [
+                                    'title' => 'Materi',
+
+                                    'href' =>
+                                    "/student/meetings/{$meeting->id}/material",
+
+                                    'icon' => 'BookOpen',
+
+                                    'unlocked' =>
+                                    $meeting->material?->is_active
+                                        ?? false,
+                                ],
+
+                                [
+                                    'title' => 'Kuis',
+
+                                    'href' =>
+                                    "/student/meetings/{$meeting->id}/quiz",
+
+                                    'icon' =>
+                                    'ClipboardCheck',
+
+                                    'unlocked' => (
+                                        $meeting->material?->is_active
+                                        &&
+                                        $meeting->materialProgress()
+                                        ->where(
+                                            'user_id',
+                                            auth()->id()
+                                        )
+                                        ->where(
+                                            'reflection_completed',
+                                            true
+                                        )
+                                        ->exists()
+                                    ),
+                                ],
+
+                                [
+                                    'title' => 'Praktik',
+
+                                    'href' =>
+                                    "/student/meetings/{$meeting->id}/practice",
+
+                                    'icon' =>
+                                    'FlaskConical',
+
+                                    'unlocked' => false,
+                                ],
+
+                                [
+                                    'title' => 'LKPD',
+
+                                    'href' =>
+                                    "/student/meetings/{$meeting->id}/lkpd",
+
+                                    'icon' =>
+                                    'FileSpreadsheet',
+
+                                    'unlocked' => false,
+                                ],
+                            ],
+                        ];
+                    }),
+            ]
+        );
     }
 }

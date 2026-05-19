@@ -77,7 +77,7 @@ const menus = [
         <Link v-for="menu in menus" :key="menu.id" :href="menu.href"
           class="group rounded-3xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg">
           <div :class="menu.color"
-            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br text-lg font-bold text-white">
+            class="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br text-lg font-bold text-white">
             {{ menu.icon }}
           </div>
 

@@ -134,7 +134,7 @@ const removeStudent = async (id: number) => {
   <div class="space-y-8">
     <!-- HEADER -->
     <section
-      class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#173B74] via-[#114084] to-emerald-500 p-8 text-white shadow-xl">
+      class="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 p-8 text-white shadow-xl">
       <div class="absolute right-0 top-0 h-56 w-56 rounded-full bg-white/10" />
 
       <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">

@@ -64,12 +64,12 @@ const menus = [
   <div class="min-h-screen bg-slate-100">
     <!-- SIDEBAR -->
     <aside
-      class="fixed top-0 left-0 z-40 flex h-screen w-72 flex-col overflow-y-auto bg-gradient-to-b from-[#071A3D] to-[#0B2B63] text-white">
+      class="fixed top-0 left-0 z-40 flex h-screen w-72 flex-col overflow-y-auto bg-linear-to-b from-[#071A3D] to-[#0B2B63] text-white">
       <!-- LOGO -->
       <div class="border-b border-white/10 p-6">
         <div class="flex items-start gap-4">
           <div
-            class="flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-400 to-teal-500 text-3xl shadow-lg">
+            class="flex h-16 w-16 items-center justify-center rounded-3xl bg-linear-to-br from-emerald-400 to-teal-500 text-3xl shadow-lg">
             👨‍🏫
           </div>
 
@@ -94,7 +94,7 @@ const menus = [
         <nav class="space-y-3">
           <Link v-for="menu in menus" :key="menu.title" :href="menu.href"
             class="group flex items-center gap-4 rounded-2xl px-4 py-4 transition" :class="page.url.startsWith(menu.href)
-                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+                ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
                 : 'text-slate-300 hover:bg-white/10 hover:text-white'
               ">
             <div class="flex h-11 w-11 items-center justify-center rounded-xl" :class="page.url.startsWith(menu.href)
