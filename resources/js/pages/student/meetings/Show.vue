@@ -91,28 +91,6 @@ const iconMap = {
               </p>
             </div>
 
-            <!-- STATUS -->
-            <div class="rounded-2xl bg-slate-50 p-4">
-              <div class="space-y-3 text-sm">
-                <div class="flex items-center gap-2 text-slate-600">
-                  <Wifi class="h-4 w-4 text-emerald-500" />
-
-                  <span>
-                    Dibuka:
-                    {{ meeting.opened_at }}
-                  </span>
-                </div>
-
-                <div class="flex items-center gap-2 text-slate-600">
-                  <Lock class="h-4 w-4 text-orange-500" />
-
-                  <span>
-                    Batas:
-                    {{ meeting.closed_at }}
-                  </span>
-                </div>
-              </div>
-            </div>
           </div>
 
           <!-- PROGRESS -->
@@ -249,9 +227,6 @@ const iconMap = {
         Kamu harus menyelesaikan
         tahapan sebelumnya sebelum
         membuka tahap berikutnya.
-        LKPD hanya dapat dibuka oleh
-        guru meskipun seluruh tahapan
-        sudah selesai.
       </div>
 
       <!-- FOOTER -->

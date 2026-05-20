@@ -86,6 +86,11 @@ class HandleInertiaRequests extends Middleware
                                         &&
                                         $meeting->material?->is_active
                                     ),
+
+                                    'completed' => $meeting
+                                        ->hasCompletedMaterial(
+                                            auth()->id()
+                                        ),
                                 ],
 
                                 /**
@@ -103,8 +108,6 @@ class HandleInertiaRequests extends Middleware
                                     'unlocked' => (
                                         $meeting->is_active
                                         &&
-                                        $meeting->material?->is_active
-                                        &&
                                         $meeting->quizzes()
                                         ->where(
                                             'is_active',
@@ -112,17 +115,16 @@ class HandleInertiaRequests extends Middleware
                                         )
                                         ->exists()
                                         &&
-                                        $meeting->materialProgress()
-                                        ->where(
-                                            'user_id',
+                                        $meeting
+                                        ->hasCompletedMaterial(
                                             auth()->id()
                                         )
-                                        ->where(
-                                            'reflection_completed',
-                                            true
-                                        )
-                                        ->exists()
                                     ),
+
+                                    'completed' => $meeting
+                                        ->hasCompletedQuiz(
+                                            auth()->id()
+                                        ),
                                 ],
 
                                 /**
@@ -141,7 +143,17 @@ class HandleInertiaRequests extends Middleware
                                         $meeting->is_active
                                         &&
                                         $meeting->practice?->is_active
+                                        &&
+                                        $meeting
+                                        ->hasCompletedQuiz(
+                                            auth()->id()
+                                        )
                                     ),
+
+                                    'completed' => $meeting
+                                        ->hasCompletedPractice(
+                                            auth()->id()
+                                        ),
                                 ],
 
                                 /**
@@ -160,8 +172,19 @@ class HandleInertiaRequests extends Middleware
                                         $meeting->is_active
                                         &&
                                         $meeting->lkpd?->is_active
+                                        &&
+                                        $meeting
+                                        ->hasCompletedPractice(
+                                            auth()->id()
+                                        )
                                     ),
+
+                                    'completed' => $meeting
+                                        ->hasCompletedLkpd(
+                                            auth()->id()
+                                        ),
                                 ],
+
                                 /**
                                  * EVALUASI
                                  */
@@ -178,7 +201,17 @@ class HandleInertiaRequests extends Middleware
                                         $meeting->is_active
                                         &&
                                         $meeting->evaluation?->is_active
+                                        &&
+                                        $meeting
+                                        ->hasCompletedLkpd(
+                                            auth()->id()
+                                        )
                                     ),
+
+                                    'completed' => $meeting
+                                        ->hasCompletedEvaluation(
+                                            auth()->id()
+                                        ),
                                 ],
                             ],
                         ];

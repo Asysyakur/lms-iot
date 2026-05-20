@@ -3,21 +3,61 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-
 use App\Models\Meeting;
-
 use Inertia\Inertia;
 
 class MeetingController extends Controller
 {
     public function show(Meeting $meeting)
     {
+        $userId = auth()->id();
+
+        $materialCompleted =
+            $meeting->hasCompletedMaterial(
+                $userId
+            );
+
+        $quizCompleted =
+            $meeting->hasCompletedQuiz(
+                $userId
+            );
+
+        $practiceCompleted =
+            $meeting->hasCompletedPractice(
+                $userId
+            );
+
+        $lkpdCompleted =
+            $meeting->hasCompletedLkpd(
+                $userId
+            );
+
+        $evaluationCompleted =
+            $meeting->hasCompletedEvaluation(
+                $userId
+            );
+
+        $quizAvailable =
+            $meeting->quizzes()
+            ->where('is_active', true)
+            ->exists();
+
         $steps = [
+
+            /*
+            |--------------------------------------------------------------------------
+            | MATERI
+            |--------------------------------------------------------------------------
+            */
 
             [
                 'id' => 1,
+
                 'title' => 'Materi',
-                'description' => 'Pelajari materi...',
+
+                'description' =>
+                'Pelajari materi...',
+
                 'icon' => 'BookOpen',
 
                 'active' => (
@@ -32,49 +72,66 @@ class MeetingController extends Controller
                     $meeting->material?->is_active
                 ),
 
-                'completed' => false,
+                'completed' =>
+                $materialCompleted,
 
                 'href' =>
                 "/student/meetings/{$meeting->id}/material",
             ],
 
+            /*
+            |--------------------------------------------------------------------------
+            | KUIS
+            |--------------------------------------------------------------------------
+            */
+
             [
                 'id' => 2,
+
                 'title' => 'Kuis',
-                'description' => 'Kerjakan kuis...',
-                'icon' => 'ClipboardCheck',
+
+                'description' =>
+                'Kerjakan kuis...',
+
+                'icon' =>
+                'ClipboardCheck',
 
                 'active' => (
                     $meeting->is_active
                     &&
-                    $meeting->quizzes()
-                    ->where('is_active', true)
-                    ->exists()
+                    $quizAvailable
                 ),
 
                 'unlocked' => (
                     $meeting->is_active
                     &&
-                    $meeting->quizzes()
-                    ->where('is_active', true)
-                    ->exists()
+                    $meeting->practice?->is_active
                     &&
-                    $meeting->materialProgress()
-                    ->where('user_id', auth()->id())
-                    ->where('reflection_completed', true)
-                    ->exists()
+                    $quizCompleted
                 ),
 
-                'completed' => false,
+                'completed' =>
+                $quizCompleted,
 
                 'href' =>
                 "/student/meetings/{$meeting->id}/quiz",
             ],
 
+            /*
+            |--------------------------------------------------------------------------
+            | PRAKTIK
+            |--------------------------------------------------------------------------
+            */
+
             [
                 'id' => 3,
-                'title' => 'Praktik Mandiri',
-                'description' => 'Lakukan praktik...',
+
+                'title' =>
+                'Praktik Mandiri',
+
+                'description' =>
+                'Lakukan praktik...',
+
                 'icon' => 'Code2',
 
                 'active' => (
@@ -87,21 +144,33 @@ class MeetingController extends Controller
                     $meeting->is_active
                     &&
                     $meeting->practice?->is_active
+                    &&
+                    $materialCompleted
                 ),
 
-                'completed' => false,
+                'completed' =>
+                $practiceCompleted,
 
                 'href' =>
                 "/student/meetings/{$meeting->id}/practice",
             ],
 
+            /*
+            |--------------------------------------------------------------------------
+            | LKPD
+            |--------------------------------------------------------------------------
+            */
+
             [
                 'id' => 4,
-                'title' => 'LKPD',
-                'description' => 'Kerjakan LKPD...',
-                'icon' => 'FileSpreadsheet',
 
-                'teacher_only' => true,
+                'title' => 'LKPD',
+
+                'description' =>
+                'Kerjakan LKPD...',
+
+                'icon' =>
+                'FileSpreadsheet',
 
                 'active' => (
                     $meeting->is_active
@@ -109,21 +178,38 @@ class MeetingController extends Controller
                     $meeting->lkpd?->is_active
                 ),
 
-                'unlocked' => false,
+                'unlocked' => (
+                    $meeting->is_active
+                    &&
+                    $meeting->lkpd?->is_active
+                    &&
+                    $practiceCompleted
+                ),
 
-                'completed' => false,
+                'completed' =>
+                $lkpdCompleted,
 
                 'href' =>
                 "/student/meetings/{$meeting->id}/lkpd",
             ],
-            
+
+            /*
+            |--------------------------------------------------------------------------
+            | EVALUASI
+            |--------------------------------------------------------------------------
+            */
+
             [
                 'id' => 5,
-                'title' => 'Evaluasi',
-                'description' => 'Kerjakan evaluasi...',
-                'icon' => 'ClipboardList',
 
-                'teacher_only' => true,
+                'title' =>
+                'Evaluasi',
+
+                'description' =>
+                'Kerjakan evaluasi...',
+
+                'icon' =>
+                'ClipboardList',
 
                 'active' => (
                     $meeting->is_active
@@ -131,9 +217,16 @@ class MeetingController extends Controller
                     $meeting->evaluation?->is_active
                 ),
 
-                'unlocked' => false,
+                'unlocked' => (
+                    $meeting->is_active
+                    &&
+                    $meeting->evaluation?->is_active
+                    &&
+                    $lkpdCompleted
+                ),
 
-                'completed' => false,
+                'completed' =>
+                $evaluationCompleted,
 
                 'href' =>
                 "/student/meetings/{$meeting->id}/evaluation",
@@ -143,14 +236,20 @@ class MeetingController extends Controller
         return Inertia::render(
             'student/meetings/Show',
             [
+
                 'meeting' => [
-                    'id' => $meeting->id,
 
-                    'title' => $meeting->title,
+                    'id' =>
+                    $meeting->id,
 
-                    'subtitle' => $meeting->subtitle,
+                    'title' =>
+                    $meeting->title,
 
-                    'description' => $meeting->description,
+                    'subtitle' =>
+                    $meeting->subtitle,
+
+                    'description' =>
+                    $meeting->description,
 
                     'opened' =>
                     $meeting->opened_at &&

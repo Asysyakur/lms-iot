@@ -20,10 +20,18 @@ import {
 const page = usePage();
 
 const meetings =
-computed(() =>
+  computed(() =>
     page.props.sidebarMeetings ?? []
   );
-  
+
+const iconMap = {
+  BookOpen,
+  ClipboardCheck,
+  FlaskConical,
+  FileSpreadsheet,
+  ClipboardList,
+};
+
 const currentMeetingId = page.url.match(
   /\/student\/meetings\/(\d+)/
 )?.[1];
@@ -101,8 +109,8 @@ const toggleMeeting = (id: number) => {
           <Link :href="`/student/meetings/${meeting.id}`"
             class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition hover:bg-white/10"
             :class="page.url.startsWith(`/student/meetings/${meeting.id}`)
-                ? 'bg-white/10'
-                : ''
+              ? 'bg-white/10'
+              : ''
               ">
             <div class="flex items-center gap-3">
               <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100/10">
@@ -127,12 +135,19 @@ const toggleMeeting = (id: number) => {
                 <Link v-if="menu.unlocked" :href="menu.href"
                   class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10">
                   <div class="flex h-7 w-7 items-center justify-center rounded-md bg-white/10">
-                    <component :is="menu.icon" class="h-3.5 w-3.5" />
+                    <component :is="iconMap[menu.icon]" class="h-3.5 w-3.5" />
                   </div>
 
-                  <span>
-                    {{ menu.title }}
-                  </span>
+                  <div class="flex w-full items-center justify-between">
+                    <span>
+                      {{ menu.title }}
+                    </span>
+
+                    <span v-if="menu.completed"
+                      class="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
+                      ✓
+                    </span>
+                  </div>
                 </Link>
 
                 <!-- LOCKED -->
