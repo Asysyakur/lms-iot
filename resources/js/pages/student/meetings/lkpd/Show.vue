@@ -495,7 +495,7 @@ const submitLkpd = async () => {
         ← Kembali ke Praktik
       </button>
 
-      <a v-if="evalOpened && props.submission?.file_path" :href="`/student/meetings/${props.meeting.id}/lkpd`"
+      <a v-if="evalOpened && props.submission?.file_path" :href="`/student/meetings/${props.meeting.id}/evaluation`"
         class="rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700">
         🚀 Lanjut ke Evaluation
       </a>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Student\AssessmentController as StudentAssessmentController;
 use App\Http\Controllers\Teacher\AssessmentController;
 use App\Http\Controllers\Teacher\EvaluationController;
+use App\Http\Controllers\Student\EvaluationController as StudentEvaluationController;
 use App\Http\Controllers\Teacher\LkpdController;
 use App\Http\Controllers\Student\LkpdController as StudentLkpdController;
 use App\Http\Controllers\Teacher\MaterialController;
@@ -173,6 +174,16 @@ Route::middleware([
     Route::post(
         '/meetings/{meeting}/lkpd/submit',
         [StudentLkpdController::class, 'submit']
+    );
+
+    Route::get(
+        '/meetings/{meeting}/evaluation',
+        [StudentEvaluationController::class, 'show']
+    );
+
+    Route::post(
+        '/meetings/{meeting}/evaluation/submit',
+        [StudentEvaluationController::class, 'submit']
     );
 });
 
