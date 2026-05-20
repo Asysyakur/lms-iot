@@ -9,6 +9,7 @@ use App\Http\Controllers\Teacher\MeetingController;
 use App\Http\Controllers\Student\MeetingController as StudentMeetingController;
 use App\Http\Controllers\Student\MeetingMaterialController;
 use App\Http\Controllers\Teacher\PracticeController;
+use App\Http\Controllers\Student\PracticeController as StudentPracticeController;
 use App\Http\Controllers\Teacher\QuestionController;
 use App\Http\Controllers\Teacher\QuizController;
 use App\Http\Controllers\Student\QuizController as StudentQuizController;
@@ -155,14 +156,13 @@ Route::middleware([
 
     Route::get(
         '/meetings/{meeting}/practice',
-        fn($meeting) =>
-        Inertia::render(
-            'student/meetings/practices/Show',
-            [
-                'meetingId' => $meeting,
-            ]
-        )
-    )->name('student.meeting.practice');
+        [StudentPracticeController::class, 'show']
+    );
+
+    Route::post(
+        '/meetings/{meeting}/practice/submit',
+        [StudentPracticeController::class, 'submit']
+    );
 
     Route::get(
         '/meetings/{meeting}/lkpd',

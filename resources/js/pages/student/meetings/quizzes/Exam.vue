@@ -155,11 +155,11 @@ const submitQuiz =
       <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
-            Pertemuan 1
+            Pertemuan {{ props.meeting.meeting_number }} : {{ props.meeting.title }}
           </span>
 
           <h1 class="mt-3 text-2xl font-bold">
-            🧠 Kuis
+            🧠 Kuis {{ props.meeting.title || 'Kuis Belum Tersedia' }}
           </h1>
         </div>
       </div>
