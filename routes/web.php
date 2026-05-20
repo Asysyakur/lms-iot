@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Student\AssessmentController as StudentAssessmentController;
 use App\Http\Controllers\Teacher\AssessmentController;
+use App\Http\Controllers\Teacher\DashboardController;
+use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Teacher\EvaluationController;
 use App\Http\Controllers\Student\EvaluationController as StudentEvaluationController;
 use App\Http\Controllers\Teacher\LkpdController;
@@ -81,13 +83,10 @@ Route::middleware([
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/dashboard', function () {
-
-        return Inertia::render(
-            'student/dashboard/Index'
-        );
-    })->name('student.dashboard');
-
+    Route::get('/dashboard', [
+        StudentDashboardController::class,
+        'index',
+    ])->name('student.dashboard');
     /*
     |--------------------------------------------------------------------------
     | ASSESSMENTS
@@ -204,12 +203,10 @@ Route::middleware([
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/dashboard', function () {
-
-        return Inertia::render(
-            'teacher/dashboard/Index'
-        );
-    })->name('teacher.dashboard');
+    Route::get('/dashboard', [
+        DashboardController::class,
+        'index',
+    ])->name('teacher.dashboard');
 
     /*
     |--------------------------------------------------------------------------
