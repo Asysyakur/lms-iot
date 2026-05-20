@@ -32,9 +32,10 @@ defineOptions({
           </p>
         </div>
 
-        <button class="rounded-2xl bg-white px-5 py-3 font-semibold text-blue-700 transition hover:bg-slate-100">
+        <a href="/teacher/reports/assessments/export"
+          class="rounded-2xl bg-white px-5 py-3 font-semibold text-blue-700 transition hover:bg-slate-100">
           ⬇ Download Excel
-        </button>
+        </a>
       </div>
     </section>
 
@@ -89,16 +90,16 @@ defineOptions({
               </td>
               <td class="px-5 py-4">
                 <span class="rounded-full px-3 py-1 text-xs font-semibold" :class="student.pretest_status === 'Selesai'
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-slate-100 text-slate-500'
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : 'bg-slate-100 text-slate-500'
                   ">
                   {{ student.pretest_status }}
                 </span>
               </td>
               <td class="px-5 py-4">
                 <span class="rounded-full px-3 py-1 text-xs font-semibold" :class="student.posttest_status === 'Selesai'
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-slate-100 text-slate-500'
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : 'bg-slate-100 text-slate-500'
                   ">
                   {{ student.posttest_status }}
                 </span>

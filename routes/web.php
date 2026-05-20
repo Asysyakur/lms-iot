@@ -406,6 +406,21 @@ Route::middleware([
     );
 
     Route::get(
+        '/reports/export',
+        [ReportController::class, 'export']
+    )->name('teacher.reports.export');
+
+    Route::get(
+        '/reports/assessments/export',
+        [ReportController::class, 'exportAssessment']
+    );
+
+    Route::get(
+        '/reports/meetings/{meeting}/export',
+        [ReportController::class, 'exportMeetingDetail']
+    );
+
+    Route::get(
         '/reports/assessments',
         [ReportController::class, 'assessments']
     )->name('teacher.reports.assessments');

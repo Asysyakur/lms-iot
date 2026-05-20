@@ -195,9 +195,10 @@ const formatAnswer =
             }}
           </button>
 
-          <button class="rounded-2xl bg-white px-5 py-3 font-semibold text-emerald-700 transition hover:bg-slate-100">
+          <a :href="`/teacher/reports/meetings/${meeting.id}/export`"
+            class="rounded-2xl bg-white px-5 py-3 font-semibold text-emerald-700 transition hover:bg-slate-100">
             ⬇ Download Excel
-          </button>
+          </a>
 
         </div>
       </div>

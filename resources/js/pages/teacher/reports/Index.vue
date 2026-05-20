@@ -31,10 +31,10 @@ const props = defineProps<{
           </p>
         </div>
 
-        <button
+        <a href="/teacher/reports/export" target="_blank"
           class="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 font-semibold text-slate-700 transition hover:bg-slate-100">
           Download Ringkasan
-        </button>
+        </a>
       </div>
 
       <!-- MENU -->

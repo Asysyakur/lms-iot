@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Meeting;
 use App\Models\User;
-use App\Models\Assessment;
-use App\Models\AssessmentResult;
+use App\Exports\FullReportExport;
+use App\Exports\PrePostReportExport;
+use App\Exports\MeetingDetailExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -68,106 +70,6 @@ class ReportController extends Controller
             'teacher/reports/Index',
             [
                 'menus' => $menus,
-            ]
-        );
-    }
-    /*
-    |--------------------------------------------------------------------------
-    | REPORT PERTEMUAN
-    |--------------------------------------------------------------------------
-    */
-
-    public function meetings()
-    {
-        $studentsCount =
-            User::where(
-                'role',
-                'student'
-            )->count();
-
-        $meetings = Meeting::with([
-            'material',
-            'quizzes',
-            'practice',
-            'lkpd',
-            'evaluation',
-            'practiceSubmissions',
-            'lkpdSubmissions',
-            'evaluationSubmissions',
-        ])
-            ->orderBy(
-                'meeting_number'
-            )
-            ->get()
-            ->map(function ($meeting) use ($studentsCount) {
-
-                $practiceCount =
-                    $meeting->practiceSubmissions
-                    ->count();
-
-                $lkpdCount =
-                    $meeting->lkpdSubmissions
-                    ->count();
-
-                $evaluationCount =
-                    $meeting->evaluationSubmissions
-                    ->count();
-
-                $completion =
-                    $studentsCount > 0
-                    ? round(
-                        (
-                            $evaluationCount /
-                            $studentsCount
-                        ) * 100
-                    )
-                    : 0;
-
-                return [
-
-                    'id' =>
-                    $meeting->id,
-
-                    'meeting_number' =>
-                    $meeting->meeting_number,
-
-                    'title' =>
-                    $meeting->title,
-
-                    'material_active' =>
-                    $meeting->material?->is_active,
-
-                    'quiz_count' =>
-                    $meeting->quizzes->count(),
-
-                    'practice_submissions' =>
-                    $practiceCount,
-
-                    'lkpd_submissions' =>
-                    $lkpdCount,
-
-                    'evaluation_submissions' =>
-                    $evaluationCount,
-
-                    'completion' =>
-                    $completion,
-
-                    'status' =>
-                    $meeting->is_active
-                        ? 'Aktif'
-                        : 'Nonaktif',
-                ];
-            });
-
-        return Inertia::render(
-            'teacher/reports/MeetingSummary',
-            [
-
-                'meetings' =>
-                $meetings,
-
-                'studentsCount' =>
-                $studentsCount,
             ]
         );
     }
@@ -438,6 +340,32 @@ class ReportController extends Controller
         return back()->with(
             'success',
             'Nilai berhasil disimpan.'
+        );
+    }
+
+    public function export()
+    {
+        return Excel::download(
+            new FullReportExport,
+            'laporan-lengkap.xlsx'
+        );
+    }
+
+    public function exportAssessment()
+    {
+        return Excel::download(
+            new PrePostReportExport,
+            'laporan-pretest-posttest.xlsx'
+        );
+    }
+
+    public function exportMeetingDetail(
+        Meeting $meeting
+    ) {
+
+        return Excel::download(
+            new MeetingDetailExport($meeting),
+            'laporan-' . $meeting->title . '.xlsx'
         );
     }
 }

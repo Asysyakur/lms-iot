@@ -162,4 +162,108 @@ class Meeting extends Model
             ->where('passed', true)
             ->exists();
     }
+
+    public function students()
+    {
+        return User::where(
+            'role',
+            'student'
+        )->get()->map(function ($student) {
+
+            /**
+             * MATERIAL
+             */
+            $material =
+                $this->materialProgress
+                ->where(
+                    'user_id',
+                    $student->id
+                )
+                ->first();
+
+            /**
+             * QUIZ
+             */
+            $quiz =
+                $this->quizAttempts
+                ->where(
+                    'user_id',
+                    $student->id
+                )
+                ->sortByDesc('score')
+                ->first();
+
+            /**
+             * PRACTICE
+             */
+            $practice =
+                $this->practiceSubmissions
+                ->where(
+                    'user_id',
+                    $student->id
+                )
+                ->first();
+
+            /**
+             * LKPD
+             */
+            $lkpd =
+                $this->lkpdSubmissions
+                ->where(
+                    'user_id',
+                    $student->id
+                )
+                ->first();
+
+            /**
+             * EVALUATION
+             */
+            $evaluation =
+                $this->evaluationSubmissions
+                ->where(
+                    'user_id',
+                    $student->id
+                )
+                ->first();
+
+            return (object) [
+
+                'id' =>
+                $student->id,
+
+                'name' =>
+                $student->name,
+
+                'triggerAnswer' =>
+                $material?->trigger_answer,
+
+                'triggerScore' =>
+                $material?->trigger_score ?? 0,
+
+                'reflectionAnswer' =>
+                $material?->reflection_answers,
+
+                'duration_seconds' =>
+                $material?->duration_seconds ?? 0,
+
+                'quiz' =>
+                $quiz?->score ?? 0,
+
+                'practice' =>
+                $practice?->submission_link,
+
+                'practiceScore' =>
+                $practice?->score ?? 0,
+
+                'lkpd' =>
+                $lkpd?->file_path,
+
+                'evaluation' =>
+                $evaluation?->answers,
+
+                'evaluationScore' =>
+                $evaluation?->score ?? 0,
+            ];
+        });
+    }
 }
