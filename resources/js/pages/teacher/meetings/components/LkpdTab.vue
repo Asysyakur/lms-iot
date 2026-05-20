@@ -2,34 +2,46 @@
 
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { Upload, Save } from 'lucide-vue-next';
+import {
+  Upload,
+} from 'lucide-vue-next';
+
 import { watch } from 'vue';
 import axios from 'axios';
-import Swal from 'sweetalert2';
+
+import { toast } from 'vue-sonner';
 
 const props = defineProps<{
   meeting: any;
 }>();
 
 const form = useForm({
-  meeting_id: props.meeting.id,
+  meeting_id:
+    props.meeting.id,
 
-  google_docs_url: props.meeting.lkpd?.google_docs_url ?? '',
+  google_docs_url:
+    props.meeting.lkpd
+      ?.google_docs_url ?? '',
 
-  submission_note: props.meeting.lkpd?.submission_note ?? '',
+  submission_note:
+    props.meeting.lkpd
+      ?.submission_note ?? '',
 });
 
 watch(
   () => props.meeting,
   (meeting) => {
 
-    form.meeting_id = meeting.id;
+    form.meeting_id =
+      meeting.id;
 
     form.google_docs_url =
-      meeting.lkpd?.google_docs_url ?? '';
+      meeting.lkpd
+        ?.google_docs_url ?? '';
 
     form.submission_note =
-      meeting.lkpd?.submission_note ?? '';
+      meeting.lkpd
+        ?.submission_note ?? '';
   },
   {
     immediate: true,
@@ -49,34 +61,24 @@ const submit = async () => {
     props.meeting.lkpd =
       response.data.lkpd;
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title:
-        'LKPD berhasil disimpan',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.success(
+      'LKPD berhasil disimpan'
+    );
 
   } catch (error) {
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'error',
-      title:
-        'Gagal menyimpan LKPD',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.error(
+      'Gagal menyimpan LKPD'
+    );
   }
 };
 
 const toggleLkpd =
   async () => {
 
-    if (!props.meeting.lkpd) {
+    if (
+      !props.meeting.lkpd
+    ) {
       return;
     }
 
@@ -92,29 +94,18 @@ const toggleLkpd =
         response.data.lkpd,
       );
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title:
-          response.data.lkpd.is_active
-            ? 'LKPD diaktifkan'
-            : 'LKPD dinonaktifkan',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.success(
+        response.data.lkpd
+          .is_active
+          ? 'LKPD diaktifkan'
+          : 'LKPD dinonaktifkan'
+      );
 
     } catch (error) {
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title:
-          'Gagal mengubah status LKPD',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.error(
+        'Gagal mengubah status LKPD'
+      );
     }
   };
 </script>

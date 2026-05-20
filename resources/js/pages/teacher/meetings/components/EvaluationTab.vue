@@ -2,8 +2,9 @@
 import { useForm } from '@inertiajs/vue3';
 import axios from 'axios';
 import { Save } from 'lucide-vue-next';
-import Swal from 'sweetalert2';
 import { watch } from 'vue';
+
+import { toast } from 'vue-sonner';
 
 const props = defineProps<{
   meeting: any;
@@ -12,7 +13,9 @@ const props = defineProps<{
 const form = useForm({
   meeting_id: props.meeting.id,
 
-  question: props.meeting.evaluation?.question ?? '',
+  question:
+    props.meeting.evaluation?.question
+    ?? '',
 });
 
 watch(
@@ -23,10 +26,12 @@ watch(
       return;
     }
 
-    form.meeting_id = meeting.id;
+    form.meeting_id =
+      meeting.id;
 
     form.question =
-      meeting.evaluation?.question ?? '';
+      meeting.evaluation?.question
+      ?? '';
   },
 );
 
@@ -43,34 +48,24 @@ const submit = async () => {
     props.meeting.evaluation =
       response.data.evaluation;
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title:
-        'Evaluasi berhasil disimpan',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.success(
+      'Evaluasi berhasil disimpan'
+    );
 
   } catch (error) {
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'error',
-      title:
-        'Gagal menyimpan evaluasi',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.error(
+      'Gagal menyimpan evaluasi'
+    );
   }
 };
 
 const toggleEvaluation =
   async () => {
 
-    if (!props.meeting.evaluation) {
+    if (
+      !props.meeting.evaluation
+    ) {
       return;
     }
 
@@ -86,29 +81,18 @@ const toggleEvaluation =
         response.data.evaluation,
       );
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title:
-          response.data.evaluation.is_active
-            ? 'Evaluasi diaktifkan'
-            : 'Evaluasi dinonaktifkan',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.success(
+        response.data.evaluation
+          .is_active
+          ? 'Evaluasi diaktifkan'
+          : 'Evaluasi dinonaktifkan'
+      );
 
     } catch (error) {
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title:
-          'Gagal mengubah status Evaluasi',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.error(
+        'Gagal mengubah status evaluasi'
+      );
     }
   };
 </script>

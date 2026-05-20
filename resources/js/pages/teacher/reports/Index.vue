@@ -8,45 +8,10 @@ defineOptions({
   layout: TeacherSidebarLayout,
 });
 
-const menus = [
-  {
-    id: 'prepost',
-    title: 'Hasil Pre-test & Post-test',
-    description:
-      'Lihat nilai pre-test dan post-test siswa.',
-    icon: '📄',
-    href: '/teacher/reports/assessments',
-    color: 'from-blue-500 to-cyan-500',
-  },
+const props = defineProps<{
+  menus: any;
+}>();
 
-  {
-    id: 'meeting1',
-    title: 'Hasil Pertemuan 1',
-    description:
-      'Monitoring jawaban refleksi, kuis, LKPD, praktik, dan evaluasi.',
-    icon: '1',
-    href: '/teacher/reports/meetings',
-    color: 'from-emerald-500 to-teal-500',
-  },
-
-  {
-    id: 'meeting2',
-    title: 'Hasil Pertemuan 2',
-    description:
-      'Monitoring jawaban refleksi, kuis, LKPD, praktik, dan evaluasi.',
-    icon: '2',
-    color: 'from-orange-500 to-amber-500',
-  },
-
-  {
-    id: 'meeting3',
-    title: 'Hasil Pertemuan 3',
-    description:
-      'Monitoring jawaban refleksi, kuis, LKPD, praktik, dan evaluasi.',
-    icon: '3',
-    color: 'from-purple-500 to-fuchsia-500',
-  },
-];
 </script>
 
 <template>
@@ -74,7 +39,7 @@ const menus = [
 
       <!-- MENU -->
       <div class="mt-8 grid gap-5 lg:grid-cols-4">
-        <Link v-for="menu in menus" :key="menu.id" :href="menu.href"
+        <Link v-for="menu in props.menus" :key="menu.id" :href="menu.href"
           class="group rounded-3xl border border-slate-200 bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg">
           <div :class="menu.color"
             class="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br text-lg font-bold text-white">

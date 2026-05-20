@@ -140,6 +140,16 @@ Route::middleware([
         [MeetingMaterialController::class, 'saveProgress']
     )->name('student.material.progress');
 
+    Route::post(
+        '/meetings/{meeting}/start-reading',
+        [MeetingMaterialController::class, 'startReading']
+    );
+
+    Route::post(
+        '/meetings/{meeting}/heartbeat',
+        [MeetingMaterialController::class, 'heartbeat']
+    );
+
     Route::get(
         '/meetings/{meeting}/quiz',
         [StudentQuizController::class, 'exam']
@@ -373,17 +383,27 @@ Route::middleware([
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/reports', function () {
-
-        return Inertia::render(
-            'teacher/reports/Index'
-        );
-    })->name('teacher.reports');
+    Route::get(
+        '/reports',
+        [ReportController::class, 'index']
+    );
 
     Route::get(
         '/reports/meetings',
         [ReportController::class, 'meetings']
     )->name('teacher.reports.meetings');
+
+    Route::get(
+        '/reports/meetings/{meeting}',
+        [ReportController::class, 'meetingDetail']
+    )->name('teacher.reports.meeting.detail');
+
+    Route::post(
+        '/reports/meetings/{meeting}/scores',
+        [ReportController::class, 'saveScores']
+    )->name(
+        'teacher.reports.meetings.scores'
+    );
 
     Route::get(
         '/reports/assessments',

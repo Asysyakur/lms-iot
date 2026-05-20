@@ -70,35 +70,111 @@ class MeetingMaterialController extends Controller
         Request $request,
         Meeting $meeting
     ) {
-        $progress = MaterialProgress::firstOrCreate(
-            [
+
+        $progress =
+            MaterialProgress::firstOrCreate([
                 'user_id' => auth()->id(),
                 'meeting_id' => $meeting->id,
+            ]);
+
+        /**
+         * READING PROGRESS
+         */
+        if (
+            $request->filled(
+                'reading_progress'
+            )
+        ) {
+
+            $progress->reading_progress =
+                max(
+                    $progress->reading_progress ?? 0,
+                    $request->reading_progress
+                );
+        }
+
+        /**
+         * TRIGGER ANSWER
+         */
+        if (
+            $request->filled(
+                'trigger_answer'
+            )
+        ) {
+
+            $progress->trigger_answer =
+                $request->trigger_answer;
+        }
+
+        /**
+         * REFLECTION
+         */
+        if (
+            $request->has(
+                'reflection_answers'
+            )
+        ) {
+
+            $progress->reflection_answers =
+                $request->reflection_answers;
+
+            $progress->reflection_completed =
+                $request->reflection_completed;
+        }
+
+        $progress->save();
+
+        return response()->json([
+            'success' => true,
+        ]);
+    }
+
+    public function startReading(
+        Meeting $meeting
+    ) {
+
+        MaterialProgress::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+
+                'meeting_id' => $meeting->id,
+            ],
+            [
+                'started_at' => now(),
+
+                'last_activity_at' => now(),
             ]
         );
 
+        return response()->json([
+            'success' => true,
+        ]);
+    }
+
+    public function heartbeat(
+        Meeting $meeting
+    ) {
+
+        $progress =
+            MaterialProgress::firstOrCreate(
+                [
+                    'user_id' => auth()->id(),
+
+                    'meeting_id' => $meeting->id,
+                ]
+            );
+
+        $progress->increment(
+            'duration_seconds',
+            30
+        );
+
         $progress->update([
-            'reading_progress' =>
-            $request->has('reading_progress')
-                ? $request->reading_progress
-                : $progress->reading_progress,
-
-            'trigger_answer' =>
-            $request->has('trigger_answer')
-                ? $request->trigger_answer
-                : $progress->trigger_answer,
-
-            'reflection_answers' =>
-            $request->has('reflection_answers')
-                ? $request->reflection_answers
-                : $progress->reflection_answers,
-
-            'reflection_completed' =>
-            $request->has('reflection_completed')
-                ? $request->reflection_completed
-                : $progress->reflection_completed,
+            'last_activity_at' => now(),
         ]);
 
-        return back();
+        return response()->json([
+            'success' => true,
+        ]);
     }
 }

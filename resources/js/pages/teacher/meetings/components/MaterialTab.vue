@@ -1,38 +1,50 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+
 import { Save } from 'lucide-vue-next';
-import Swal from 'sweetalert2';
-import { reactive, watch } from 'vue';
+
+import {
+  watch,
+} from 'vue';
+
 import axios from 'axios';
+
+import { toast } from 'vue-sonner';
 
 const props = defineProps<{
   meeting: any;
 }>();
 
-
 const form = useForm({
-  meeting_id: props.meeting.id,
+  meeting_id:
+    props.meeting.id,
 
-  title: props.meeting?.material?.title ?? '',
+  title:
+    props.meeting?.material
+      ?.title ?? '',
 
   description:
-    props.meeting?.material?.description ?? '',
+    props.meeting?.material
+      ?.description ?? '',
 
   video_url:
-    props.meeting?.material?.video_url ?? '',
+    props.meeting?.material
+      ?.video_url ?? '',
 
   trigger_question:
-    props.meeting?.material?.trigger_question ?? '',
+    props.meeting?.material
+      ?.trigger_question ?? '',
 
   reflection_question:
-    props.meeting?.material?.reflection_question ?? [''],
+    props.meeting?.material
+      ?.reflection_question
+    ?? [''],
 
   pdf_file: null,
 });
 
 /**
  * AUTO UPDATE FORM
- * SAAT MEETING BERUBAH
  */
 watch(
   () => props.meeting,
@@ -42,26 +54,29 @@ watch(
       return;
     }
 
-    Object.assign(
-      meeting.material ?? {},
-    );
-
-    form.meeting_id = meeting.id;
+    form.meeting_id =
+      meeting.id;
 
     form.title =
-      props.meeting?.material?.title ?? '';
+      meeting?.material
+        ?.title ?? '';
 
     form.description =
-      props.meeting?.material?.description ?? '';
+      meeting?.material
+        ?.description ?? '';
 
     form.video_url =
-      props.meeting?.material?.video_url ?? '';
+      meeting?.material
+        ?.video_url ?? '';
 
     form.trigger_question =
-      props.meeting?.material?.trigger_question ?? '';
+      meeting?.material
+        ?.trigger_question ?? '';
 
     form.reflection_question =
-      props.meeting?.material?.reflection_question ?? [''];
+      meeting?.material
+        ?.reflection_question
+      ?? [''];
 
     form.pdf_file = null;
   },
@@ -74,11 +89,14 @@ const submit = async () => {
 
   try {
 
-    const formData = new FormData();
+    const formData =
+      new FormData();
 
     formData.append(
       'meeting_id',
-      String(form.meeting_id),
+      String(
+        form.meeting_id
+      ),
     );
 
     formData.append(
@@ -101,16 +119,20 @@ const submit = async () => {
       form.trigger_question ?? '',
     );
 
-    form.reflection_question.forEach(
-      (question, index) => {
+    form.reflection_question
+      .forEach(
+        (
+          question,
+          index
+        ) => {
 
-        formData.append(
-          `reflection_question[${index}]`,
-          question
-        );
+          formData.append(
+            `reflection_question[${index}]`,
+            question
+          );
 
-      }
-    );
+        }
+      );
 
     if (form.pdf_file) {
 
@@ -132,36 +154,26 @@ const submit = async () => {
       response.data.material,
     );
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title: 'Materi berhasil disimpan',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.success(
+      'Materi berhasil disimpan'
+    );
 
   } catch (error) {
 
     console.error(error);
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'error',
-      title: 'Gagal menyimpan materi',
-      showConfirmButton: false,
-      timer: 2500,
-    });
-
+    toast.error(
+      'Gagal menyimpan materi'
+    );
   }
-
 };
 
 const toggleMaterial =
   async () => {
 
-    if (!props.meeting.material) {
+    if (
+      !props.meeting.material
+    ) {
       return;
     }
 
@@ -177,29 +189,18 @@ const toggleMaterial =
         response.data.material,
       );
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title:
-          response.data.material.is_active
-            ? 'Materi diaktifkan'
-            : 'Materi dinonaktifkan',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.success(
+        response.data.material
+          .is_active
+          ? 'Materi diaktifkan'
+          : 'Materi dinonaktifkan'
+      );
 
     } catch (error) {
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title:
-          'Gagal mengubah status materi',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.error(
+        'Gagal mengubah status materi'
+      );
     }
   };
 </script>

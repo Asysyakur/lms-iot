@@ -6,7 +6,7 @@ import {
   watch,
 } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import Swal from 'sweetalert2';
+import { toast } from 'vue-sonner';
 import {
   Plus,
   FileQuestion,
@@ -21,14 +21,6 @@ const isPretest =
   computed(() =>
     props.type === 'pretest',
   );
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 2500,
-  timerProgressBar: true,
-});
 
 const form = useForm({
   id: null,
@@ -85,7 +77,9 @@ watch(
 
 const submit = () => {
 
-  // UPDATE
+  /**
+   * UPDATE
+   */
   if (form.id) {
 
     form.put(
@@ -95,24 +89,23 @@ const submit = () => {
 
         onSuccess: () => {
 
-          Toast.fire({
-            icon: 'success',
-            title: 'Soal berhasil diperbarui',
-          });
+          toast.success(
+            'Soal berhasil diperbarui'
+          );
 
           form.reset();
 
-          form.type = props.type;
+          form.type =
+            props.type;
 
           form.id = null;
         },
 
         onError: () => {
 
-          Toast.fire({
-            icon: 'error',
-            title: 'Gagal memperbarui soal',
-          });
+          toast.error(
+            'Gagal memperbarui soal'
+          );
         },
       },
     );
@@ -120,30 +113,34 @@ const submit = () => {
     return;
   }
 
-  // CREATE
-  form.post('/teacher/questions', {
-    preserveScroll: true,
+  /**
+   * CREATE
+   */
+  form.post(
+    '/teacher/questions',
+    {
+      preserveScroll: true,
 
-    onSuccess: () => {
+      onSuccess: () => {
 
-      Toast.fire({
-        icon: 'success',
-        title: 'Soal berhasil ditambahkan',
-      });
+        toast.success(
+          'Soal berhasil ditambahkan'
+        );
 
-      form.reset();
+        form.reset();
 
-      form.type = props.type;
+        form.type =
+          props.type;
+      },
+
+      onError: () => {
+
+        toast.error(
+          'Gagal menambahkan soal'
+        );
+      },
     },
-
-    onError: () => {
-
-      Toast.fire({
-        icon: 'error',
-        title: 'Gagal menambahkan soal',
-      });
-    },
-  });
+  );
 };
 
 </script>

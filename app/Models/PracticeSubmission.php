@@ -10,6 +10,7 @@ class PracticeSubmission extends Model
         'user_id',
         'meeting_id',
         'project_url',
+        'score',
         'submitted_at',
     ];
 }

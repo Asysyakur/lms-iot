@@ -2,34 +2,50 @@
 
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-import { Save } from 'lucide-vue-next';
-import { watch } from 'vue';
+
+import {
+  Save,
+} from 'lucide-vue-next';
+
+import {
+  watch,
+} from 'vue';
+
 import axios from 'axios';
-import Swal from 'sweetalert2';
+
+import { toast } from 'vue-sonner';
 
 const props = defineProps<{
   meeting: any;
 }>();
 
 const form = useForm({
-  meeting_id: props.meeting.id,
+  meeting_id:
+    props.meeting.id,
 
-  instruction: props.meeting.practice?.instruction ?? '',
+  instruction:
+    props.meeting.practice
+      ?.instruction ?? '',
 
-  makecode_url: props.meeting.practice?.makecode_url ?? '',
+  makecode_url:
+    props.meeting.practice
+      ?.makecode_url ?? '',
 });
 
 watch(
   () => props.meeting,
   (meeting) => {
 
-    form.meeting_id = meeting.id;
+    form.meeting_id =
+      meeting.id;
 
     form.instruction =
-      meeting.practice?.instruction ?? '';
+      meeting.practice
+        ?.instruction ?? '';
 
     form.makecode_url =
-      meeting.practice?.makecode_url ?? '';
+      meeting.practice
+        ?.makecode_url ?? '';
   },
   {
     immediate: true,
@@ -49,34 +65,24 @@ const submit = async () => {
     props.meeting.practice =
       response.data.practice;
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title:
-        'Praktik berhasil disimpan',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.success(
+      'Praktik berhasil disimpan'
+    );
 
   } catch (error) {
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'error',
-      title:
-        'Gagal menyimpan praktik',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.error(
+      'Gagal menyimpan praktik'
+    );
   }
 };
 
 const togglePractice =
   async () => {
 
-    if (!props.meeting.practice) {
+    if (
+      !props.meeting.practice
+    ) {
       return;
     }
 
@@ -92,29 +98,18 @@ const togglePractice =
         response.data.practice,
       );
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title:
-          response.data.practice.is_active
-            ? 'Praktik diaktifkan'
-            : 'Praktik dinonaktifkan',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.success(
+        response.data.practice
+          .is_active
+          ? 'Praktik diaktifkan'
+          : 'Praktik dinonaktifkan'
+      );
 
     } catch (error) {
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title:
-          'Gagal mengubah status praktik',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.error(
+        'Gagal mengubah status praktik'
+      );
     }
   };
 </script>

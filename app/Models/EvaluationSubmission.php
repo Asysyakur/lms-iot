@@ -10,6 +10,7 @@ class EvaluationSubmission extends Model
         'user_id',
         'meeting_id',
         'answers',
+        'score',
         'submitted_at',
     ];
 

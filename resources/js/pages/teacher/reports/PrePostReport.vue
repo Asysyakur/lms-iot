@@ -59,6 +59,14 @@ defineOptions({
               <th class="px-5 py-4 text-left text-sm">
                 Nilai Post-test
               </th>
+
+              <th class="px-5 py-4 text-left text-sm">
+                Status Pre-test
+              </th>
+
+              <th class="px-5 py-4 text-left text-sm">
+                Status Post-test
+              </th>
             </tr>
           </thead>
 
@@ -73,11 +81,27 @@ defineOptions({
               </td>
 
               <td class="px-5 py-4 text-slate-600">
-                {{ student.pretest }}
+                {{ student.pretest_score ?? '-' }}
               </td>
 
               <td class="px-5 py-4 font-bold text-emerald-600">
-                {{ student.posttest }}
+                {{ student.posttest_score ?? '-' }}
+              </td>
+              <td class="px-5 py-4">
+                <span class="rounded-full px-3 py-1 text-xs font-semibold" :class="student.pretest_status === 'Selesai'
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : 'bg-slate-100 text-slate-500'
+                  ">
+                  {{ student.pretest_status }}
+                </span>
+              </td>
+              <td class="px-5 py-4">
+                <span class="rounded-full px-3 py-1 text-xs font-semibold" :class="student.posttest_status === 'Selesai'
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : 'bg-slate-100 text-slate-500'
+                  ">
+                  {{ student.posttest_status }}
+                </span>
               </td>
             </tr>
           </tbody>

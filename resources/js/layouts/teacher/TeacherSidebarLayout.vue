@@ -12,6 +12,7 @@ import {
   BarChart3,
   LogOut,
 } from 'lucide-vue-next';
+import { Toaster } from 'vue-sonner';
 
 const page = usePage();
 
@@ -61,6 +62,7 @@ const menus = [
 </script>
 
 <template>
+  <Toaster richColors position="top-right" />
   <div class="min-h-screen bg-slate-100">
     <!-- SIDEBAR -->
     <aside
@@ -94,12 +96,12 @@ const menus = [
         <nav class="space-y-3">
           <Link v-for="menu in menus" :key="menu.title" :href="menu.href"
             class="group flex items-center gap-4 rounded-2xl px-4 py-4 transition" :class="page.url.startsWith(menu.href)
-                ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
-                : 'text-slate-300 hover:bg-white/10 hover:text-white'
+              ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+              : 'text-slate-300 hover:bg-white/10 hover:text-white'
               ">
             <div class="flex h-11 w-11 items-center justify-center rounded-xl" :class="page.url.startsWith(menu.href)
-                ? 'bg-white/20'
-                : menu.color
+              ? 'bg-white/20'
+              : menu.color
               ">
               <component :is="menu.icon" class="h-5 w-5" />
             </div>

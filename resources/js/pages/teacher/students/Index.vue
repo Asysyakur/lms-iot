@@ -1,10 +1,22 @@
 <!-- resources/js/pages/teacher/students/Index.vue -->
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useForm, router } from '@inertiajs/vue3';
+import {
+  ref,
+  computed,
+} from 'vue';
+
+import {
+  useForm,
+  router,
+} from '@inertiajs/vue3';
+
 import TeacherSidebarLayout from '@/layouts/teacher/TeacherSidebarLayout.vue';
-import Swal from 'sweetalert2';
+
+import {
+  toast,
+} from 'vue-sonner';
+
 import {
   UserPlus,
   Trash2,
@@ -13,7 +25,8 @@ import {
 } from 'lucide-vue-next';
 
 defineOptions({
-  layout: TeacherSidebarLayout,
+  layout:
+    TeacherSidebarLayout,
 });
 
 interface Student {
@@ -31,103 +44,119 @@ const props = defineProps<{
 
 const form = useForm({
   name: '',
-  class: 'XI TKJ-T-1',
+
+  class:
+    'XI TKJ-T-1',
+
   username: '',
+
   password: '',
 });
 
-const deletedStudents = ref(0);
+const deletedStudents =
+  ref(0);
 
-const totalStudents = computed(() => {
-  return props.students.length;
-});
+const totalStudents =
+  computed(() => {
 
-const activeStudents = computed(() => {
-  return props.students.filter(
-    (student: Student) => student.active,
-  ).length;
-});
-
-const inactiveStudents = computed(() => {
-  return props.students.filter(
-    (student: Student) => !student.active,
-  ).length;
-});
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 2500,
-  timerProgressBar: true,
-});
-
-const addStudent = () => {
-  form.post('/teacher/students', {
-
-    preserveScroll: true,
-
-    onSuccess: () => {
-
-      Toast.fire({
-        icon: 'success',
-        title: 'Akun siswa berhasil dibuat',
-      });
-
-      form.reset();
-
-      form.class = 'XI TKJ-T-1';
-    },
-
-    onError: () => {
-
-      Toast.fire({
-        icon: 'error',
-        title: 'Gagal membuat akun siswa',
-      });
-    },
-  });
-};
-
-const removeStudent = async (id: number) => {
-
-  const result = await Swal.fire({
-    title: 'Hapus akun?',
-    text: 'Data siswa akan dihapus permanen',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Ya, hapus',
-    cancelButtonText: 'Batal',
-    confirmButtonColor: '#ef4444',
+    return props.students.length;
   });
 
-  if (!result.isConfirmed) {
-    return;
-  }
+const activeStudents =
+  computed(() => {
 
-  router.delete(`/teacher/students/${id}`, {
-
-    preserveScroll: true,
-
-    onSuccess: () => {
-
-      deletedStudents.value++;
-
-      Toast.fire({
-        icon: 'success',
-        title: 'Akun siswa berhasil dihapus',
-      });
-    },
-
-    onError: () => {
-
-      Toast.fire({
-        icon: 'error',
-        title: 'Gagal menghapus akun',
-      });
-    },
+    return props.students.filter(
+      (
+        student: Student,
+      ) =>
+        student.active,
+    ).length;
   });
-};
+
+const inactiveStudents =
+  computed(() => {
+
+    return props.students.filter(
+      (
+        student: Student,
+      ) =>
+        !student.active,
+    ).length;
+  });
+
+const addStudent =
+  () => {
+
+    form.post(
+      '/teacher/students',
+      {
+        preserveScroll:
+          true,
+
+        onSuccess:
+          () => {
+
+            toast.success(
+              'Akun siswa berhasil dibuat',
+            );
+
+            form.reset();
+
+            form.class =
+              'XI TKJ-T-1';
+          },
+
+        onError:
+          () => {
+
+            toast.error(
+              'Gagal membuat akun siswa',
+            );
+          },
+      },
+    );
+  };
+
+const removeStudent =
+  async (
+    id: number,
+  ) => {
+
+    const confirmed =
+      confirm(
+        'Hapus akun siswa ini?',
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    router.delete(
+      `/teacher/students/${id}`,
+      {
+        preserveScroll:
+          true,
+
+        onSuccess:
+          () => {
+
+            deletedStudents.value++;
+
+            toast.success(
+              'Akun siswa berhasil dihapus',
+            );
+          },
+
+        onError:
+          () => {
+
+            toast.error(
+              'Gagal menghapus akun',
+            );
+          },
+      },
+    );
+  };
 </script>
 
 <template>

@@ -1,27 +1,37 @@
 <script setup lang="ts">
-import { useForm } from '@inertiajs/vue3';
+import {
+  useForm,
+} from '@inertiajs/vue3';
+
 import {
   Plus,
   Pencil,
   Trash2,
 } from 'lucide-vue-next';
+
 import axios from 'axios';
-import Swal from 'sweetalert2';
+
 import {
   ref,
   watch,
 } from 'vue';
 
+import {
+  toast,
+} from 'vue-sonner';
+
 const props = defineProps<{
   meeting: any;
 }>();
 
-const editingQuiz = ref<any>(null);
+const editingQuiz =
+  ref<any>(null);
 
 const form = useForm({
   id: null,
 
-  meeting_id: props.meeting.id,
+  meeting_id:
+    props.meeting.id,
 
   question: '',
 
@@ -45,7 +55,8 @@ watch(
       return;
     }
 
-    editingQuiz.value = null;
+    editingQuiz.value =
+      null;
 
     form.reset();
 
@@ -62,11 +73,15 @@ watch(
 /**
  * EDIT QUIZ
  */
-const editQuiz = (quiz: any) => {
+const editQuiz = (
+  quiz: any,
+) => {
 
-  editingQuiz.value = quiz;
+  editingQuiz.value =
+    quiz;
 
-  form.id = quiz.id;
+  form.id =
+    quiz.id;
 
   form.question =
     quiz.question;
@@ -108,25 +123,21 @@ const submit = async () => {
       const index =
         props.meeting.quizzes.findIndex(
           (quiz: any) =>
-            quiz.id === form.id,
+            quiz.id ===
+            form.id,
         );
 
       if (index !== -1) {
 
         props.meeting.quizzes[
           index
-        ] = response.data.quiz;
+        ] =
+          response.data.quiz;
       }
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title:
-          'Soal berhasil diupdate',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.success(
+        'Soal berhasil diupdate'
+      );
 
       resetForm();
 
@@ -146,91 +157,68 @@ const submit = async () => {
       response.data.quiz,
     );
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title:
-        'Soal berhasil ditambahkan',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.success(
+      'Soal berhasil ditambahkan'
+    );
 
     resetForm();
 
   } catch (error) {
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'error',
-      title: 'Terjadi kesalahan',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.error(
+      'Terjadi kesalahan'
+    );
   }
 };
 
 /**
  * DELETE
  */
-const removeQuiz = async (
-  id: number,
-) => {
+const removeQuiz =
+  async (
+    id: number,
+  ) => {
 
-  const result =
-    await Swal.fire({
-      title: 'Hapus soal?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Hapus',
-    });
-
-  if (!result.isConfirmed) {
-    return;
-  }
-
-  try {
-
-    await axios.delete(
-      `/teacher/quizzes/${id}`,
-    );
-
-    props.meeting.quizzes =
-      props.meeting.quizzes.filter(
-        (quiz: any) =>
-          quiz.id !== id,
+    const confirmed =
+      confirm(
+        'Hapus soal ini?'
       );
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title:
-        'Soal berhasil dihapus',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    if (!confirmed) {
+      return;
+    }
 
-  } catch (error) {
+    try {
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'error',
-      title: 'Gagal menghapus soal',
-      showConfirmButton: false,
-      timer: 2500,
-    });
-  }
-};
+      await axios.delete(
+        `/teacher/quizzes/${id}`,
+      );
+
+      props.meeting.quizzes =
+        props.meeting.quizzes.filter(
+          (quiz: any) =>
+            quiz.id !== id,
+        );
+
+      toast.success(
+        'Soal berhasil dihapus'
+      );
+
+    } catch (error) {
+
+      toast.error(
+        'Gagal menghapus soal'
+      );
+    }
+  };
 
 /**
  * RESET
  */
 const resetForm = () => {
 
-  editingQuiz.value = null;
+  editingQuiz.value =
+    null;
 
   form.reset();
 
@@ -244,7 +232,8 @@ const toggleQuizMeeting =
   async () => {
 
     if (
-      !props.meeting.quizzes?.length
+      !props.meeting.quizzes
+        ?.length
     ) {
       return;
     }
@@ -268,29 +257,17 @@ const toggleQuizMeeting =
         },
       );
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title:
-          response.data.is_active
-            ? 'Quiz diaktifkan'
-            : 'Quiz dinonaktifkan',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.success(
+        response.data.is_active
+          ? 'Quiz diaktifkan'
+          : 'Quiz dinonaktifkan'
+      );
 
     } catch (error) {
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title:
-          'Gagal mengubah status quiz',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.error(
+        'Gagal mengubah status quiz'
+      );
     }
   };
 </script>

@@ -1,7 +1,7 @@
 <!-- resources/js/pages/teacher/assessments/components/AssessmentSettings.vue -->
 
 <script setup lang="ts">
-import Swal from 'sweetalert2';
+import { toast } from 'vue-sonner';
 
 import { useForm } from '@inertiajs/vue3';
 
@@ -16,14 +16,6 @@ const props = defineProps<{
 
   assessment?: any;
 }>();
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 2500,
-  timerProgressBar: true,
-});
 
 const form = useForm({
   type: props.type,
@@ -41,61 +33,57 @@ const form = useForm({
     props.assessment?.attempts ?? 1,
 });
 
-const submit = () => {
+const submit = async () => {
 
-  // VALIDASI DURATION
+  /**
+   * VALIDASI DURATION
+   */
   if (
     form.duration < 1 ||
     form.duration > 300
   ) {
 
-    Toast.fire({
-      icon: 'error',
-      title:
-        'Durasi harus 1 - 300 menit',
-    });
+    toast.error(
+      'Durasi harus 1 - 300 menit'
+    );
 
     return;
   }
 
-  // VALIDASI ATTEMPTS
+  /**
+   * VALIDASI ATTEMPTS
+   */
   if (
     form.attempts < 1 ||
     form.attempts > 10
   ) {
 
-    Toast.fire({
-      icon: 'error',
-      title:
-        'Kesempatan harus 1 - 10 kali',
-    });
+    toast.error(
+      'Kesempatan harus 1 - 10 kali'
+    );
 
     return;
   }
 
-  form.put(
-    '/teacher/assessments/settings',
+  toast.promise(
+
+    form.put(
+      '/teacher/assessments/settings',
+      {
+        preserveScroll: true,
+      }
+    ),
+
     {
-      preserveScroll: true,
+      loading:
+        'Menyimpan pengaturan...',
 
-      onSuccess: () => {
+      success:
+        'Pengaturan berhasil disimpan',
 
-        Toast.fire({
-          icon: 'success',
-          title:
-            'Pengaturan berhasil disimpan',
-        });
-      },
-
-      onError: () => {
-
-        Toast.fire({
-          icon: 'error',
-          title:
-            'Gagal menyimpan pengaturan',
-        });
-      },
-    },
+      error:
+        'Gagal menyimpan pengaturan',
+    }
   );
 };
 </script>

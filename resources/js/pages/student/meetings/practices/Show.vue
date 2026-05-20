@@ -3,7 +3,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import axios from 'axios';
-import Swal from 'sweetalert2';
+import { toast } from 'vue-sonner';
 import StudentSidebarLayout from '@/layouts/student/StudentSidebarLayout.vue';
 
 import {
@@ -56,9 +56,8 @@ console.log(props.meeting, lkpdOpened.value, props.submission?.project_url);
 
 const submitPractice = async () => {
 
-  try {
-
-    await axios.post(
+  const request =
+    axios.post(
       `/student/meetings/${props.meeting.id}/practice/submit`,
       {
         project_url:
@@ -66,30 +65,32 @@ const submitPractice = async () => {
       }
     );
 
-    submitted.value = true;
+  toast.promise(request, {
 
-    Swal.fire({
-      icon: 'success',
-      title: 'Berhasil',
-      text: 'Praktikum berhasil dikumpulkan',
-      timer: 2000,
-      showConfirmButton: false,
-    });
+    loading:
+      'Mengumpulkan praktikum...',
 
-  } catch (error: any) {
+    success: () => {
 
-    Swal.fire({
-      icon: 'error',
-      title: 'Gagal',
+      submitted.value = true;
 
-      text:
-        error.response?.data?.errors?.project_url?.[0]
+      return 'Praktikum berhasil dikumpulkan';
+    },
+
+    error: (error: any) => {
+
+      return (
+        error.response?.data?.errors
+          ?.project_url?.[0]
+
         ||
-        'Link tidak valid',
-    });
 
-  }
+        'Link tidak valid'
+      );
+    },
+  });
 
+  await request;
 };
 </script>
 

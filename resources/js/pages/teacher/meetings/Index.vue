@@ -13,6 +13,7 @@ import LkpdTab from './components/LkpdTab.vue';
 import EvaluationTab from './components/EvaluationTab.vue';
 import { useForm } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
+import { toast } from 'vue-sonner';
 import axios from 'axios';
 
 defineOptions({
@@ -69,15 +70,9 @@ const createMeeting = async () => {
           response.data.meeting;
       }
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title:
-          'Pertemuan berhasil diupdate',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.success(
+        'Pertemuan berhasil diupdate'
+      );
 
       resetMeetingForm();
 
@@ -86,15 +81,9 @@ const createMeeting = async () => {
 
     } catch (error) {
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title:
-          'Gagal update meeting',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.error(
+        'Gagal mengupdate pertemuan'
+      );
     }
 
     return;
@@ -115,15 +104,9 @@ const createMeeting = async () => {
       response.data.meeting,
     );
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title:
-        'Pertemuan berhasil dibuat',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.success(
+      'Pertemuan berhasil dibuat'
+    );
 
     resetMeetingForm();
 
@@ -132,15 +115,9 @@ const createMeeting = async () => {
 
   } catch (error) {
 
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'error',
-      title:
-        'Gagal membuat meeting',
-      showConfirmButton: false,
-      timer: 2500,
-    });
+    toast.error(
+      'Gagal membuat pertemuan'
+    );
   }
 };
 
@@ -206,27 +183,15 @@ const removeMeeting =
           null;
       }
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title:
-          'Pertemuan berhasil dihapus',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.success(
+        'Pertemuan berhasil dihapus'
+      );
 
     } catch (error) {
 
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title:
-          'Gagal menghapus meeting',
-        showConfirmButton: false,
-        timer: 2500,
-      });
+      toast.error(
+        'Gagal menghapus pertemuan'
+      );
     }
   };
 

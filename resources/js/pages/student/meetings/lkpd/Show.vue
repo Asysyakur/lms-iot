@@ -3,7 +3,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import axios from 'axios';
-import Swal from 'sweetalert2';
+import { toast } from 'vue-sonner';
 import StudentSidebarLayout from '@/layouts/student/StudentSidebarLayout.vue';
 
 import {
@@ -119,17 +119,16 @@ const submitLkpd = async () => {
     return;
   }
 
-  try {
+  const formData =
+    new FormData();
 
-    const formData =
-      new FormData();
+  formData.append(
+    'file',
+    selectedFile.value
+  );
 
-    formData.append(
-      'file',
-      selectedFile.value
-    );
-
-    await axios.post(
+  const request =
+    axios.post(
       `/student/meetings/${props.meeting.id}/lkpd/submit`,
       formData,
       {
@@ -140,36 +139,29 @@ const submitLkpd = async () => {
       }
     );
 
-    submitted.value = true;
+  toast.promise(request, {
 
-    Swal.fire({
+    loading:
+      'Mengupload LKPD...',
 
-      icon: 'success',
+    success: () => {
 
-      title: 'Berhasil',
+      submitted.value = true;
 
-      text:
-        'LKPD berhasil dikumpulkan',
+      return 'LKPD berhasil dikumpulkan';
+    },
 
-      timer: 2000,
+    error: (error: any) => {
 
-      showConfirmButton: false,
-    });
-
-  } catch (error: any) {
-
-    Swal.fire({
-
-      icon: 'error',
-
-      title: 'Gagal',
-
-      text:
+      return (
         error.response?.data?.message
         ||
-        'Upload gagal',
-    });
-  }
+        'Upload gagal'
+      );
+    },
+  });
+
+  await request;
 };
 </script>
 

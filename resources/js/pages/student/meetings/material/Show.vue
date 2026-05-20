@@ -5,9 +5,11 @@ import {
     ref,
     computed,
     onMounted,
+    onBeforeUnmount,
     nextTick,
     watch,
 } from 'vue';
+import { Link } from '@inertiajs/vue3';
 
 import StudentSidebarLayout from '@/layouts/student/StudentSidebarLayout.vue';
 
@@ -16,7 +18,7 @@ import {
     Download,
 } from 'lucide-vue-next';
 import axios from 'axios';
-import Swal from 'sweetalert2';
+import { toast } from 'vue-sonner';
 
 import * as pdfjsLib from 'pdfjs-dist';
 
@@ -36,13 +38,7 @@ const props = defineProps<{
     progress: any;
 }>();
 
-const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-});
+let heartbeatInterval: any = null;
 
 const reflectionSaved =
     ref(
@@ -216,28 +212,8 @@ const saveReadingProgressLocal =
     };
 
 /**
- * LOAD READING PROGRESS LOCAL
- */
-const loadReadingProgressLocal =
-    () => {
-
-        const saved =
-            localStorage.getItem(
-                progressStorageKey
-            );
-
-        if (!saved) {
-            return;
-        }
-
-        readingProgress.value =
-            Number(saved);
-
-    };
-
-/**
- * PROGRESS
- */
+* PROGRESS
+*/
 const updateProgress = () => {
 
     if (!pdfContainer.value) {
@@ -276,11 +252,19 @@ const updateProgress = () => {
 
     clearTimeout(saveTimeout);
 
-    saveTimeout = setTimeout(() => {
+    saveTimeout = setTimeout(async () => {
 
+        /**
+         * SAVE LOCAL
+         */
         saveReadingProgressLocal();
 
-    }, 500);
+        /**
+         * SAVE DATABASE
+         */
+        await saveReadingProgress();
+
+    }, 1000);
 };
 
 /**
@@ -503,13 +487,68 @@ const renderPdf = async () => {
 
 };
 
-onMounted(() => {
+onMounted(async () => {
 
-    loadReadingProgressLocal();
+    readingProgress.value =
+        props.progress?.reading_progress
+        ?? 0;
 
     renderPdf();
 
+    /**
+     * START READING
+     */
+    await axios.post(
+        `/student/meetings/${props.meeting.id}/start-reading`
+    );
+
+    /**
+     * HEARTBEAT
+     */
+    heartbeatInterval =
+        setInterval(async () => {
+
+            await axios.post(
+                `/student/meetings/${props.meeting.id}/heartbeat`
+            );
+
+        }, 30000);
+
 });
+
+onBeforeUnmount(() => {
+
+    if (heartbeatInterval) {
+
+        clearInterval(
+            heartbeatInterval
+        );
+
+    }
+
+});
+
+const saveReadingProgress =
+    async () => {
+
+        try {
+
+            await axios.post(
+                `/student/meetings/${props.meeting.id}/material/progress`,
+                {
+                    reading_progress:
+                        readingProgress.value,
+                }
+            );
+
+        } catch (error) {
+
+            console.error(
+                'Failed save reading progress',
+                error
+            );
+        }
+    };
 
 /**
  * SAVE TRIGGER ANSWER
@@ -527,22 +566,18 @@ const saveTriggerAnswer =
                 }
             );
 
-            Toast.fire({
-                icon: 'success',
-                title: 'Jawaban pemantik berhasil disimpan',
-            });
+            toast.success(
+                'Jawaban pemantik berhasil disimpan'
+            );
 
         } catch (error) {
 
             console.error(error);
 
-            Toast.fire({
-                icon: 'error',
-                title: 'Gagal menyimpan jawaban pemantik',
-            });
-
+            toast.error(
+                'Gagal menyimpan jawaban pemantik'
+            );
         }
-
     };
 
 /**
@@ -566,22 +601,18 @@ const saveReflection =
 
             reflectionSaved.value = true;
 
-            Toast.fire({
-                icon: 'success',
-                title: 'Refleksi berhasil disimpan',
-            });
+            toast.success(
+                'Refleksi berhasil disimpan'
+            );
 
         } catch (error) {
 
             console.error(error);
 
-            Toast.fire({
-                icon: 'error',
-                title: 'Gagal menyimpan refleksi',
-            });
-
+            toast.error(
+                'Gagal menyimpan refleksi'
+            );
         }
-
     };
 
 watch(
@@ -667,8 +698,8 @@ watch(
 
                 <div class="flex justify-end">
                     <button :disabled="triggerAnswer.trim() === ''" @click="saveTriggerAnswer" :class="triggerAnswer.trim() !== ''
-                            ? 'bg-purple-600 hover:bg-purple-700'
-                            : 'cursor-not-allowed bg-slate-200 text-slate-500'
+                        ? 'bg-purple-600 hover:bg-purple-700'
+                        : 'cursor-not-allowed bg-slate-200 text-slate-500'
                         " class="cursor-pointer rounded-2xl px-6 py-3 text-sm font-semibold text-white transition">
                         Simpan Jawaban
                     </button>
@@ -846,23 +877,24 @@ watch(
 
         <!-- FOOTER -->
         <section class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
             <button
                 class="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
                 ← Kembali ke Pertemuan
             </button>
 
-            <!-- NEXT -->
-            <button :disabled="!canProceed
-                " :class="canProceed
-                    ? 'bg-emerald-500 hover:bg-emerald-600'
-                    : 'cursor-not-allowed bg-slate-300 text-slate-500'
-                    " class="rounded-2xl px-6 py-3 font-semibold text-white transition">
-                {{
-                    canProceed
-                        ? 'Lanjut ke Kuis →'
-                        : '🔒 Selesaikan Refleksi'
-                }}
+            <!-- ACTIVE -->
+            <Link v-if="canProceed" :href="`/student/meetings/${props.meeting.id}/quiz`"
+                class="rounded-2xl bg-emerald-500 px-6 py-3 font-semibold text-white transition hover:bg-emerald-600">
+                Lanjut ke Kuis →
+            </Link>
+
+            <!-- DISABLED -->
+            <button v-else disabled
+                class="cursor-not-allowed rounded-2xl bg-slate-300 px-6 py-3 font-semibold text-slate-500">
+                🔒 Selesaikan Refleksi
             </button>
+
         </section>
     </div>
 </template>

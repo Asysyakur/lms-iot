@@ -7,6 +7,7 @@ import {
   CheckCircle2,
 } from 'lucide-vue-next';
 import Swal from 'sweetalert2';
+import { toast } from 'vue-sonner';
 import { router } from '@inertiajs/vue3';
 defineProps<{
   type: 'pretest' | 'posttest';
@@ -24,49 +25,58 @@ const emit = defineEmits([
   'edit',
 ]);
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 2500,
-  timerProgressBar: true,
-});
+const removeQuestion = async (
+  id: number
+) => {
 
-const removeQuestion = async (id: number) => {
+  const result =
+    await Swal.fire({
 
-  const result = await Swal.fire({
-    title: 'Hapus soal?',
-    text: 'Soal akan dihapus permanen',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Ya, hapus',
-    cancelButtonText: 'Batal',
-    confirmButtonColor: '#ef4444',
-  });
+      title:
+        'Hapus soal?',
+
+      text:
+        'Soal akan dihapus permanen',
+
+      icon:
+        'warning',
+
+      showCancelButton: true,
+
+      confirmButtonText:
+        'Ya, hapus',
+
+      cancelButtonText:
+        'Batal',
+
+      confirmButtonColor:
+        '#ef4444',
+    });
 
   if (!result.isConfirmed) {
     return;
   }
 
-  router.delete(`/teacher/questions/${id}`, {
-    preserveScroll: true,
+  router.delete(
+    `/teacher/questions/${id}`,
+    {
+      preserveScroll: true,
 
-    onSuccess: () => {
+      onSuccess: () => {
 
-      Toast.fire({
-        icon: 'success',
-        title: 'Soal berhasil dihapus',
-      });
+        toast.success(
+          'Soal berhasil dihapus'
+        );
+      },
+
+      onError: () => {
+
+        toast.error(
+          'Gagal menghapus soal'
+        );
+      },
     },
-
-    onError: () => {
-
-      Toast.fire({
-        icon: 'error',
-        title: 'Gagal menghapus soal',
-      });
-    },
-  });
+  );
 };
 </script>
 

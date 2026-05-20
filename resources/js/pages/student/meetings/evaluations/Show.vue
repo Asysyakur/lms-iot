@@ -3,7 +3,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import axios from 'axios';
-import Swal from 'sweetalert2';
+import { toast } from 'vue-sonner';
 import StudentSidebarLayout from '@/layouts/student/StudentSidebarLayout.vue';
 import { router } from '@inertiajs/vue3';
 
@@ -30,49 +30,40 @@ const answers = ref(
 const submitEvaluation =
   async () => {
 
-    try {
-
-      await axios.post(
+    const request =
+      axios.post(
         `/student/meetings/${props.meeting.id}/evaluation/submit`,
         {
-
           answers:
             answers.value,
         }
       );
 
-      await Swal.fire({
+    toast.promise(request, {
 
-        icon: 'success',
+      loading:
+        'Mengirim evaluasi...',
 
-        title: 'Berhasil',
+      success: () => {
 
-        text:
-          'Evaluasi berhasil dikumpulkan',
+        router.visit(
+          `/student/meetings/${props.meeting.id}`
+        );
 
-        timer: 2000,
+        return 'Evaluasi berhasil dikumpulkan';
+      },
 
-        showConfirmButton: false,
-      });
+      error: (error: any) => {
 
-      router.visit(
-        `/student/meetings/${props.meeting.id}`
-      );
-
-    } catch (error: any) {
-
-      Swal.fire({
-
-        icon: 'error',
-
-        title: 'Gagal',
-
-        text:
+        return (
           error.response?.data?.message
           ||
-          'Gagal mengirim evaluasi',
-      });
-    }
+          'Gagal mengirim evaluasi'
+        );
+      },
+    });
+
+    await request;
   };
 </script>
 

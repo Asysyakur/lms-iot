@@ -42,4 +42,44 @@ class User extends Authenticatable
     {
         return $this->hasMany(AssessmentResult::class, 'student_id');
     }
+
+    public function materialProgress()
+    {
+        return $this->hasMany(
+            \App\Models\MaterialProgress::class,
+            'user_id'
+        );
+    }
+
+    public function practiceSubmissions()
+    {
+        return $this->hasMany(
+            \App\Models\PracticeSubmission::class,
+            'user_id'
+        );
+    }
+
+    public function lkpdSubmissions()
+    {
+        return $this->hasMany(
+            \App\Models\LkpdSubmission::class,
+            'user_id'
+        );
+    }
+
+    public function evaluationSubmissions()
+    {
+        return $this->hasMany(
+            \App\Models\EvaluationSubmission::class,
+            'user_id'
+        );
+    }
+
+    public function quizAttempts()
+    {
+        return $this->hasMany(
+            \App\Models\QuizAttempt::class,
+            'user_id'
+        );
+    }
 }
