@@ -335,7 +335,7 @@ const submitPractice = async () => {
       </a>
 
       <button v-else class="rounded-2xl bg-slate-300 px-6 py-3 font-semibold text-slate-500">
-        🔒 Menunggu LKPD Dibuka Guru
+        🔒 Lanjut ke LKPD
       </button>
     </section>
   </div>

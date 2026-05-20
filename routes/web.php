@@ -4,6 +4,7 @@ use App\Http\Controllers\Student\AssessmentController as StudentAssessmentContro
 use App\Http\Controllers\Teacher\AssessmentController;
 use App\Http\Controllers\Teacher\EvaluationController;
 use App\Http\Controllers\Teacher\LkpdController;
+use App\Http\Controllers\Student\LkpdController as StudentLkpdController;
 use App\Http\Controllers\Teacher\MaterialController;
 use App\Http\Controllers\Teacher\MeetingController;
 use App\Http\Controllers\Student\MeetingController as StudentMeetingController;
@@ -166,14 +167,13 @@ Route::middleware([
 
     Route::get(
         '/meetings/{meeting}/lkpd',
-        fn($meeting) =>
-        Inertia::render(
-            'student/meetings/lkpd/Show',
-            [
-                'meetingId' => $meeting,
-            ]
-        )
-    )->name('student.meeting.lkpd');
+        [StudentLkpdController::class, 'show']
+    );
+
+    Route::post(
+        '/meetings/{meeting}/lkpd/submit',
+        [StudentLkpdController::class, 'submit']
+    );
 });
 
 /*
