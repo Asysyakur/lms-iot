@@ -32,6 +32,11 @@ const submitted = ref(
   !!props.submission
 );
 
+const currentSubmission =
+  ref(
+    props.submission
+  );
+
 const instructions = computed(() => {
 
   if (!props.practice?.instruction) {
@@ -73,6 +78,11 @@ const submitPractice = async () => {
     success: () => {
 
       submitted.value = true;
+
+      currentSubmission.value = {
+        project_url:
+          practiceLink.value,
+      };
 
       return 'Praktikum berhasil dikumpulkan';
     },
@@ -305,7 +315,7 @@ const submitPractice = async () => {
           <button @click="submitPractice" :disabled="!canSubmit" :class="canSubmit
             ? 'bg-emerald-500 hover:bg-emerald-600'
             : 'cursor-not-allowed bg-slate-300 text-slate-500'
-            " class="rounded-2xl px-6 py-3 font-semibold text-white transition">
+            " class="cursor-pointer rounded-2xl px-6 py-3 font-semibold text-white transition">
             {{
               canSubmit
                 ? '🚀 Kumpulkan Praktikum'
@@ -324,13 +334,11 @@ const submitPractice = async () => {
     </section>
 
     <!-- FOOTER -->
-    <section class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-      <button
-        class="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
-        ← Kembali ke Kuis
-      </button>
-
-      <a v-if="lkpdOpened && props.submission?.project_url" :href="`/student/meetings/${props.meeting.id}/lkpd`"
+    <section class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-end">
+      <a v-if="
+        lkpdOpened &&
+        currentSubmission?.project_url
+      " :href="`/student/meetings/${props.meeting.id}/lkpd`"
         class="rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700">
         🚀 Lanjut ke LKPD
       </a>

@@ -231,19 +231,19 @@ const iconMap = {
 
       <!-- FOOTER -->
       <div class="mt-8 flex items-center justify-between">
-        <button
+        <a href="/student/dashboard"
           class="flex items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
           <ChevronLeft class="h-4 w-4" />
 
           Kembali
-        </button>
+        </a>
 
-        <button
+        <a :href="steps.find(step => step.id === 1)?.href"
           class="flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-600">
           Lanjut ke Materi
 
           <ChevronRight class="h-4 w-4" />
-        </button>
+        </a>
       </div>
     </section>
   </div>

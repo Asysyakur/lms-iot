@@ -878,10 +878,10 @@ watch(
         <!-- FOOTER -->
         <section class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
-            <button
+            <a :href="`/student/meetings/${props.meeting.id}`"
                 class="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
                 ← Kembali ke Pertemuan
-            </button>
+            </a>
 
             <!-- ACTIVE -->
             <Link v-if="canProceed" :href="`/student/meetings/${props.meeting.id}/quiz`"

@@ -31,6 +31,10 @@ const selectedFile = ref<File | null>(
 
 const submitted = ref(false);
 
+const currentSubmission = ref(
+  props.submission
+);
+
 const instructions = [
   'Baca seluruh petunjuk pengerjaan LKPD terlebih dahulu.',
   'Buat salinan template Google Docs sebelum mulai mengerjakan.',
@@ -99,7 +103,7 @@ const evalOpened = computed(() => {
 });
 
 const existingFile = computed(() => {
-  return props.submission?.file_path;
+  return currentSubmission.value?.file_path;
 });
 
 const existingFileName = computed(() => {
@@ -147,6 +151,11 @@ const submitLkpd = async () => {
     success: () => {
 
       submitted.value = true;
+
+      currentSubmission.value = {
+        file_path:
+          'uploaded',
+      };
 
       return 'LKPD berhasil dikumpulkan';
     },
@@ -482,12 +491,13 @@ const submitLkpd = async () => {
 
     <!-- FOOTER -->
     <section class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-      <button
+      <a
+        :href="`/student/meetings/${props.meeting.id}/practice`"
         class="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
         ← Kembali ke Praktik
-      </button>
+      </a>
 
-      <a v-if="evalOpened && props.submission?.file_path" :href="`/student/meetings/${props.meeting.id}/evaluation`"
+      <a v-if="evalOpened && currentSubmission?.file_path" :href="`/student/meetings/${props.meeting.id}/evaluation`"
         class="rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700">
         🚀 Lanjut ke Evaluation
       </a>
