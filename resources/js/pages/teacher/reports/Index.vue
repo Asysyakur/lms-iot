@@ -10,6 +10,7 @@ defineOptions({
 
 const props = defineProps<{
   menus: any;
+  meetingProgress: any[];
 }>();
 
 </script>
@@ -71,55 +72,33 @@ const props = defineProps<{
         </h2>
 
         <div class="mt-6 space-y-5">
-
-          <div>
+          <div v-for="meeting in props.meetingProgress" :key="meeting.id">
             <div class="mb-2 flex items-center justify-between text-sm">
               <span class="font-semibold text-slate-700">
-                Pertemuan 1
+                {{ meeting.title }}
               </span>
 
-              <span class="text-emerald-600">
-                96%
+              <span :class="meeting.percentage >= 80
+                  ? 'text-emerald-600'
+                  : meeting.percentage >= 50
+                    ? 'text-blue-600'
+                    : 'text-orange-600'
+                ">
+                {{ meeting.percentage }}%
               </span>
             </div>
 
             <div class="h-3 overflow-hidden rounded-full bg-slate-100">
-              <div class="h-full w-[96%] rounded-full bg-emerald-500" />
+              <div class="h-full rounded-full transition-all duration-500" :class="meeting.percentage >= 80
+                  ? 'bg-emerald-500'
+                  : meeting.percentage >= 50
+                    ? 'bg-blue-500'
+                    : 'bg-orange-500'
+                " :style="{
+        width: meeting.percentage + '%'
+      }" />
             </div>
           </div>
-
-          <div>
-            <div class="mb-2 flex items-center justify-between text-sm">
-              <span class="font-semibold text-slate-700">
-                Pertemuan 2
-              </span>
-
-              <span class="text-blue-600">
-                78%
-              </span>
-            </div>
-
-            <div class="h-3 overflow-hidden rounded-full bg-slate-100">
-              <div class="h-full w-[78%] rounded-full bg-blue-500" />
-            </div>
-          </div>
-
-          <div>
-            <div class="mb-2 flex items-center justify-between text-sm">
-              <span class="font-semibold text-slate-700">
-                Pertemuan 3
-              </span>
-
-              <span class="text-orange-600">
-                45%
-              </span>
-            </div>
-
-            <div class="h-3 overflow-hidden rounded-full bg-slate-100">
-              <div class="h-full w-[45%] rounded-full bg-orange-500" />
-            </div>
-          </div>
-
         </div>
       </div>
 

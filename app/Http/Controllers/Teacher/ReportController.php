@@ -17,9 +17,49 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $meetings = Meeting::orderBy(
-            'meeting_number'
-        )->get();
+        $meetings = Meeting::with([
+            'materialProgress',
+            'practiceSubmissions',
+            'lkpdSubmissions',
+            'evaluationSubmissions',
+        ])
+            ->orderBy('meeting_number')
+            ->get();
+
+        $totalStudents = User::where(
+            'role',
+            'student'
+        )->count();
+
+        $meetingProgress = $meetings->map(
+            function ($meeting) use ($totalStudents) {
+
+                $completedStudents =
+                    $meeting->evaluationSubmissions
+                    ->pluck('user_id')
+                    ->unique()
+                    ->count();
+
+                $percentage =
+                    $totalStudents > 0
+                    ? round(
+                        ($completedStudents / $totalStudents) * 100
+                    )
+                    : 0;
+
+                return [
+
+                    'id' =>
+                    $meeting->id,
+
+                    'title' =>
+                    $meeting->title,
+
+                    'percentage' =>
+                    $percentage,
+                ];
+            }
+        );
 
         $menus = [
 
@@ -69,7 +109,12 @@ class ReportController extends Controller
         return Inertia::render(
             'teacher/reports/Index',
             [
-                'menus' => $menus,
+
+                'menus' =>
+                $menus,
+
+                'meetingProgress' =>
+                $meetingProgress,
             ]
         );
     }
