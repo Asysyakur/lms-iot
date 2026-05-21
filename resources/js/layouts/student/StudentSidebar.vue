@@ -50,7 +50,7 @@ const toggleMeeting = (id: number) => {
 
 <template>
   <aside
-    class="sticky top-0 flex h-screen w-72 shrink-0 flex-col overflow-y-auto bg-linear-to-b from-[#071A3D] to-[#0B2B63] text-white">
+    class="top-0 left-0 flex h-screen w-72 shrink-0 flex-col overflow-y-auto bg-linear-to-b from-[#071A3D] to-[#0B2B63] text-white shadow-2xl lg:fixed">
     <!-- LOGO -->
     <div class="p-6">
       <Link href="/student/dashboard" class="flex items-start gap-4">
@@ -75,8 +75,11 @@ const toggleMeeting = (id: number) => {
     <div class="flex-1 px-4 pb-6">
       <nav class="space-y-2">
         <!-- DASHBOARD -->
-        <Link href="/student/dashboard"
-          class="flex items-center justify-between rounded-xl bg-white/10 px-4 py-3 transition hover:bg-white/15">
+        <Link href="/student/dashboard" class="flex items-center justify-between rounded-2xl px-4 py-3 transition"
+          :class="page.url === '/student/dashboard'
+            ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+            : 'text-slate-200 hover:bg-white/10'
+            ">
           <div class="flex items-center gap-3">
             <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/20">
               <LayoutDashboard class="h-4 w-4 text-purple-300" />
@@ -90,7 +93,10 @@ const toggleMeeting = (id: number) => {
 
         <!-- PRE TEST -->
         <Link href="/student/assessments/pretest"
-          class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-200 transition hover:bg-white/10">
+          class="flex items-center gap-3 rounded-2xl px-4 py-3 text-slate-200 transition hover:bg-white/10" :class="page.url.startsWith('/student/assessments/pretest')
+            ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+            : ''
+            ">
           <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/20">
             <ClipboardCheck class="h-4 w-4 text-amber-300" />
           </div>
@@ -106,8 +112,8 @@ const toggleMeeting = (id: number) => {
         <!-- MEETINGS -->
         <div v-for="meeting in meetings" :key="meeting.id" class="space-y-2">
           <!-- HEADER -->
-          <Link :href="`/student/meetings/${meeting.id}`"
-            class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition hover:bg-white/10"
+          <button type="button" @click="toggleMeeting(meeting.id)"
+            class="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition hover:bg-white/10"
             :class="page.url.startsWith(`/student/meetings/${meeting.id}`)
               ? 'bg-white/10'
               : ''
@@ -122,14 +128,26 @@ const toggleMeeting = (id: number) => {
               </span>
             </div>
 
-            <ChevronDown v-if="openedMeeting === meeting.id" class="h-4 w-4 text-slate-300" />
+            <ChevronDown v-if="
+              openedMeeting === meeting.id
+            " class="h-4 w-4 text-slate-300" />
 
             <ChevronRight v-else class="h-4 w-4 text-slate-300" />
-          </Link>
+          </button>
 
           <!-- SUB MENU -->
           <div v-if="openedMeeting === meeting.id" class="ml-4 border-l border-white/10 pl-4">
             <div class="space-y-2">
+              <Link :href="`/student/meetings/${meeting.id}`"
+                class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-cyan-300 transition hover:bg-white/10">
+                <div class="flex h-7 w-7 items-center justify-center rounded-md bg-cyan-500/20">
+                  <BookOpen class="h-3.5 w-3.5" />
+                </div>
+
+                <span>
+                  Overview
+                </span>
+              </Link>
               <template v-for="menu in meeting.menus" :key="menu.title">
                 <!-- ENABLE -->
                 <Link v-if="menu.unlocked" :href="menu.href"
@@ -170,8 +188,11 @@ const toggleMeeting = (id: number) => {
         <div class="my-4 border-t border-white/10" />
 
         <!-- POST TEST -->
-        <Link href="/student/assessments/posttest"
-          class="flex items-center gap-3 rounded-xl px-4 py-3 text-slate-200 transition hover:bg-white/10">
+        <Link href="/student/assessments/posttest" class="flex items-center gap-3 rounded-2xl px-4 py-3 transition"
+          :class="page.url.startsWith('/student/assessments/posttest')
+            ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+            : 'text-slate-200 hover:bg-white/10'
+            ">
           <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/20">
             <FileText class="h-4 w-4 text-emerald-300" />
           </div>
@@ -186,7 +207,7 @@ const toggleMeeting = (id: number) => {
     <!-- FOOTER -->
     <div class="border-t border-white/10 p-4">
       <Link href="/logout" method="post" as="button"
-        class="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition hover:bg-red-500/20 hover:text-red-300">
+        class="cursor-pointer flex w-full items-center gap-3 rounded-xl px-4 py-3 text-slate-300 transition hover:bg-red-500/20 hover:text-red-300">
         <LogOut class="h-5 w-5" />
 
         <span>Keluar</span>

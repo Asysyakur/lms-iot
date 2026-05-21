@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
@@ -39,6 +40,62 @@ class StudentController extends Controller
         return back()->with(
             'success',
             'Akun siswa berhasil dihapus'
+        );
+    }
+
+    public function update(
+        Request $request,
+        User $user
+    ) {
+
+        $request->validate([
+
+            'name' => ['required'],
+
+            'class' => ['required'],
+
+            'username' => [
+
+                'required',
+
+                Rule::unique(
+                    'users',
+                    'username'
+                )->ignore($user->id),
+            ],
+        ]);
+
+        $user->update([
+
+            'name' =>
+            $request->name,
+
+            'class' =>
+            $request->class,
+
+            'username' =>
+            $request->username,
+        ]);
+
+        /**
+         * PASSWORD OPTIONAL
+         */
+        if (
+            $request->password
+        ) {
+
+            $user->update([
+
+                'password' =>
+                Hash::make(
+                    $request->password
+                ),
+            ]);
+        }
+
+        return back()->with(
+            'success',
+            'Akun siswa berhasil diupdate'
         );
     }
 }

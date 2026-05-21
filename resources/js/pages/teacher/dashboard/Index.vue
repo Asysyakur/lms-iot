@@ -41,7 +41,7 @@ const iconMap: any = {
   <div class="space-y-8">
     <!-- HEADER -->
     <section
-      class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#173B74] via-[#114084] to-emerald-500 p-8 text-white shadow-xl">
+      class="relative overflow-hidden rounded-3xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 p-8 text-white shadow-xl">
       <div class="absolute right-0 top-0 h-56 w-56 rounded-full bg-white/10" />
 
       <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -49,10 +49,6 @@ const iconMap: any = {
           <div class="mb-4 flex items-center gap-3">
             <span class="rounded-full bg-white/20 px-4 py-1 text-xs font-bold uppercase tracking-wider">
               Dashboard Guru
-            </span>
-
-            <span class="rounded-full bg-emerald-400/20 px-4 py-1 text-xs font-bold text-emerald-100">
-              Aktif Hari Ini
             </span>
           </div>
 
@@ -68,17 +64,12 @@ const iconMap: any = {
             aktivitas.
           </p>
         </div>
-
-        <button
-          class="rounded-2xl bg-white/20 px-6 py-4 font-bold text-white backdrop-blur transition hover:bg-white/30">
-          + Tambah Pertemuan
-        </button>
       </div>
     </section>
 
     <!-- STATS -->
     <section class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-      <div v-for="stat in stats" :key="stat.title" class="rounded-3xl border bg-gradient-to-br p-6 shadow-sm"
+      <div v-for="stat in stats" :key="stat.title" class="rounded-3xl border bg-linear-to-br p-6 shadow-sm"
         :class="stat.color">
         <div class="flex items-start justify-between">
           <div>
@@ -120,7 +111,7 @@ const iconMap: any = {
 
         <Link :href="feature.href"
           class="mt-6 inline-block rounded-2xl bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
-        Buka Menu →
+          Buka Menu →
         </Link>
       </div>
     </section>

@@ -32,7 +32,38 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
 
-    return Inertia::render('Welcome');
+    if (auth()->check()) {
+
+        $user = auth()->user();
+
+        /**
+         * GURU / ADMIN
+         */
+        if (
+            $user->role === 'teacher'
+            ||
+            $user->role === 'admin'
+        ) {
+
+            return redirect()
+                ->route(
+                    'teacher.dashboard'
+                );
+        }
+
+        /**
+         * SISWA
+         */
+        return redirect()
+            ->route(
+                'student.dashboard'
+            );
+    }
+
+    /**
+     * BELUM LOGIN
+     */
+    return redirect('/login');
 })->name('home');
 
 /*
@@ -40,31 +71,6 @@ Route::get('/', function () {
 | AUTHENTICATED
 |--------------------------------------------------------------------------
 */
-
-Route::middleware(['auth'])->group(function () {
-
-    /*
-    |--------------------------------------------------------------------------
-    | REDIRECT AFTER LOGIN
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('/dashboard', function (Request $request) {
-
-        $user = $request->user();
-
-        if (
-            $user->role === 'teacher' ||
-            $user->role === 'admin'
-        ) {
-            return redirect()
-                ->route('teacher.dashboard');
-        }
-
-        return redirect()
-            ->route('student.dashboard');
-    });
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -239,6 +245,11 @@ Route::middleware([
 
     Route::post('/students', [StudentController::class, 'store'])
         ->name('teacher.students.store');
+
+    Route::put(
+        '/students/{user}',
+        [StudentController::class, 'update']
+    );
 
     Route::delete('/students/{user}', [StudentController::class, 'destroy'])
         ->name('teacher.students.destroy');

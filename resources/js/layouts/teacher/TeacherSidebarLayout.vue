@@ -2,6 +2,7 @@
 
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 import {
   LayoutDashboard,
@@ -11,10 +12,13 @@ import {
   FileText,
   BarChart3,
   LogOut,
+  Menu,
 } from 'lucide-vue-next';
 import { Toaster } from 'vue-sonner';
 
 const page = usePage();
+
+const sidebarOpen = ref(false);
 
 const menus = [
   {
@@ -64,12 +68,46 @@ const menus = [
 <template>
   <Toaster richColors position="top-right" />
   <div class="min-h-screen bg-slate-100">
+    <!-- MOBILE HEADER -->
+    <div
+      class="sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-4 shadow-sm lg:hidden">
+      <div>
+        <h1 class="text-lg font-black text-slate-800">
+          LMS IoT
+        </h1>
+
+        <p class="text-xs text-slate-500">
+          Panel Guru
+        </p>
+      </div>
+
+      <button @click="sidebarOpen = !sidebarOpen"
+        class="relative flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 transition hover:bg-slate-100">
+        <Menu class="h-6 w-6 text-slate-700 transition-all duration-300" :class="sidebarOpen
+            ? 'rotate-90 scale-0 opacity-0'
+            : 'rotate-0 scale-100 opacity-100'
+          " />
+
+        <div class="absolute transition-all duration-300 text-slate-700" :class="sidebarOpen
+            ? 'rotate-0 scale-100 opacity-100'
+            : 'rotate-90 scale-0 opacity-0'
+          ">
+          ✕
+        </div>
+      </button>
+    </div>
+    <!-- OVERLAY -->
+    <div v-if="sidebarOpen" @click="sidebarOpen = false"
+      class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden" />
     <!-- SIDEBAR -->
-    <aside
-      class="fixed top-0 left-0 z-40 flex h-screen w-72 flex-col overflow-y-auto bg-linear-to-b from-[#071A3D] to-[#0B2B63] text-white">
+    <aside :class="sidebarOpen
+      ? 'translate-x-0'
+      : '-translate-x-full lg:translate-x-0'
+      "
+      class="fixed top-0 left-0 z-50 flex h-screen w-72 flex-col overflow-y-auto bg-linear-to-b from-[#071A3D] to-[#0B2B63] text-white transition-transform duration-300">
       <!-- LOGO -->
       <div class="border-b border-white/10 p-6">
-        <div class="flex items-start gap-4">
+        <div class="flex items-start justify-between">
           <div
             class="flex h-16 w-16 items-center justify-center rounded-3xl bg-linear-to-br from-emerald-400 to-teal-500 text-3xl shadow-lg">
             👨‍🏫
@@ -94,7 +132,7 @@ const menus = [
         </div>
 
         <nav class="space-y-3">
-          <Link v-for="menu in menus" :key="menu.title" :href="menu.href"
+          <Link v-for="menu in menus" @click="sidebarOpen = false" :key="menu.title" :href="menu.href"
             class="group flex items-center gap-4 rounded-2xl px-4 py-4 transition" :class="page.url.startsWith(menu.href)
               ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
               : 'text-slate-300 hover:bg-white/10 hover:text-white'
@@ -133,7 +171,7 @@ const menus = [
     </aside>
 
     <!-- CONTENT -->
-    <main class="ml-72 min-w-0 overflow-x-hidden p-4 md:p-6">
+    <main class="min-w-0 overflow-x-hidden p-4 md:p-6 lg:ml-72">
       <slot />
     </main>
   </div>

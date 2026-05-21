@@ -22,6 +22,7 @@ import {
   Trash2,
   UserCheck,
   UserX,
+  Pencil,
 } from 'lucide-vue-next';
 
 defineOptions({
@@ -56,6 +57,41 @@ const form = useForm({
 const deletedStudents =
   ref(0);
 
+const editingStudent =
+  ref<any>(null);
+
+const editStudent =
+  (
+    student: Student
+  ) => {
+
+    editingStudent.value =
+      student;
+
+    form.name =
+      student.name;
+
+    form.class =
+      student.class;
+
+    form.username =
+      student.username;
+
+    form.password = '';
+  };
+
+const resetForm =
+  () => {
+
+    editingStudent.value =
+      null;
+
+    form.reset();
+
+    form.class =
+      'XI TKJ-T-1';
+  };
+
 const totalStudents =
   computed(() => {
 
@@ -87,6 +123,45 @@ const inactiveStudents =
 const addStudent =
   () => {
 
+    /**
+     * UPDATE
+     */
+    if (
+      editingStudent.value
+    ) {
+
+      form.put(
+        `/teacher/students/${editingStudent.value.id}`,
+        {
+          preserveScroll:
+            true,
+
+          onSuccess:
+            () => {
+
+              toast.success(
+                'Akun siswa berhasil diupdate',
+              );
+
+              resetForm();
+            },
+
+          onError:
+            () => {
+
+              toast.error(
+                'Gagal update akun',
+              );
+            },
+        },
+      );
+
+      return;
+    }
+
+    /**
+     * CREATE
+     */
     form.post(
       '/teacher/students',
       {
@@ -100,10 +175,7 @@ const addStudent =
               'Akun siswa berhasil dibuat',
             );
 
-            form.reset();
-
-            form.class =
-              'XI TKJ-T-1';
+            resetForm();
           },
 
         onError:
@@ -260,11 +332,19 @@ const removeStudent =
 
         <!-- BUTTON -->
         <div class="mt-6 flex justify-end">
+          <button v-if="editingStudent" @click="resetForm"
+            class="mr-3 rounded-2xl bg-slate-200 px-6 py-3 font-semibold text-slate-700 transition hover:bg-slate-300">
+            Batal
+          </button>
           <button @click="addStudent" :disabled="form.processing"
             class="cursor-pointer inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
             <UserPlus class="h-5 w-5" />
 
-            Simpan Akun Siswa
+            {{
+              editingStudent
+                ? 'Update Akun'
+                : 'Simpan Akun Siswa'
+            }}
           </button>
         </div>
       </div>
@@ -366,14 +446,6 @@ const removeStudent =
                 Username
               </th>
 
-              <th class="px-5 py-4 text-left text-sm font-semibold">
-                Password Awal
-              </th>
-
-              <th class="px-5 py-4 text-left text-sm font-semibold">
-                Status
-              </th>
-
               <th class="px-5 py-4 text-center text-sm font-semibold">
                 Aksi
               </th>
@@ -404,40 +476,33 @@ student, index
                 {{ student.username }}
               </td>
 
-              <!-- PASSWORD -->
-              <td class="px-5 py-4 text-sm text-slate-700">
-                {{ student.password }}
-              </td>
-
-              <!-- STATUS -->
-              <td class="px-5 py-4">
-                <div v-if="student.active"
-                  class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
-                  <UserCheck class="h-3 w-3" />
-
-                  Aktif
-                </div>
-
-                <div v-else
-                  class="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-                  <UserX class="h-3 w-3" />
-
-                  Belum Login
-                </div>
-              </td>
-
               <!-- ACTION -->
               <td class="px-5 py-4 text-center">
-                <button @click="
-                  removeStudent(
-                    student.id,
-                  )
-                  "
-                  class="cursor-pointer inline-flex items-center gap-2 rounded-xl bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600">
-                  <Trash2 class="h-4 w-4" />
+                <div class="flex items-center justify-center gap-2">
 
-                  Hapus
-                </button>
+                  <!-- EDIT -->
+                  <button @click="
+                    editStudent(student)
+                    "
+                    class="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600">
+                    <Pencil class="h-4 w-4" />
+
+                    Edit
+                  </button>
+
+                  <!-- DELETE -->
+                  <button @click="
+                    removeStudent(
+                      student.id,
+                    )
+                    "
+                    class="inline-flex items-center gap-2 rounded-xl bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600">
+                    <Trash2 class="h-4 w-4" />
+
+                    Hapus
+                  </button>
+
+                </div>
               </td>
             </tr>
           </tbody>
