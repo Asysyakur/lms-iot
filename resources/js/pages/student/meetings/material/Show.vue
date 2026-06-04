@@ -649,7 +649,7 @@ watch(
             </div>
         </section>
 
-        <section v-if="material.video_url" class="rounded-3xl bg-white p-6 shadow-sm">
+        <section v-if="material.video_url" class="rounded-2xl bg-white p-5 shadow-sm">
             <h2 class="mb-4 text-lg font-bold text-slate-800">
                 🎥 Video Pembelajaran
             </h2>
@@ -659,7 +659,7 @@ watch(
         </section>
 
         <!-- PERTANYAAN PEMANTIK -->
-        <section class="rounded-3xl bg-white p-6 shadow-sm">
+        <section class="rounded-2xl bg-white p-5 shadow-sm">
             <div class="mb-6 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100">
@@ -708,7 +708,7 @@ watch(
         </section>
 
         <!-- READING PROGRESS -->
-        <section class="rounded-3xl bg-white p-6 shadow-sm">
+        <section class="rounded-2xl bg-white p-5 shadow-sm">
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="font-bold text-slate-800">
@@ -745,13 +745,13 @@ watch(
         </section>
 
         <!-- MATERI -->
-        <section class="rounded-3xl bg-white p-6 shadow-sm">
+        <section class="rounded-2xl bg-white p-5 shadow-sm">
             <div ref="pdfContainer"
                 class="flex flex-col items-center h-[680px] overflow-y-scroll rounded-2xl border border-slate-200 bg-slate-100 p-5" />
         </section>
 
         <!-- REFLECTION -->
-        <section " class=" rounded-3xl bg-white p-6 shadow-sm">
+        <section " class=" rounded-2xl bg-white p-5 shadow-sm">
             <div class="mb-6 flex items-center justify-between">
                 <div>
                     <h2 class="text-lg font-bold text-slate-800">
@@ -843,7 +843,7 @@ watch(
         </section>
 
         <!-- DOWNLOAD PDF -->
-        <section class="rounded-3xl bg-white p-6 shadow-sm">
+        <section class="rounded-2xl bg-white p-5 shadow-sm">
             <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 <div class="flex items-start gap-4">
                     <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100">

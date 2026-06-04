@@ -122,9 +122,6 @@ const formatAnswer =
       return '-';
     }
 
-    /**
-     * ARRAY
-     */
     if (
       Array.isArray(
         answer,
@@ -136,9 +133,6 @@ const formatAnswer =
       );
     }
 
-    /**
-     * JSON STRING
-     */
     try {
 
       const parsed =
@@ -167,27 +161,40 @@ const formatAnswer =
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-5">
 
     <!-- HEADER -->
-    <section class="rounded-3xl bg-linear-to-r from-emerald-600 to-teal-600 p-6 text-white shadow-lg">
-      <div class="flex items-center justify-between">
+    <section
+      class="rounded-2xl bg-linear-to-r from-emerald-600 to-teal-600 p-5 text-white shadow-sm">
+
+      <div
+        class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
         <div>
-          <h1 class="text-2xl font-bold">
+
+          <h1
+            class="text-xl font-bold">
+
             📘 {{ props.meeting.title }}
           </h1>
 
-          <p class="mt-2 text-emerald-100">
+          <p
+            class="mt-1 text-sm text-emerald-100">
+
             Monitoring aktivitas siswa
-            pada
-            {{ props.meeting.title }}.
+            pada {{ props.meeting.title }}.
           </p>
         </div>
 
-        <div class="flex gap-3">
+        <div
+          class="flex flex-wrap gap-3">
 
-          <button @click="saveScores" :disabled="form.processing"
-            class="rounded-2xl bg-white px-5 py-3 font-semibold text-emerald-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50">
+          <!-- SAVE -->
+          <button
+            @click="saveScores"
+            :disabled="form.processing"
+            class="rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-emerald-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50">
+
             {{
               form.processing
                 ? 'Menyimpan...'
@@ -195,8 +202,11 @@ const formatAnswer =
             }}
           </button>
 
-          <a :href="`/teacher/reports/meetings/${meeting.id}/export`"
-            class="rounded-2xl bg-white px-5 py-3 font-semibold text-emerald-700 transition hover:bg-slate-100">
+          <!-- EXPORT -->
+          <a
+            :href="`/teacher/reports/meetings/${meeting.id}/export`"
+            class="rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-emerald-700 transition hover:bg-slate-100">
+
             ⬇ Download Excel
           </a>
 
@@ -205,116 +215,118 @@ const formatAnswer =
     </section>
 
     <!-- TABLE -->
-    <section class="overflow-hidden rounded-3xl bg-white shadow-sm">
-      <div class="overflow-x-auto">
+    <section
+      class="overflow-hidden rounded-2xl bg-white shadow-sm">
 
-        <table class="min-w-max text-sm">
+      <div
+        class="overflow-x-auto">
 
-          <thead class="bg-slate-900 text-white">
+        <table
+          class="min-w-max text-sm">
+
+          <!-- HEAD -->
+          <thead
+            class="bg-slate-900 text-white">
+
             <tr>
 
-              <!-- NOMOR -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 No
               </th>
 
-              <!-- NAMA -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Nama Siswa
               </th>
 
-              <!-- PEMANTIK -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Jawaban Pemantik
               </th>
 
-              <!-- NILAI PEMANTIK -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Nilai Pemantik
               </th>
 
-              <!-- WAKTU AKSES -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Waktu Akses
               </th>
 
-              <!-- REFLEKSI -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Jawaban Refleksi
               </th>
 
-              <!-- KUIS -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Nilai Kuis
               </th>
 
-              <!-- PRAKTIK -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Link Praktikum
               </th>
 
-              <!-- NILAI PRAKTIK -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Nilai Praktikum
               </th>
 
-              <!-- LKPD -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 LKPD
               </th>
 
-              <!-- EVALUASI -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Jawaban Evaluasi
               </th>
 
-              <!-- NILAI EVALUASI -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Nilai Evaluasi
               </th>
 
-              <!-- TOTAL -->
-              <th class="px-4 py-3 text-left whitespace-nowrap">
+              <th class="px-4 py-3 text-left text-xs font-semibold whitespace-nowrap">
                 Total Nilai
               </th>
 
             </tr>
           </thead>
 
+          <!-- BODY -->
           <tbody>
-            <tr v-for="(
-student,
-  index
-                            ) in props.students" :key="index"
-              class="border-b border-slate-100 text-slate-700 hover:bg-slate-50">
 
-              <!-- NOMOR -->
-              <td class="px-4 py-4">
+            <tr
+              v-for="(
+                student,
+                index
+              ) in props.students"
+              :key="index"
+              class="border-b border-slate-100 text-sm text-slate-700 hover:bg-slate-50">
+
+              <!-- NO -->
+              <td class="px-4 py-3">
                 {{ index + 1 }}
               </td>
 
-              <!-- NAMA -->
-              <td class="px-4 py-4 font-semibold whitespace-nowrap">
+              <!-- NAME -->
+              <td class="px-4 py-3 font-semibold whitespace-nowrap">
                 {{ student.name }}
               </td>
 
-              <!-- JAWABAN PEMANTIK -->
-              <td class="min-w-60 px-4 py-4">
+              <!-- PEMANTIK -->
+              <td class="min-w-[220px] px-4 py-3 text-sm leading-relaxed">
                 {{
                   student.triggerAnswer ||
                   '-'
                 }}
               </td>
 
-              <!-- NILAI PEMANTIK -->
-              <td class="px-4 py-4">
-                <input type="number" min="1" max="100" v-model="form.students[index]
-                  .triggerScore
-                  " " class=" w-20 rounded-xl border border-slate-200 px-3 py-2 text-center" />
+              <!-- SCORE PEMANTIK -->
+              <td class="px-4 py-3">
+
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  v-model="form.students[index].triggerScore"
+                  class="w-16 rounded-lg border border-slate-200 px-2 py-2 text-center text-sm outline-none focus:border-emerald-500" />
               </td>
 
-              <!-- WAKTU AKSES -->
-              <td class="px-4 py-4 whitespace-nowrap text-slate-500">
+              <!-- ACCESS -->
+              <td class="px-4 py-3 text-sm whitespace-nowrap text-slate-500">
                 {{
                   student.accessTime ||
                   '-'
@@ -322,76 +334,101 @@ student,
               </td>
 
               <!-- REFLEKSI -->
-              <td class="min-w-60 px-4 py-4">
+              <td class="min-w-[220px] px-4 py-3 text-sm leading-relaxed">
                 {{
                   formatAnswer(student.reflectionAnswer) ||
                   '-'
                 }}
               </td>
 
-              <!-- KUIS -->
-              <td class="px-4 py-4">
-                <div class="rounded-xl bg-blue-50 px-3 py-2 text-center font-bold text-blue-600">
+              <!-- QUIZ -->
+              <td class="px-4 py-3">
+
+                <div
+                  class="rounded-lg bg-blue-50 px-3 py-2 text-center text-sm font-bold text-blue-600">
+
                   {{
                     student.quiz || 0
                   }}
                 </div>
               </td>
 
-              <!-- LINK PRAKTIK -->
-              <td class="px-4 py-4">
-                <a v-if="
-                  student.practice
-                " :href="student.practice
-                  " target="_blank"
-                  class="rounded-full bg-blue-100 px-4 py-2 text-xs font-semibold text-blue-700 transition hover:bg-blue-200">
+              <!-- PRAKTIK -->
+              <td class="px-4 py-3">
+
+                <a
+                  v-if="student.practice"
+                  :href="student.practice"
+                  target="_blank"
+                  class="inline-flex rounded-full bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-200">
+
                   Buka
                 </a>
 
-                <span v-else class="text-slate-400">
+                <span
+                  v-else
+                  class="text-slate-400">
+
                   -
                 </span>
               </td>
 
-              <!-- NILAI PRAKTIK -->
-              <td class="px-4 py-4">
-                <input type="number" min="1" max="100" v-model="form.students[index]
-                  .practiceScore
-                  " class=" w-20 rounded-xl border border-slate-200 px-3 py-2 text-center" />
+              <!-- SCORE PRAKTIK -->
+              <td class="px-4 py-3">
+
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  v-model="form.students[index].practiceScore"
+                  class="w-16 rounded-lg border border-slate-200 px-2 py-2 text-center text-sm outline-none focus:border-emerald-500" />
               </td>
 
               <!-- LKPD -->
-              <td class="px-4 py-4">
-                <a v-if="
-                  student.lkpd
-                " :href="`/storage/${student.lkpd}`" target="_blank"
-                  class="rounded-full bg-emerald-100 px-4 py-2 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-200">
+              <td class="px-4 py-3">
+
+                <a
+                  v-if="student.lkpd"
+                  :href="`/storage/${student.lkpd}`"
+                  target="_blank"
+                  class="inline-flex rounded-full bg-emerald-100 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-200">
+
                   Lihat
                 </a>
 
-                <span v-else class="text-slate-400">
+                <span
+                  v-else
+                  class="text-slate-400">
+
                   -
                 </span>
               </td>
 
-              <!-- JAWABAN EVALUASI -->
-              <td class="min-w-60 px-4 py-4">
+              <!-- EVALUASI -->
+              <td class="min-w-[220px] px-4 py-3 text-sm leading-relaxed">
                 {{
                   formatAnswer(student.evaluation) ||
                   '-'
                 }}
               </td>
 
-              <!-- NILAI EVALUASI -->
-              <td class="px-4 py-4">
-                <input type="number" min="1" max="100" v-model="form.students[index]
-                  .evaluationScore
-                  " " class=" w-20 rounded-xl border border-slate-200 px-3 py-2 text-center" />
+              <!-- SCORE EVALUASI -->
+              <td class="px-4 py-3">
+
+                <input
+                  type="number"
+                  min="1"
+                  max="100"
+                  v-model="form.students[index].evaluationScore"
+                  class="w-16 rounded-lg border border-slate-200 px-2 py-2 text-center text-sm outline-none focus:border-emerald-500" />
               </td>
 
               <!-- TOTAL -->
-              <td class="px-4 py-4">
-                <div class="rounded-full bg-emerald-100 px-4 py-2 text-center font-bold text-emerald-700">
+              <td class="px-4 py-3">
+
+                <div
+                  class="rounded-full bg-emerald-100 px-3 py-2 text-center text-sm font-bold text-emerald-700">
+
                   {{
                     calculateTotal(
                       form.students[index],
@@ -402,6 +439,7 @@ student,
               </td>
 
             </tr>
+
           </tbody>
 
         </table>

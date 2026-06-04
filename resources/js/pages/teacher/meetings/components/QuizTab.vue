@@ -1,3 +1,5 @@
+<!-- resources/js/pages/teacher/meetings/components/QuizTab.vue -->
+
 <script setup lang="ts">
 import {
   useForm,
@@ -39,13 +41,13 @@ const form = useForm({
   option_b: '',
   option_c: '',
   option_d: '',
+  option_e: '',
 
   answer: 'A',
 });
 
 /**
  * RESET FORM
- * SAAT GANTI MEETING
  */
 watch(
   () => props.meeting,
@@ -73,103 +75,108 @@ watch(
 /**
  * EDIT QUIZ
  */
-const editQuiz = (
-  quiz: any,
-) => {
+const editQuiz =
+  (
+    quiz: any,
+  ) => {
 
-  editingQuiz.value =
-    quiz;
+    editingQuiz.value =
+      quiz;
 
-  form.id =
-    quiz.id;
+    form.id =
+      quiz.id;
 
-  form.question =
-    quiz.question;
+    form.question =
+      quiz.question;
 
-  form.option_a =
-    quiz.option_a;
+    form.option_a =
+      quiz.option_a;
 
-  form.option_b =
-    quiz.option_b;
+    form.option_b =
+      quiz.option_b;
 
-  form.option_c =
-    quiz.option_c;
+    form.option_c =
+      quiz.option_c;
 
-  form.option_d =
-    quiz.option_d;
+    form.option_d =
+      quiz.option_d;
 
-  form.answer =
-    quiz.answer;
-};
+    form.option_e =
+      quiz.option_e ?? '';
+
+    form.answer =
+      quiz.answer;
+  };
 
 /**
  * SUBMIT
  */
-const submit = async () => {
+const submit =
+  async () => {
 
-  try {
+    try {
 
-    /**
-     * UPDATE
-     */
-    if (form.id) {
+      /**
+       * UPDATE
+       */
+      if (form.id) {
 
+        const response =
+          await axios.put(
+            `/teacher/quizzes/${form.id}`,
+            form,
+          );
+
+        const index =
+          props.meeting.quizzes.findIndex(
+            (quiz: any) =>
+              quiz.id ===
+              form.id,
+          );
+
+        if (index !== -1) {
+
+          props.meeting.quizzes[
+            index
+          ] =
+            response.data.quiz;
+        }
+
+        toast.success(
+          'Soal berhasil diupdate'
+        );
+
+        resetForm();
+
+        return;
+      }
+
+      /**
+       * CREATE
+       */
       const response =
-        await axios.put(
-          `/teacher/quizzes/${form.id}`,
+        await axios.post(
+          '/teacher/quizzes',
           form,
         );
 
-      const index =
-        props.meeting.quizzes.findIndex(
-          (quiz: any) =>
-            quiz.id ===
-            form.id,
-        );
-
-      if (index !== -1) {
-
-        props.meeting.quizzes[
-          index
-        ] =
-          response.data.quiz;
-      }
+      props.meeting.quizzes.push(
+        response.data.quiz,
+      );
 
       toast.success(
-        'Soal berhasil diupdate'
+        'Soal berhasil ditambahkan'
       );
 
       resetForm();
 
-      return;
-    }
+    } catch (error) {
 
-    /**
-     * CREATE
-     */
-    const response =
-      await axios.post(
-        '/teacher/quizzes',
-        form,
+      toast.error(
+        'Terjadi kesalahan'
       );
-
-    props.meeting.quizzes.push(
-      response.data.quiz,
-    );
-
-    toast.success(
-      'Soal berhasil ditambahkan'
-    );
-
-    resetForm();
-
-  } catch (error) {
-
-    toast.error(
-      'Terjadi kesalahan'
-    );
-  }
-};
+    }
+  };
 
 /**
  * DELETE
@@ -215,18 +222,19 @@ const removeQuiz =
 /**
  * RESET
  */
-const resetForm = () => {
+const resetForm =
+  () => {
 
-  editingQuiz.value =
-    null;
+    editingQuiz.value =
+      null;
 
-  form.reset();
+    form.reset();
 
-  form.meeting_id =
-    props.meeting.id;
+    form.meeting_id =
+      props.meeting.id;
 
-  form.answer = 'A';
-};
+    form.answer = 'A';
+  };
 
 const toggleQuizMeeting =
   async () => {
@@ -273,23 +281,40 @@ const toggleQuizMeeting =
 </script>
 
 <template>
-  <section class="rounded-3xl bg-white p-6 shadow-sm">
-    <div class="flex items-center justify-between">
-      <h2 class="text-xl font-bold text-slate-800">
+  <section
+    class="rounded-2xl bg-white p-5 shadow-sm">
+
+    <!-- HEADER -->
+    <div
+      class="flex items-center justify-between">
+
+      <h2
+        class="text-lg font-bold text-slate-800">
+
         📝 Pengaturan Kuis
       </h2>
 
-      <div class="flex items-center gap-3">
-        <button v-if="editingQuiz" @click="resetForm"
-          class="cursor-pointer rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700">
-          Batal Edit
+      <div
+        class="flex items-center gap-2">
+
+        <button
+          v-if="editingQuiz"
+          @click="resetForm"
+          class="rounded-xl bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-700">
+
+          Batal
         </button>
 
-        <button v-if="meeting.quizzes?.length" @click="toggleQuizMeeting"
-          class="cursor-pointer rounded-xl px-4 py-2 text-sm font-semibold transition" :class="meeting.quizzes?.[0]?.is_active
-            ? 'bg-emerald-500 text-white hover:bg-emerald-600'
-            : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-            ">
+        <button
+          v-if="meeting.quizzes?.length"
+          @click="toggleQuizMeeting"
+          class="rounded-xl px-3 py-2 text-xs font-semibold transition"
+          :class="
+            meeting.quizzes?.[0]?.is_active
+              ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+              : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+          ">
+
           {{
             meeting.quizzes?.[0]?.is_active
               ? 'Quiz Aktif'
@@ -300,33 +325,64 @@ const toggleQuizMeeting =
     </div>
 
     <!-- FORM -->
-    <div class="mt-6 space-y-5">
+    <div
+      class="mt-5 space-y-4">
+
       <!-- QUESTION -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-slate-700">
+
           Pertanyaan
         </label>
 
-        <textarea v-model="form.question" rows="4" class="w-full rounded-2xl border border-slate-200 p-4" />
+        <textarea
+          v-model="form.question"
+          rows="4"
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
       </div>
 
       <!-- OPTIONS -->
-      <div class="grid gap-5 md:grid-cols-2">
-        <input v-model="form.option_a" type="text" placeholder="Opsi A"
-          class="rounded-2xl border border-slate-200 px-4 py-3" />
+      <div
+        class="grid gap-4 md:grid-cols-2">
 
-        <input v-model="form.option_b" type="text" placeholder="Opsi B"
-          class="rounded-2xl border border-slate-200 px-4 py-3" />
+        <input
+          v-model="form.option_a"
+          type="text"
+          placeholder="Opsi A"
+          class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
 
-        <input v-model="form.option_c" type="text" placeholder="Opsi C"
-          class="rounded-2xl border border-slate-200 px-4 py-3" />
+        <input
+          v-model="form.option_b"
+          type="text"
+          placeholder="Opsi B"
+          class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
 
-        <input v-model="form.option_d" type="text" placeholder="Opsi D"
-          class="rounded-2xl border border-slate-200 px-4 py-3" />
+        <input
+          v-model="form.option_c"
+          type="text"
+          placeholder="Opsi C"
+          class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+
+        <input
+          v-model="form.option_d"
+          type="text"
+          placeholder="Opsi D"
+          class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+
+        <input
+          v-model="form.option_e"
+          type="text"
+          placeholder="Opsi E"
+          class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500 md:col-span-2" />
       </div>
 
       <!-- ANSWER -->
-      <select v-model="form.answer" class="w-full rounded-2xl border border-slate-200 px-4 py-3">
+      <select
+        v-model="form.answer"
+        class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500">
+
         <option value="A">
           Jawaban A
         </option>
@@ -342,12 +398,19 @@ const toggleQuizMeeting =
         <option value="D">
           Jawaban D
         </option>
+
+        <option value="E">
+          Jawaban E
+        </option>
       </select>
 
       <!-- BUTTON -->
-      <button @click="submit" :disabled="form.processing"
-        class="cursor-pointer inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-6 py-3 font-semibold text-white hover:bg-emerald-600 disabled:opacity-50">
-        <Plus class="h-5 w-5" />
+      <button
+        @click="submit"
+        :disabled="form.processing"
+        class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50">
+
+        <Plus class="h-4 w-4" />
 
         {{
           editingQuiz
@@ -358,43 +421,69 @@ const toggleQuizMeeting =
     </div>
 
     <!-- TABLE -->
-    <div class="mt-10">
-      <h3 class="mb-4 text-lg font-bold text-slate-800">
+    <div
+      class="mt-8">
+
+      <h3
+        class="mb-4 text-base font-bold text-slate-800">
+
         Daftar Soal
       </h3>
 
-      <div class="space-y-4">
-        <div v-for="quiz in meeting.quizzes" :key="quiz.id" class="rounded-2xl border border-slate-200 p-5">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <div class="flex items-center gap-3">
-                <h4 class="font-semibold text-slate-800">
-                  {{ quiz.question }}
-                </h4>
-              </div>
+      <div
+        class="space-y-3">
 
-              <p class="mt-2 text-sm text-slate-500">
+        <div
+          v-for="quiz in meeting.quizzes"
+          :key="quiz.id"
+          class="rounded-xl border border-slate-200 p-4">
+
+          <div
+            class="flex items-start justify-between gap-4">
+
+            <!-- CONTENT -->
+            <div class="flex-1">
+
+              <h4
+                class="text-sm font-semibold text-slate-800">
+
+                {{ quiz.question }}
+              </h4>
+
+              <p
+                class="mt-2 text-xs text-slate-500">
+
                 Jawaban:
                 {{ quiz.answer }}
               </p>
             </div>
 
-            <div class="flex items-center gap-2">
-              <button @click="editQuiz(quiz)"
-                class="cursor-pointer rounded-xl bg-slate-100 p-3 text-slate-700 hover:bg-slate-200">
-                <Pencil class="h-4 w-4" />
+            <!-- ACTION -->
+            <div
+              class="flex items-center gap-2">
+
+              <button
+                @click="editQuiz(quiz)"
+                class="rounded-lg bg-slate-100 p-2 text-slate-700 transition hover:bg-slate-200">
+
+                <Pencil class="h-3.5 w-3.5" />
               </button>
 
-              <button @click="removeQuiz(quiz.id)"
-                class="cursor-pointer rounded-xl bg-red-500 p-3 text-white hover:bg-red-600">
-                <Trash2 class="h-4 w-4" />
+              <button
+                @click="removeQuiz(quiz.id)"
+                class="rounded-lg bg-red-500 p-2 text-white transition hover:bg-red-600">
+
+                <Trash2 class="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
         </div>
 
-        <div v-if="!meeting.quizzes?.length"
-          class="rounded-2xl border border-dashed border-slate-300 p-8 text-center text-slate-500">
+        <!-- EMPTY -->
+        <div
+          v-if="!meeting.quizzes?.length"
+          class="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500">
+
           Belum ada soal quiz
         </div>
       </div>

@@ -1,3 +1,4 @@
+```vue
 <!-- resources/js/pages/teacher/assessments/components/QuestionForm.vue -->
 
 <script setup lang="ts">
@@ -5,8 +6,11 @@ import {
   computed,
   watch,
 } from 'vue';
+
 import { useForm } from '@inertiajs/vue3';
+
 import { toast } from 'vue-sonner';
+
 import {
   Plus,
   FileQuestion,
@@ -16,11 +20,6 @@ const props = defineProps<{
   type: 'pretest' | 'posttest';
   editingQuestion?: any;
 }>();
-
-const isPretest =
-  computed(() =>
-    props.type === 'pretest',
-  );
 
 const form = useForm({
   id: null,
@@ -35,6 +34,7 @@ const form = useForm({
   option_b: '',
   option_c: '',
   option_d: '',
+  option_e: '',
 
   answer: 'A',
 });
@@ -67,6 +67,9 @@ watch(
     form.option_d =
       question.option_d;
 
+    form.option_e =
+      question.option_e;
+
     form.answer =
       question.answer;
   },
@@ -77,9 +80,6 @@ watch(
 
 const submit = () => {
 
-  /**
-   * UPDATE
-   */
   if (form.id) {
 
     form.put(
@@ -100,22 +100,12 @@ const submit = () => {
 
           form.id = null;
         },
-
-        onError: () => {
-
-          toast.error(
-            'Gagal memperbarui soal'
-          );
-        },
       },
     );
 
     return;
   }
 
-  /**
-   * CREATE
-   */
   form.post(
     '/teacher/questions',
     {
@@ -132,47 +122,41 @@ const submit = () => {
         form.type =
           props.type;
       },
-
-      onError: () => {
-
-        toast.error(
-          'Gagal menambahkan soal'
-        );
-      },
     },
   );
 };
-
 </script>
 
 <template>
-  <div class="rounded-3xl bg-white p-6 shadow-sm">
-    <div class="mb-6 flex items-center gap-4">
-      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100">
-        <FileQuestion class="h-7 w-7 text-emerald-600" />
+  <div class="rounded-3xl bg-white p-5 shadow-sm">
+
+    <div class="mb-5 flex items-center gap-3">
+
+      <div
+        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100">
+        <FileQuestion class="h-6 w-6 text-emerald-600" />
       </div>
 
       <div>
-        <h2 class="text-xl font-bold text-slate-800">
+        <h2 class="text-lg font-bold text-slate-800">
           Form Soal
         </h2>
-
-        <p class="mt-1 text-sm text-slate-500">
-          Tambahkan soal dan
-          kunci jawaban.
-        </p>
       </div>
+
     </div>
 
-    <div class="space-y-5">
+    <div class="space-y-4">
+
       <!-- TYPE -->
       <div>
         <label class="mb-2 block text-sm font-semibold text-slate-700">
           Tipe Soal
         </label>
 
-        <select v-model="form.question_type"
-          class="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500">
+        <select
+          v-model="form.question_type"
+          class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500">
+
           <option value="multiple_choice">
             Pilihan Ganda
           </option>
@@ -180,6 +164,7 @@ const submit = () => {
           <option value="essay">
             Uraian
           </option>
+
         </select>
       </div>
 
@@ -189,27 +174,55 @@ const submit = () => {
           Pertanyaan
         </label>
 
-        <textarea v-model="form.question" rows="4" placeholder="Masukkan pertanyaan..."
-          class="w-full rounded-2xl border border-slate-200 p-4 outline-none focus:border-emerald-500" />
+        <textarea
+          v-model="form.question"
+          rows="4"
+          placeholder="Masukkan pertanyaan..."
+          class="w-full rounded-2xl border border-slate-200 p-4 text-sm outline-none focus:border-emerald-500" />
       </div>
 
-      <div v-if="form.question_type === 'multiple_choice'" class="space-y-4 grid grid-cols-1">
-        <input v-model="form.option_a" type="text" placeholder="Opsi A"
-          class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" />
+      <!-- OPTIONS -->
+      <div
+        v-if="form.question_type === 'multiple_choice'"
+        class="grid gap-3">
 
-        <input v-model="form.option_b" type="text" placeholder="Opsi B"
-          class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" />
+        <input
+          v-model="form.option_a"
+          type="text"
+          placeholder="Opsi A"
+          class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
 
-        <input v-model="form.option_c" type="text" placeholder="Opsi C"
-          class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" />
+        <input
+          v-model="form.option_b"
+          type="text"
+          placeholder="Opsi B"
+          class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
 
-        <input v-model="form.option_d" type="text" placeholder="Opsi D"
-          class="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500" />
+        <input
+          v-model="form.option_c"
+          type="text"
+          placeholder="Opsi C"
+          class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+
+        <input
+          v-model="form.option_d"
+          type="text"
+          placeholder="Opsi D"
+          class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+
+        <input
+          v-model="form.option_e"
+          type="text"
+          placeholder="Opsi E"
+          class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
       </div>
 
       <!-- ANSWER -->
-      <select v-if="form.question_type === 'multiple_choice'" v-model="form.answer"
-        class="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500">
+      <select
+        v-if="form.question_type === 'multiple_choice'"
+        v-model="form.answer"
+        class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500">
+
         <option value="A">
           A
         </option>
@@ -225,12 +238,21 @@ const submit = () => {
         <option value="D">
           D
         </option>
+
+        <option value="E">
+          E
+        </option>
+
       </select>
 
       <!-- BUTTON -->
-      <button @click="submit" type="button" :disabled="form.processing"
-        class="cursor-pointer inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-6 py-3 font-semibold text-white transition hover:bg-emerald-600">
-        <Plus class="h-5 w-5" />
+      <button
+        @click="submit"
+        type="button"
+        :disabled="form.processing"
+        class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-600">
+
+        <Plus class="h-4 w-4" />
 
         {{
           form.id
@@ -241,3 +263,4 @@ const submit = () => {
     </div>
   </div>
 </template>
+```

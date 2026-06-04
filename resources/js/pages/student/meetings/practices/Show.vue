@@ -130,7 +130,7 @@ const submitPractice = async () => {
     </section>
 
     <!-- FLOW -->
-    <section class="rounded-3xl bg-white p-6 shadow-sm">
+    <section class="rounded-2xl bg-white p-5 shadow-sm">
       <div class="flex items-center justify-between">
         <div class="flex flex-1 items-center">
           <!-- MATERI -->
@@ -205,7 +205,7 @@ const submitPractice = async () => {
     </section>
 
     <!-- INSTRUCTIONS -->
-    <section class="rounded-3xl bg-white p-6 shadow-sm">
+    <section class="rounded-2xl bg-white p-5 shadow-sm">
       <div class="mb-6 flex items-center gap-4">
         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100">
           <FlaskConical class="h-6 w-6 text-blue-600" />
@@ -283,7 +283,7 @@ const submitPractice = async () => {
     </section>
 
     <!-- SUBMIT -->
-    <section class="rounded-3xl bg-white p-6 shadow-sm">
+    <section class="rounded-2xl bg-white p-5 shadow-sm">
       <div class="mb-6 flex items-center gap-4">
         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100">
           <LinkIcon class="h-6 w-6 text-emerald-600" />

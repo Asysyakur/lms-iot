@@ -54,7 +54,7 @@ const submit = () => {
                 <div
                     class="relative z-10 flex w-full flex-col items-center justify-center px-12 text-center text-white">
 
-                    <h1 class="text-4xl font-black leading-tight">
+                    <h1 class="text-2xl font-black leading-tight">
                         Bit-Learn
                     </h1>
 

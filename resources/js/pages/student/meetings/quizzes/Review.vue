@@ -78,7 +78,7 @@ const canContinue = computed(() => {
 
     <!-- STATS -->
     <div class="grid gap-6 md:grid-cols-4">
-      <div class="rounded-3xl bg-white p-6 shadow-sm">
+      <div class="rounded-2xl bg-white p-5 shadow-sm">
         <h2 class="text-3xl font-bold text-emerald-500">
           {{ props.correctAnswers }}
         </h2>
@@ -88,7 +88,7 @@ const canContinue = computed(() => {
         </p>
       </div>
 
-      <div class="rounded-3xl bg-white p-6 shadow-sm">
+      <div class="rounded-2xl bg-white p-5 shadow-sm">
         <h2 class="text-3xl font-bold text-red-500">
           {{ props.wrongAnswers }}
         </h2>
@@ -98,7 +98,7 @@ const canContinue = computed(() => {
         </p>
       </div>
 
-      <div class="rounded-3xl bg-white p-6 shadow-sm">
+      <div class="rounded-2xl bg-white p-5 shadow-sm">
         <h2 class="text-3xl font-bold text-blue-500">
           {{ minimumScore }}
         </h2>
@@ -108,7 +108,7 @@ const canContinue = computed(() => {
         </p>
       </div>
 
-      <div class="rounded-3xl bg-white p-6 shadow-sm">
+      <div class="rounded-2xl bg-white p-5 shadow-sm">
         <h2 class="text-3xl font-bold text-purple-500">
           {{ props.attempts }}/3
         </h2>

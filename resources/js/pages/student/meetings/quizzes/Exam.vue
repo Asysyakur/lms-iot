@@ -168,7 +168,7 @@ const submitQuiz =
     <!-- CONTENT -->
     <div class="grid gap-6 xl:grid-cols-12">
       <!-- QUESTION -->
-      <div v-if="currentQuestion" class="rounded-3xl bg-white p-6 shadow-sm xl:col-span-8">
+      <div v-if="currentQuestion" class="rounded-2xl bg-white p-5 shadow-sm xl:col-span-8">
         <p class="mb-6 text-sm font-semibold text-blue-600">
           Soal {{ currentQuestionIndex + 1 }}
         </p>
@@ -246,7 +246,7 @@ const submitQuiz =
       <!-- SIDEBAR -->
       <div class="space-y-6 xl:col-span-4">
         <!-- PROGRESS -->
-        <div class="rounded-3xl bg-white p-6 shadow-sm">
+        <div class="rounded-2xl bg-white p-5 shadow-sm">
           <h2 class="font-bold text-slate-800">
             Progress
           </h2>
@@ -264,7 +264,7 @@ const submitQuiz =
         </div>
 
         <!-- NAVIGATION -->
-        <div class="rounded-3xl bg-white p-6 shadow-sm">
+        <div class="rounded-2xl bg-white p-5 shadow-sm">
           <h2 class="mb-5 font-bold text-slate-800">
             Navigasi Soal
           </h2>

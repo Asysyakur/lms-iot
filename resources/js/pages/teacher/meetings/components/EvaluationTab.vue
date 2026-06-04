@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+
 import axios from 'axios';
+
 import { Save } from 'lucide-vue-next';
+
 import { watch } from 'vue';
 
 import { toast } from 'vue-sonner';
@@ -11,7 +14,8 @@ const props = defineProps<{
 }>();
 
 const form = useForm({
-  meeting_id: props.meeting.id,
+  meeting_id:
+    props.meeting.id,
 
   question:
     props.meeting.evaluation?.question
@@ -35,30 +39,31 @@ watch(
   },
 );
 
-const submit = async () => {
+const submit =
+  async () => {
 
-  try {
+    try {
 
-    const response =
-      await axios.post(
-        '/teacher/evaluations',
-        form,
+      const response =
+        await axios.post(
+          '/teacher/evaluations',
+          form,
+        );
+
+      props.meeting.evaluation =
+        response.data.evaluation;
+
+      toast.success(
+        'Evaluasi berhasil disimpan'
       );
 
-    props.meeting.evaluation =
-      response.data.evaluation;
+    } catch (error) {
 
-    toast.success(
-      'Evaluasi berhasil disimpan'
-    );
-
-  } catch (error) {
-
-    toast.error(
-      'Gagal menyimpan evaluasi'
-    );
-  }
-};
+      toast.error(
+        'Gagal menyimpan evaluasi'
+      );
+    }
+  };
 
 const toggleEvaluation =
   async () => {
@@ -98,17 +103,27 @@ const toggleEvaluation =
 </script>
 
 <template>
-  <section class="max-w-full min-w-0 rounded-3xl bg-white p-6 shadow-sm">
-    <div class="flex items-center justify-between">
-      <h2 class="text-xl font-bold text-slate-800">
+  <section
+    class="rounded-2xl bg-white p-5 shadow-sm">
+
+    <!-- HEADER -->
+    <div
+      class="flex items-center justify-between">
+
+      <h2
+        class="text-lg font-bold text-slate-800">
         📋 Evaluasi
       </h2>
 
-      <button @click="toggleEvaluation" class="cursor-pointer rounded-xl px-4 py-2 text-sm font-semibold transition"
-        :class="meeting.evaluation?.is_active
-          ? 'bg-emerald-500 text-white hover:bg-emerald-600 hover:text-white'
-          : 'bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900'
-          ">
+      <button
+        @click="toggleEvaluation"
+        class="rounded-xl px-3 py-2 text-xs font-semibold transition"
+        :class="
+          meeting.evaluation?.is_active
+            ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+            : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+        ">
+
         {{
           meeting.evaluation?.is_active
             ? 'Aktif'
@@ -117,21 +132,33 @@ const toggleEvaluation =
       </button>
     </div>
 
-    <div class="mt-6 space-y-5">
+    <!-- CONTENT -->
+    <div
+      class="mt-5 space-y-4">
+
       <!-- QUESTION -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-slate-700">
+
           Pertanyaan Evaluasi
         </label>
 
-        <textarea v-model="form.question" rows="5" placeholder="Masukkan pertanyaan evaluasi..."
-          class="w-full rounded-2xl border border-slate-200 p-4 outline-none transition focus:border-rose-500" />
+        <textarea
+          v-model="form.question"
+          rows="4"
+          placeholder="Masukkan pertanyaan evaluasi..."
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-rose-500" />
       </div>
 
       <!-- BUTTON -->
-      <button @click="submit" :disabled="form.processing"
-        class="cursor-pointer inline-flex items-center gap-2 rounded-2xl bg-rose-500 px-6 py-3 font-semibold text-white transition hover:bg-rose-600 disabled:opacity-50">
-        <Save class="h-5 w-5" />
+      <button
+        @click="submit"
+        :disabled="form.processing"
+        class="inline-flex items-center gap-2 rounded-xl bg-rose-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-rose-600 disabled:opacity-50">
+
+        <Save class="h-4 w-4" />
 
         {{
           form.processing

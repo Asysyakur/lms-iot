@@ -38,7 +38,7 @@ const form = useForm({
   reflection_question:
     props.meeting?.material
       ?.reflection_question
-    ?? [''],
+      ?? [''],
 
   pdf_file: null,
 });
@@ -85,88 +85,89 @@ watch(
   },
 );
 
-const submit = async () => {
+const submit =
+  async () => {
 
-  try {
+    try {
 
-    const formData =
-      new FormData();
-
-    formData.append(
-      'meeting_id',
-      String(
-        form.meeting_id
-      ),
-    );
-
-    formData.append(
-      'title',
-      form.title ?? '',
-    );
-
-    formData.append(
-      'description',
-      form.description ?? '',
-    );
-
-    formData.append(
-      'video_url',
-      form.video_url ?? '',
-    );
-
-    formData.append(
-      'trigger_question',
-      form.trigger_question ?? '',
-    );
-
-    form.reflection_question
-      .forEach(
-        (
-          question,
-          index
-        ) => {
-
-          formData.append(
-            `reflection_question[${index}]`,
-            question
-          );
-
-        }
-      );
-
-    if (form.pdf_file) {
+      const formData =
+        new FormData();
 
       formData.append(
-        'pdf_file',
-        form.pdf_file,
+        'meeting_id',
+        String(
+          form.meeting_id
+        ),
       );
 
+      formData.append(
+        'title',
+        form.title ?? '',
+      );
+
+      formData.append(
+        'description',
+        form.description ?? '',
+      );
+
+      formData.append(
+        'video_url',
+        form.video_url ?? '',
+      );
+
+      formData.append(
+        'trigger_question',
+        form.trigger_question ?? '',
+      );
+
+      form.reflection_question
+        .forEach(
+          (
+            question,
+            index
+          ) => {
+
+            formData.append(
+              `reflection_question[${index}]`,
+              question
+            );
+
+          }
+        );
+
+      if (form.pdf_file) {
+
+        formData.append(
+          'pdf_file',
+          form.pdf_file,
+        );
+
+      }
+
+      const response =
+        await axios.post(
+          '/teacher/materials',
+          formData,
+        );
+
+      Object.assign(
+        props.meeting.material,
+        response.data.material,
+      );
+
+      toast.success(
+        'Materi berhasil disimpan'
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error(
+        'Gagal menyimpan materi'
+      );
     }
-
-    const response =
-      await axios.post(
-        '/teacher/materials',
-        formData,
-      );
-
-    Object.assign(
-      props.meeting.material,
-      response.data.material,
-    );
-
-    toast.success(
-      'Materi berhasil disimpan'
-    );
-
-  } catch (error) {
-
-    console.error(error);
-
-    toast.error(
-      'Gagal menyimpan materi'
-    );
-  }
-};
+  };
 
 const toggleMaterial =
   async () => {
@@ -206,15 +207,27 @@ const toggleMaterial =
 </script>
 
 <template>
-  <section class="max-w-full min-w-0 rounded-3xl bg-white p-6 shadow-sm">
-    <div class="flex items-center justify-between">
-      <h2 class="text-xl font-bold text-slate-800">
+  <section
+    class="rounded-2xl bg-white p-5 shadow-sm">
+
+    <!-- HEADER -->
+    <div
+      class="flex items-center justify-between">
+
+      <h2
+        class="text-lg font-bold text-slate-800">
         📘 Pengaturan Materi
       </h2>
-      <button @click="toggleMaterial" class="cursor-pointer rounded-xl px-4 py-2 text-sm font-semibold transition"
-        :class="props.meeting?.material?.is_active
-          ? 'bg-emerald-500 text-white hover:bg-emerald-600 hover:text-white'
-          : 'bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900'">
+
+      <button
+        @click="toggleMaterial"
+        class="rounded-xl px-3 py-2 text-xs font-semibold transition"
+        :class="
+          props.meeting?.material?.is_active
+            ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+            : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+        ">
+
         {{
           props.meeting?.material?.is_active
             ? 'Aktif'
@@ -223,96 +236,157 @@ const toggleMaterial =
       </button>
     </div>
 
-    <div class="mt-6 space-y-5">
+    <!-- CONTENT -->
+    <div
+      class="mt-5 space-y-4">
+
       <!-- TITLE -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-slate-700">
+
           Judul Materi
         </label>
 
-        <input v-model="form.title" type="text" placeholder="Masukkan judul materi"
-          class="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-blue-500" />
+        <input
+          v-model="form.title"
+          type="text"
+          placeholder="Masukkan judul materi"
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500" />
       </div>
 
       <!-- DESCRIPTION -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-slate-700">
+
           Deskripsi Materi
         </label>
 
-        <textarea v-model="form.description" rows="5" placeholder="Masukkan deskripsi materi..."
-          class="w-full rounded-2xl border border-slate-200 p-4 outline-none transition focus:border-blue-500" />
+        <textarea
+          v-model="form.description"
+          rows="4"
+          placeholder="Masukkan deskripsi materi..."
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500" />
       </div>
 
       <!-- FILE + VIDEO -->
-      <div class="grid gap-5 md:grid-cols-2">
+      <div
+        class="grid gap-4 md:grid-cols-2">
+
         <!-- PDF -->
         <div>
-          <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+          <label
+            class="mb-2 block text-sm font-semibold text-slate-700">
+
             Upload PDF Materi
           </label>
 
-          <input type="file" accept=".pdf" @input="
-            form.pdf_file = $event.target.files[0]
-            " class="w-full rounded-2xl border border-slate-200 p-3" />
+          <input
+            type="file"
+            accept=".pdf"
+            @input="
+              form.pdf_file = $event.target.files[0]
+            "
+            class="w-full rounded-xl border border-slate-200 p-3 text-sm" />
         </div>
 
         <!-- VIDEO -->
         <div>
-          <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+          <label
+            class="mb-2 block text-sm font-semibold text-slate-700">
+
             Link Video Youtube
           </label>
 
-          <input v-model="form.video_url" type="text" placeholder="https://youtube.com/..."
-            class="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-blue-500" />
+          <input
+            v-model="form.video_url"
+            type="text"
+            placeholder="https://youtube.com/..."
+            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500" />
         </div>
       </div>
 
       <!-- PEMANTIK -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-slate-700">
+
           Pertanyaan Pemantik
         </label>
 
-        <textarea v-model="form.trigger_question" rows="4" placeholder="Masukkan pertanyaan pemantik..."
-          class="w-full rounded-2xl border border-slate-200 p-4 outline-none transition focus:border-blue-500" />
+        <textarea
+          v-model="form.trigger_question"
+          rows="3"
+          placeholder="Masukkan pertanyaan pemantik..."
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500" />
       </div>
 
       <!-- REFLEKSI -->
       <div>
-        <div class="mb-3 flex items-center justify-between">
-          <label class="block text-sm font-semibold text-slate-700">
+
+        <div
+          class="mb-3 flex items-center justify-between">
+
+          <label
+            class="block text-sm font-semibold text-slate-700">
+
             Pertanyaan Refleksi
           </label>
 
-          <button type="button" @click="form.reflection_question.push('')"
-            class="rounded-xl bg-blue-100 px-3 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-200">
-            + Tambah Pertanyaan
+          <button
+            type="button"
+            @click="form.reflection_question.push('')"
+            class="rounded-xl bg-blue-100 px-3 py-2 text-xs font-semibold text-blue-700 transition hover:bg-blue-200">
+
+            + Tambah
           </button>
         </div>
 
-        <div v-for="(question, index) in form.reflection_question" :key="index" class="mb-4">
-          <div class="mb-2 flex items-center justify-between">
-            <span class="text-sm font-semibold text-slate-600">
+        <div
+          v-for="(question, index) in form.reflection_question"
+          :key="index"
+          class="mb-4">
+
+          <div
+            class="mb-2 flex items-center justify-between">
+
+            <span
+              class="text-xs font-semibold text-slate-600">
+
               Pertanyaan {{ index + 1 }}
             </span>
 
-            <button v-if="form.reflection_question.length > 1" type="button"
+            <button
+              v-if="form.reflection_question.length > 1"
+              type="button"
               @click="form.reflection_question.splice(index, 1)"
-              class="text-sm font-semibold text-red-500 hover:text-red-700">
+              class="text-xs font-semibold text-red-500 hover:text-red-700">
+
               Hapus
             </button>
           </div>
 
-          <textarea v-model="form.reflection_question[index]" rows="3" placeholder="Masukkan pertanyaan refleksi..."
-            class="w-full rounded-2xl border border-slate-200 p-4 outline-none transition focus:border-blue-500" />
+          <textarea
+            v-model="form.reflection_question[index]"
+            rows="3"
+            placeholder="Masukkan pertanyaan refleksi..."
+            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500" />
         </div>
       </div>
 
       <!-- BUTTON -->
-      <button @click="submit" :disabled="form.processing"
-        class="cursor-pointer inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50">
-        <Save class="h-5 w-5" />
+      <button
+        @click="submit"
+        :disabled="form.processing"
+        class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50">
+
+        <Save class="h-4 w-4" />
 
         {{
           form.processing

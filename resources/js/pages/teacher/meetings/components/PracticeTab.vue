@@ -52,30 +52,31 @@ watch(
   },
 );
 
-const submit = async () => {
+const submit =
+  async () => {
 
-  try {
+    try {
 
-    const response =
-      await axios.post(
-        '/teacher/practices',
-        form,
+      const response =
+        await axios.post(
+          '/teacher/practices',
+          form,
+        );
+
+      props.meeting.practice =
+        response.data.practice;
+
+      toast.success(
+        'Praktik berhasil disimpan'
       );
 
-    props.meeting.practice =
-      response.data.practice;
+    } catch (error) {
 
-    toast.success(
-      'Praktik berhasil disimpan'
-    );
-
-  } catch (error) {
-
-    toast.error(
-      'Gagal menyimpan praktik'
-    );
-  }
-};
+      toast.error(
+        'Gagal menyimpan praktik'
+      );
+    }
+  };
 
 const togglePractice =
   async () => {
@@ -115,17 +116,28 @@ const togglePractice =
 </script>
 
 <template>
-  <section class="max-w-full min-w-0 rounded-3xl bg-white p-6 shadow-sm">
-    <div class="flex items-center justify-between">
-      <h2 class="text-xl font-bold text-slate-800">
+  <section
+    class="rounded-2xl bg-white p-5 shadow-sm">
+
+    <!-- HEADER -->
+    <div
+      class="flex items-center justify-between">
+
+      <h2
+        class="text-lg font-bold text-slate-800">
+
         🧪 Pengaturan Praktik
       </h2>
 
-      <button @click="togglePractice" class="cursor-pointer rounded-xl px-4 py-2 text-sm font-semibold transition"
-        :class="meeting.practice?.is_active
-          ? 'bg-emerald-500 text-white hover:bg-emerald-600 hover:text-white'
-          : 'bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900'
-          ">
+      <button
+        @click="togglePractice"
+        class="rounded-xl px-3 py-2 text-xs font-semibold transition"
+        :class="
+          meeting.practice?.is_active
+            ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+            : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+        ">
+
         {{
           meeting.practice?.is_active
             ? 'Aktif'
@@ -134,31 +146,49 @@ const togglePractice =
       </button>
     </div>
 
-    <div class="mt-6 space-y-5">
+    <!-- CONTENT -->
+    <div
+      class="mt-5 space-y-4">
+
       <!-- INSTRUCTION -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-slate-700">
+
           Instruksi Praktik
         </label>
 
-        <textarea v-model="form.instruction" rows="8" placeholder="Masukkan instruksi praktik..."
-          class="w-full rounded-2xl border border-slate-200 p-4 outline-none transition focus:border-purple-500" />
+        <textarea
+          v-model="form.instruction"
+          rows="6"
+          placeholder="Masukkan instruksi praktik..."
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-purple-500" />
       </div>
 
-      <!-- MAKECODE URL -->
+      <!-- MAKECODE -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-slate-700">
+
           Link MakeCode
         </label>
 
-        <input v-model="form.makecode_url" type="text" placeholder="https://makecode.microbit.org/..."
-          class="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-purple-500" />
+        <input
+          v-model="form.makecode_url"
+          type="text"
+          placeholder="https://makecode.microbit.org/..."
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-purple-500" />
       </div>
 
       <!-- BUTTON -->
-      <button @click="submit" :disabled="form.processing"
-        class="cursor-pointer inline-flex items-center gap-2 rounded-2xl bg-purple-500 px-6 py-3 font-semibold text-white transition hover:bg-purple-600 disabled:opacity-50">
-        <Save class="h-5 w-5" />
+      <button
+        @click="submit"
+        :disabled="form.processing"
+        class="inline-flex items-center gap-2 rounded-xl bg-purple-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-600 disabled:opacity-50">
+
+        <Save class="h-4 w-4" />
 
         {{
           form.processing

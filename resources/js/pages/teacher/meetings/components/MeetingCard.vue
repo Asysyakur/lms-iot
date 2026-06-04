@@ -1,5 +1,8 @@
+<!-- resources/js/pages/teacher/meetings/components/MeetingCard.vue -->
+
 <script setup lang="ts">
 import axios from 'axios';
+
 import {
   Pencil,
   Trash2,
@@ -30,32 +33,53 @@ const toggleMeeting =
 </script>
 
 <template>
-  <div @click="$emit('click')"
-    class="cursor-pointer max-w-full min-w-0 rounded-3xl border bg-slate-50 p-5 text-left transition hover:bg-emerald-50"
-    :class="active
-      ? 'border-emerald-500 ring-2 ring-emerald-100'
-      : 'border-slate-200'
-      ">
-    <div class="flex min-w-0 items-start justify-between gap-3">
-      <div class="flex min-w-0 flex-col gap-2">
-        <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900 text-sm font-bold text-white">
+  <div
+    @click="$emit('click')"
+    class="cursor-pointer rounded-2xl border bg-slate-50 p-4 text-left transition hover:bg-emerald-50"
+    :class="
+      active
+        ? 'border-emerald-500 ring-2 ring-emerald-100'
+        : 'border-slate-200'
+    ">
+
+    <div
+      class="flex items-start justify-between gap-3">
+
+      <!-- LEFT -->
+      <div
+        class="min-w-0 flex-1">
+
+        <!-- NUMBER -->
+        <div
+          class="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-sm font-bold text-white">
+
           {{ meeting.meeting_number }}
         </div>
 
-        <h2 class="mt-4 truncate font-bold text-slate-800">
+        <!-- TITLE -->
+        <h2
+          class="mt-3 truncate text-sm font-bold text-slate-800">
+
           {{ meeting.title }}
         </h2>
 
-        <p class="mt-1 text-sm text-slate-500">
+        <!-- SUBTITLE -->
+        <p
+          class="mt-1 text-xs text-slate-500">
+
           Pertemuan {{ meeting.meeting_number }}
         </p>
 
         <!-- TOGGLE -->
-        <button @click.stop="toggleMeeting(meeting)"
-          class="cursor-pointer rounded-xl px-3 py-2 text-xs font-bold transition" :class="meeting.is_active
-            ? 'bg-emerald-500 text-white hover:bg-emerald-600 hover:text-white'
-            : 'bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900'
-            ">
+        <button
+          @click.stop="toggleMeeting(meeting)"
+          class="mt-3 rounded-lg px-3 py-1.5 text-xs font-semibold transition"
+          :class="
+            meeting.is_active
+              ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+              : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+          ">
+
           {{
             meeting.is_active
               ? 'Aktif'
@@ -64,22 +88,31 @@ const toggleMeeting =
         </button>
       </div>
 
-      <div class="flex items-start gap-2">
+      <!-- RIGHT -->
+      <div
+        class="flex items-start gap-2">
+
         <!-- STATUS -->
-        <span class="shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+        <span
+          class="rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+
           {{ meeting.status }}
         </span>
 
         <!-- EDIT -->
-        <button @click.stop="emit('edit', meeting)"
-          class="cursor-pointer rounded-xl bg-slate-100 p-2 text-slate-700 transition hover:bg-slate-200">
-          <Pencil class="h-4 w-4" />
+        <button
+          @click.stop="emit('edit', meeting)"
+          class="rounded-lg bg-slate-100 p-2 text-slate-700 transition hover:bg-slate-200">
+
+          <Pencil class="h-3.5 w-3.5" />
         </button>
 
         <!-- DELETE -->
-        <button @click.stop="emit('delete', meeting)"
-          class="cursor-pointer rounded-xl bg-red-500 p-2 text-white transition hover:bg-red-600">
-          <Trash2 class="h-4 w-4" />
+        <button
+          @click.stop="emit('delete', meeting)"
+          class="rounded-lg bg-red-500 p-2 text-white transition hover:bg-red-600">
+
+          <Trash2 class="h-3.5 w-3.5" />
         </button>
       </div>
     </div>

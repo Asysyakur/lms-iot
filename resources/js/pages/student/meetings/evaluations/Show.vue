@@ -120,7 +120,7 @@ const submitEvaluation =
     </section>
 
     <!-- QUESTION CARD -->
-    <section class="rounded-3xl bg-white p-6 shadow-sm">
+    <section class="rounded-2xl bg-white p-5 shadow-sm">
       <div class="mb-8 flex items-center gap-4">
         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-100">
           <BadgeHelp class="h-6 w-6 text-violet-600" />
@@ -139,7 +139,7 @@ const submitEvaluation =
         </div>
       </div>
 
-      <div class="space-y-8">
+      <div class="space-y-6">
 
         <!-- QUESTION -->
         <div>
@@ -151,7 +151,7 @@ const submitEvaluation =
           </h3>
 
           <textarea v-model="answers[0]" rows="6" placeholder="Tuliskan jawabanmu..."
-            class="w-full rounded-2xl border border-slate-200 px-5 py-4 text-sm outline-none transition focus:border-violet-500" />
+            class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-violet-500" />
         </div>
 
         <!-- BUTTON -->

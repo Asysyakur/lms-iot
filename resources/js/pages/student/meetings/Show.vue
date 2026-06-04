@@ -55,7 +55,7 @@ const iconMap = {
 <template>
   <div class="space-y-6">
     <!-- HEADER -->
-    <section class="overflow-hidden rounded-3xl bg-white p-6 shadow-sm">
+    <section class="overflow-hidden rounded-2xl bg-white p-5 shadow-sm">
       <div class="flex flex-col gap-6 xl:flex-row xl:items-start">
         <!-- IMAGE -->
         <div
@@ -134,7 +134,7 @@ const iconMap = {
     </section>
 
     <!-- STEPS -->
-    <section class="rounded-3xl bg-white p-6 shadow-sm">
+    <section class="rounded-2xl bg-white p-5 shadow-sm">
       <h2 class="mb-6 text-lg font-bold text-slate-800">
         Tahapan Pembelajaran
       </h2>
@@ -208,13 +208,13 @@ const iconMap = {
             <a v-if="
               step.unlocked
             " :href="step.href"
-              class="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600">
+              class="rounded-xl bg-emerald-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600">
               Buka
               {{ step.title }}
             </a>
 
             <button v-else disabled
-              class="cursor-not-allowed rounded-xl bg-slate-200 px-4 py-2 text-sm font-semibold text-slate-500">
+              class="cursor-not-allowed rounded-xl bg-slate-200 px-3 py-2 text-sm font-semibold text-slate-500">
               Tidak Tersedia
             </button>
           </div>

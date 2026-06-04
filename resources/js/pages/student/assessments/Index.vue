@@ -110,7 +110,7 @@ const hasSubmitted =
     <!-- CONTENT -->
     <div class="grid gap-6 xl:grid-cols-2">
       <!-- REQUIREMENTS -->
-      <div class="rounded-3xl bg-white p-6 shadow-sm">
+      <div class="rounded-2xl bg-white p-5 shadow-sm">
         <h2 class="mb-6 font-bold text-slate-800">
           ✅ Syarat Mengerjakan
           {{ props.assessment.title }}
@@ -141,7 +141,7 @@ const hasSubmitted =
       </div>
 
       <!-- INFORMATION -->
-      <div class="rounded-3xl bg-white p-6 shadow-sm">
+      <div class="rounded-2xl bg-white p-5 shadow-sm">
         <h2 class="mb-6 font-bold text-slate-800">
           ℹ️ Informasi
           {{ props.assessment.title }}

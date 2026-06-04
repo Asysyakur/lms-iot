@@ -201,7 +201,7 @@ const submitLkpd = async () => {
     </section>
 
     <!-- FLOW -->
-    <section class="rounded-3xl bg-white p-6 shadow-sm">
+    <section class="rounded-2xl bg-white p-5 shadow-sm">
       <div class="flex items-center justify-between">
         <div class="flex flex-1 items-center">
           <!-- MATERI -->
@@ -276,7 +276,7 @@ const submitLkpd = async () => {
     </section>
 
     <!-- INSTRUCTIONS -->
-    <section class="rounded-3xl bg-white p-6 shadow-sm">
+    <section class="rounded-2xl bg-white p-5 shadow-sm">
       <div class="mb-6 flex items-center gap-4">
         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100">
           <FileSpreadsheet class="h-6 w-6 text-orange-600" />
@@ -365,7 +365,7 @@ const submitLkpd = async () => {
     </section>
 
     <!-- SUBMIT -->
-    <section class="rounded-3xl bg-white p-6 shadow-sm">
+    <section class="rounded-2xl bg-white p-5 shadow-sm">
       <div class="mb-6 flex items-center gap-4">
         <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100">
           <Upload class="h-6 w-6 text-emerald-600" />
@@ -461,7 +461,7 @@ const submitLkpd = async () => {
             </div>
 
             <a :href="`/storage/${existingFile}`" target="_blank"
-              class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
+              class="rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
               Lihat File
             </a>
           </div>

@@ -95,7 +95,7 @@ const duration = 20;
     <!-- INFO -->
     <div class="grid gap-6 md:grid-cols-3">
       <div
-        class="rounded-3xl bg-white p-6 shadow-sm"
+        class="rounded-2xl bg-white p-5 shadow-sm"
       >
         <div
           class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100"
@@ -117,7 +117,7 @@ const duration = 20;
       </div>
 
       <div
-        class="rounded-3xl bg-white p-6 shadow-sm"
+        class="rounded-2xl bg-white p-5 shadow-sm"
       >
         <div
           class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100"
@@ -139,7 +139,7 @@ const duration = 20;
       </div>
 
       <div
-        class="rounded-3xl bg-white p-6 shadow-sm"
+        class="rounded-2xl bg-white p-5 shadow-sm"
       >
         <div
           class="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-100"
@@ -163,7 +163,7 @@ const duration = 20;
 
     <!-- ACTION -->
     <section
-      class="rounded-3xl bg-white p-6 shadow-sm"
+      class="rounded-2xl bg-white p-5 shadow-sm"
     >
       <div
         class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between"

@@ -1,12 +1,12 @@
-<!-- resources/js/pages/teacher/meetings/components/LkpdTab.vue -->
-
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
+
 import {
   Upload,
 } from 'lucide-vue-next';
 
 import { watch } from 'vue';
+
 import axios from 'axios';
 
 import { toast } from 'vue-sonner';
@@ -48,30 +48,31 @@ watch(
   },
 );
 
-const submit = async () => {
+const submit =
+  async () => {
 
-  try {
+    try {
 
-    const response =
-      await axios.post(
-        '/teacher/lkpds',
-        form,
+      const response =
+        await axios.post(
+          '/teacher/lkpds',
+          form,
+        );
+
+      props.meeting.lkpd =
+        response.data.lkpd;
+
+      toast.success(
+        'LKPD berhasil disimpan'
       );
 
-    props.meeting.lkpd =
-      response.data.lkpd;
+    } catch (error) {
 
-    toast.success(
-      'LKPD berhasil disimpan'
-    );
-
-  } catch (error) {
-
-    toast.error(
-      'Gagal menyimpan LKPD'
-    );
-  }
-};
+      toast.error(
+        'Gagal menyimpan LKPD'
+      );
+    }
+  };
 
 const toggleLkpd =
   async () => {
@@ -111,16 +112,27 @@ const toggleLkpd =
 </script>
 
 <template>
-  <section class="max-w-full min-w-0 rounded-3xl bg-white p-6 shadow-sm">
-    <div class="flex items-center justify-between">
-      <h2 class="text-xl font-bold text-slate-800">
+  <section
+    class="rounded-2xl bg-white p-5 shadow-sm">
+
+    <!-- HEADER -->
+    <div
+      class="flex items-center justify-between">
+
+      <h2
+        class="text-lg font-bold text-slate-800">
         📄 Pengaturan LKPD
       </h2>
 
-      <button @click="toggleLkpd" class="cursor-pointer rounded-xl px-4 py-2 text-sm font-semibold transition" :class="meeting.lkpd?.is_active
-        ? 'bg-emerald-500 text-white hover:bg-emerald-600 hover:text-white'
-        : 'bg-slate-200 text-slate-700 hover:bg-slate-300 hover:text-slate-900'
+      <button
+        @click="toggleLkpd"
+        class="rounded-xl px-3 py-2 text-xs font-semibold transition"
+        :class="
+          meeting.lkpd?.is_active
+            ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+            : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
         ">
+
         {{
           meeting.lkpd?.is_active
             ? 'Aktif'
@@ -129,42 +141,63 @@ const toggleLkpd =
       </button>
     </div>
 
+    <!-- CONTENT -->
+    <div
+      class="mt-5 space-y-4">
 
-    <div class="mt-6 space-y-5">
       <!-- FILE -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-slate-700">
+
           Upload File LKPD
         </label>
 
-        <input type="file"
-          class="w-full rounded-2xl border border-slate-200 p-3 outline-none transition focus:border-orange-500" />
+        <input
+          type="file"
+          class="w-full rounded-xl border border-slate-200 p-3 text-sm outline-none transition focus:border-orange-500" />
       </div>
 
       <!-- GOOGLE DOCS -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-slate-700">
+
           Link Google Docs Template
         </label>
 
-        <input v-model="form.google_docs_url" type="text" placeholder="https://docs.google.com/..."
-          class="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-orange-500" />
+        <input
+          v-model="form.google_docs_url"
+          type="text"
+          placeholder="https://docs.google.com/..."
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-orange-500" />
       </div>
 
       <!-- NOTE -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label
+          class="mb-2 block text-sm font-semibold text-slate-700">
+
           Catatan Pengumpulan
         </label>
 
-        <textarea v-model="form.submission_note" rows="5" placeholder="Masukkan catatan pengumpulan LKPD..."
-          class="w-full rounded-2xl border border-slate-200 p-4 outline-none transition focus:border-orange-500" />
+        <textarea
+          v-model="form.submission_note"
+          rows="4"
+          placeholder="Masukkan catatan pengumpulan LKPD..."
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-orange-500" />
       </div>
 
       <!-- BUTTON -->
-      <button @click="submit" :disabled="form.processing"
-        class="cursor-pointer inline-flex items-center gap-2 rounded-2xl bg-orange-500 px-6 py-3 font-semibold text-white transition hover:bg-orange-600 disabled:opacity-50">
-        <Upload class="h-5 w-5" />
+      <button
+        @click="submit"
+        :disabled="form.processing"
+        class="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:opacity-50">
+
+        <Upload class="h-4 w-4" />
 
         {{
           form.processing
