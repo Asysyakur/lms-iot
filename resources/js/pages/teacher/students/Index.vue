@@ -35,7 +35,7 @@ interface Student {
   class: string;
   username: string;
   password: string;
-  active: boolean;
+  last_seen_at: string | null;
 }
 
 const props = defineProps<{
@@ -52,6 +52,15 @@ const form = useForm({
 
   password: '',
 });
+
+const classOptions = [
+  'X TKJ-T-1',
+  'X TKJ-T-2',
+  'XI TKJ-T-1',
+  'XI TKJ-T-2',
+  'XII TKJ-T-1',
+  'XII TKJ-T-2',
+];
 
 const deletedStudents =
   ref(0);
@@ -101,23 +110,82 @@ const activeStudents =
   computed(() => {
 
     return props.students.filter(
-      (
-        student: Student,
-      ) =>
-        student.active,
+      (student: any) => {
+
+        if (!student.last_seen_at) {
+          return false;
+        }
+
+        const lastSeen =
+          new Date(
+            student.last_seen_at
+          ).getTime();
+
+        const now =
+          Date.now();
+
+        /**
+         * AKTIF JIKA
+         * < 5 MENIT
+         */
+        return (
+          now - lastSeen
+          <
+          5 * 60 * 1000
+        );
+      }
     ).length;
   });
 
 const inactiveStudents =
   computed(() => {
 
-    return props.students.filter(
-      (
-        student: Student,
-      ) =>
-        !student.active,
-    ).length;
+    return (
+      props.students.length
+      -
+      activeStudents.value
+    );
   });
+
+const isOnline = (
+  student: Student
+) => {
+
+  if (!student.last_seen_at) {
+    return false;
+  }
+
+  const lastSeen =
+    new Date(
+      student.last_seen_at
+    ).getTime();
+
+  return (
+    Date.now() - lastSeen
+    <
+    5 * 60 * 1000
+  );
+};
+
+const formatLastSeen = (
+  value: string | null
+) => {
+
+  if (!value) {
+    return 'Belum pernah login';
+  }
+
+  const date =
+    new Date(value);
+
+  return date.toLocaleString(
+    'id-ID',
+    {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    }
+  );
+};
 
 const addStudent =
   () => {
@@ -310,29 +378,8 @@ const removeStudent =
 
             <select v-model="form.class"
               class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500">
-
-              <option>
-                X TKJ-T-1
-              </option>
-
-              <option>
-                X TKJ-T-2
-              </option>
-
-              <option>
-                XI TKJ-T-1
-              </option>
-
-              <option>
-                XI TKJ-T-2
-              </option>
-
-              <option>
-                XII TKJ-T-1
-              </option>
-
-              <option>
-                XII TKJ-T-2
+              <option v-for="item in classOptions" :key="item" :value="item">
+                {{ item }}
               </option>
             </select>
           </div>
@@ -513,6 +560,14 @@ const removeStudent =
                 Username
               </th>
 
+              <th class="px-4 py-3 text-left text-[11px] font-semibold">
+                Status
+              </th>
+
+              <th class="px-4 py-3 text-left text-[11px] font-semibold">
+                Last Seen
+              </th>
+
               <th class="px-4 py-3 text-center text-[11px] font-semibold">
 
                 Aksi
@@ -525,7 +580,7 @@ const removeStudent =
 
             <tr v-for="(
 student,
-                  index
+  index
               ) in students" :key="student.id" class="border-b border-slate-100 transition hover:bg-slate-50">
 
               <!-- NO -->
@@ -550,6 +605,30 @@ student,
               <td class="px-4 py-3 text-sm text-slate-700">
 
                 {{ student.username }}
+              </td>
+
+              <!-- STATUS -->
+              <td class="px-4 py-3">
+
+                <span v-if="isOnline(student)"
+                  class="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                  <span class="h-2 w-2 rounded-full bg-emerald-500" />
+
+                  Online
+                </span>
+
+                <span v-else
+                  class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                  <span class="h-2 w-2 rounded-full bg-slate-400" />
+
+                  Offline
+                </span>
+              </td>
+
+              <!-- LAST SEEN -->
+              <td class="px-4 py-3 text-sm text-slate-600">
+
+                {{ formatLastSeen(student.last_seen_at) }}
               </td>
 
               <!-- ACTION -->

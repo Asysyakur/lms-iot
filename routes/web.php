@@ -238,7 +238,13 @@ Route::middleware([
                 'students' => User::where(
                     'role',
                     'student'
-                )->latest()->get(),
+                )->latest()->get([
+                    'id',
+                    'name',
+                    'class',
+                    'username',
+                    'last_seen_at',
+                ]),
             ]
         );
     })->name('teacher.students');
