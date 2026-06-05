@@ -191,7 +191,7 @@ const formatAnswer =
             {{
               form.processing
                 ? 'Menyimpan...'
-                : '💾 Simpan Nilai'
+                : 'Simpan Nilai'
             }}
           </button>
 
@@ -199,7 +199,7 @@ const formatAnswer =
           <a :href="`/teacher/reports/meetings/${meeting.id}/export`"
             class="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-slate-100">
 
-            ⬇ Download Excel
+            Download Excel
           </a>
         </div>
       </div>

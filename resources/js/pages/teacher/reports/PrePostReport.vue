@@ -37,7 +37,7 @@ defineOptions({
         <a href="/teacher/reports/assessments/export"
           class="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-slate-100">
 
-          ⬇ Download Excel
+          Download Excel
         </a>
       </div>
     </section>

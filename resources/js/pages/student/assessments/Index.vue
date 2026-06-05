@@ -107,8 +107,8 @@ const hasSubmitted =
 
     <!-- CONTENT -->
     <div class="grid gap-4" :class="!isPretest
-        ? 'xl:grid-cols-2'
-        : 'xl:grid-cols-1'
+      ? 'xl:grid-cols-2'
+      : 'xl:grid-cols-1'
       ">
 
       <!-- REQUIREMENTS -->
@@ -122,6 +122,7 @@ const hasSubmitted =
 
         <div class="space-y-3">
 
+          <!-- REQUIREMENTS DARI BACKEND -->
           <div v-for="item in requirements" :key="item.title"
             class="flex items-start gap-3 border-b border-slate-100 pb-3">
 
@@ -130,11 +131,22 @@ const hasSubmitted =
             <AlertCircle v-else class="mt-0.5 h-4 w-4 text-red-500" />
 
             <span :class="item.completed
-                ? 'text-slate-700'
-                : 'text-red-500'
+              ? 'text-slate-700'
+              : 'text-red-500'
               " class="text-sm">
 
               {{ item.title }}
+            </span>
+          </div>
+
+          <!-- RULES POSTTEST -->
+          <div v-for="rule in posttestRules" :key="rule" class="flex items-start gap-3 border-b border-slate-100 pb-3">
+
+            <CheckCircle2 class="mt-0.5 h-4 w-4 text-emerald-500" />
+
+            <span class="text-sm text-slate-700">
+
+              {{ rule }}
             </span>
           </div>
         </div>
@@ -171,7 +183,7 @@ const hasSubmitted =
         </div>
 
         <!-- RULES -->
-        <div class="mt-5 rounded-xl bg-slate-50 p-3">
+        <div v-if="isPretest" class="mt-5 rounded-xl bg-slate-50 p-3">
 
           <h3 class="mb-3 text-sm font-bold text-slate-700">
 
@@ -180,9 +192,7 @@ const hasSubmitted =
 
           <div class="space-y-2.5">
 
-            <div v-for="rule in isPretest
-              ? pretestRules
-              : posttestRules" :key="rule" class="flex items-start gap-2">
+            <div v-for="rule in pretestRules" :key="rule" class="flex items-start gap-2">
 
               <div class="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
 
@@ -249,7 +259,7 @@ const hasSubmitted =
 
               <h2 class="text-sm font-bold text-emerald-700">
 
-                🎉 Assessment sudah dikerjakan
+                Assessment sudah dikerjakan
               </h2>
 
               <p class="mt-1 text-xs text-emerald-600">
@@ -279,7 +289,7 @@ const hasSubmitted =
           <!-- BELUM BUKA -->
           <div v-if="!props.isOpened" class="rounded-xl bg-amber-100 px-4 py-2.5 text-xs font-semibold text-amber-700">
 
-            ⏳ Assessment dibuka pada
+            Assessment dibuka pada
             {{ props.openAt }}
           </div>
 
@@ -287,7 +297,7 @@ const hasSubmitted =
           <div v-else-if="!props.canTakeExam && !hasSubmitted"
             class="rounded-xl bg-red-100 px-4 py-2.5 text-xs font-semibold text-red-700">
 
-            🚫 Syarat assessment belum terpenuhi
+            Syarat assessment belum terpenuhi
           </div>
 
           <!-- ATTEMPT HABIS -->
@@ -297,13 +307,13 @@ const hasSubmitted =
 
               <div class="rounded-xl bg-red-100 px-4 py-2.5 text-xs font-semibold text-red-700">
 
-                🚫 Kesempatan pengerjaan habis
+                Kesempatan pengerjaan habis
               </div>
 
               <Link :href="`/student/assessments/${props.assessment.type}/result`"
                 class="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600">
 
-                📊 Lihat Hasil
+                Lihat Hasil
               </Link>
             </div>
           </template>
@@ -327,7 +337,7 @@ const hasSubmitted =
                 "
                 class="inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition">
 
-                🚀 Mulai
+                Mulai
                 {{ props.assessment.title }}
               </Link>
             </div>

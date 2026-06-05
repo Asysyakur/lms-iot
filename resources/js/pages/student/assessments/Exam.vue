@@ -237,7 +237,7 @@ const submitExam = async () => {
           @click="submitExam"
           class="mt-6 w-full rounded-xl bg-red-50 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-100">
 
-          🚨 Selesai dan Kumpulkan
+          Selesai dan Kumpulkan
         </button>
       </div>
     </div>
