@@ -31,17 +31,13 @@ interface Assessment {
 
 const props = defineProps<{
   assessment: Assessment;
-
   latestResult: any;
-
+  ongoingResult: any;
+  otherOngoingAssessment: any;
   submittedCount: number;
-
   remainingAttempts: number;
-
   isOpened: boolean;
-
   canTakeExam: boolean;
-
   openAt: string;
 }>();
 
@@ -75,6 +71,12 @@ const posttestRules = [
 
 const hasSubmitted =
   props.submittedCount > 0;
+
+const hasOngoingExam =
+  !!props.ongoingResult;
+
+const hasOtherOngoingAssessment =
+  !!props.otherOngoingAssessment;
 </script>
 
 <template>
@@ -318,6 +320,20 @@ const hasSubmitted =
             </div>
           </template>
 
+          <!-- ADA TEST LAIN -->
+          <template v-else-if="
+            hasOtherOngoingAssessment
+          ">
+            <div class="rounded-xl bg-amber-100 px-4 py-2.5 text-xs font-semibold text-amber-700">
+              Assessment
+              {{
+                props.otherOngoingAssessment
+                  ?.assessment?.title
+              }}
+              sedang berlangsung
+            </div>
+          </template>
+
           <!-- BISA -->
           <template v-else>
 
@@ -331,15 +347,29 @@ const hasSubmitted =
                 </span>
               </div>
 
-              <Link :href="`/student/assessments/${props.assessment.type}/exam`" :class="isPretest
-                ? 'bg-blue-600 hover:bg-blue-700'
-                : 'bg-emerald-500 hover:bg-emerald-600'
-                "
-                class="inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition">
+              <div class="flex flex-wrap items-center gap-3">
+                <!-- ATTEMPT -->
+                <div class="text-xs text-slate-500">
 
-                Mulai
-                {{ props.assessment.title }}
-              </Link>
+                  Kesempatan tersisa:
+                  <span class="font-bold">
+                    {{ props.remainingAttempts }}
+                  </span>
+                </div>
+
+                <Link :href="`/student/assessments/${props.assessment.type}/exam`" :class="isPretest
+                  ? 'bg-blue-600 hover:bg-blue-700'
+                  : 'bg-emerald-500 hover:bg-emerald-600'
+                  "
+                  class="inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition">
+
+                  {{
+                    hasOngoingExam
+                      ? 'Lanjutkan Assessment'
+                      : `Mulai ${props.assessment.title}`
+                  }}
+                </Link>
+              </div>
             </div>
           </template>
         </div>

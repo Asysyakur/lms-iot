@@ -46,6 +46,41 @@ class AssessmentController extends Controller
             ->sortByDesc('created_at')
             ->first();
 
+        $ongoingResult =
+            $results
+            ->where(
+                'status',
+                'in_progress'
+            )
+            ->sortByDesc('created_at')
+            ->first();
+
+        $otherOngoingAssessment =
+            AssessmentResult::with(
+                'assessment'
+            )
+            ->where(
+                'student_id',
+                Auth::id()
+            )
+            ->where(
+                'status',
+                'in_progress'
+            )
+            ->whereHas(
+                'assessment',
+                function ($query) use ($type) {
+
+                    $query->where(
+                        'type',
+                        '!=',
+                        $type
+                    );
+                }
+            )
+            ->latest()
+            ->first();
+
         /*
     |--------------------------------------------------------------------------
     | CHECK OPEN DATETIME
@@ -91,6 +126,12 @@ class AssessmentController extends Controller
 
                 'latestResult' =>
                 $latestResult,
+
+                'ongoingResult' =>
+                $ongoingResult,
+
+                'otherOngoingAssessment' =>
+                $otherOngoingAssessment,
 
                 'submittedCount' =>
                 $submittedCount,
@@ -189,6 +230,70 @@ class AssessmentController extends Controller
             ->first();
 
         /*
+|--------------------------------------------------------------------------
+| AUTO SUBMIT IF EXPIRED
+|--------------------------------------------------------------------------
+*/
+
+        if ($result) {
+
+            $expiredAt =
+                Carbon::parse(
+                    $result->started_at
+                )->addMinutes(
+                    $assessment->duration
+                );
+
+            if (
+                now()->greaterThan(
+                    $expiredAt
+                )
+            ) {
+
+                $correct =
+                    $result->answers
+                    ->where('is_correct', true)
+                    ->count();
+
+                $wrong =
+                    $result->answers
+                    ->where('is_correct', false)
+                    ->count();
+
+                $total =
+                    $assessment->questions
+                    ->count();
+
+                $score =
+                    $total > 0
+                    ? round(
+                        ($correct / $total) * 100
+                    )
+                    : 0;
+
+                $result->update([
+                    'score' =>
+                    $score,
+
+                    'correct_answers' =>
+                    $correct,
+
+                    'wrong_answers' =>
+                    $wrong,
+
+                    'submitted_at' =>
+                    now(),
+
+                    'status' =>
+                    'submitted',
+                ]);
+
+                return redirect(
+                    "/student/assessments/{$type}/result"
+                );
+            }
+        }
+        /*
     |--------------------------------------------------------------------------
     | CREATE NEW ATTEMPT
     |--------------------------------------------------------------------------
@@ -224,7 +329,13 @@ class AssessmentController extends Controller
         return Inertia::render(
             'student/assessments/Exam',
             [
-                'assessment' => $assessment,
+                'assessment' => [
+
+                    ...$assessment->toArray(),
+
+                    'duration' =>
+                    $assessment->duration,
+                ],
 
                 'questions' =>
                 $assessment->questions,
@@ -297,6 +408,22 @@ class AssessmentController extends Controller
         )->findOrFail(
             $validated['result_id']
         );
+
+        /*
+    |--------------------------------------------------------------------------
+    | PREVENT DOUBLE SUBMIT
+    |--------------------------------------------------------------------------
+    */
+
+        if (
+            $result->status === 'submitted'
+        ) {
+
+            return response()->json([
+                'message' =>
+                'Assessment sudah selesai.'
+            ], 403);
+        }
 
         $correct =
             $result->answers
