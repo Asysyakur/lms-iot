@@ -11,19 +11,76 @@ use Inertia\Inertia;
 
 class QuizController extends Controller
 {
-    public function exam(Meeting $meeting)
-    {
+    public function exam(
+        Meeting $meeting
+    ) {
+
+        /*
+    |--------------------------------------------------------------------------
+    | CHECK PASSED QUIZ
+    |--------------------------------------------------------------------------
+    */
+
+        $passedAttempt =
+            QuizAttempt::where(
+                'user_id',
+                auth()->id()
+            )
+            ->where(
+                'meeting_id',
+                $meeting->id
+            )
+            ->where(
+                'passed',
+                true
+            )
+            ->latest()
+            ->first();
+
+        /*
+    |--------------------------------------------------------------------------
+    | IF PASSED
+    |--------------------------------------------------------------------------
+    */
+
+        if ($passedAttempt) {
+
+            return redirect()->route(
+                'student.meeting.quiz.review',
+                [
+
+                    'meeting' =>
+                    $meeting->id,
+
+                    'attempt' =>
+                    $passedAttempt->id,
+                ]
+            );
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | SHOW QUIZ
+    |--------------------------------------------------------------------------
+    */
+
         $questions =
             $meeting->quizzes()
-            ->where('is_active', true)
+            ->where(
+                'is_active',
+                true
+            )
             ->get();
 
         return Inertia::render(
             'student/meetings/quizzes/Exam',
             [
-                'meeting' => $meeting,
 
-                'questions' => $questions,
+                'meeting' =>
+                $meeting,
+
+                'questions' =>
+                $questions,
             ]
         );
     }
