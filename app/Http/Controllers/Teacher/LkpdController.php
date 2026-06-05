@@ -23,7 +23,15 @@ class LkpdController extends Controller
                 'meeting_id' => $request->meeting_id,
             ],
             [
-                'template_file' => $file,
+                'template_file' =>
+                $file
+                    ??
+                    optional(
+                        Lkpd::where(
+                            'meeting_id',
+                            $request->meeting_id
+                        )->first()
+                    )->template_file,
 
                 'google_docs_url' =>
                 $request->google_docs_url,

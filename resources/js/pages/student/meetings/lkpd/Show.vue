@@ -43,7 +43,37 @@ const instructions = [
 ];
 
 const templateLink =
-  'https://docs.google.com/document/d/xxxxxxxxxxxxx/copy';
+  computed(() => {
+
+    return (
+      props.lkpd
+        ?.google_docs_url
+      ||
+      null
+    );
+  });
+
+const templateFile =
+  computed(() => {
+
+    return (
+      props.lkpd
+        ?.template_file
+      ||
+      null
+    );
+  });
+
+const submissionNote =
+  computed(() => {
+
+    return (
+      props.lkpd
+        ?.submission_note
+      ||
+      null
+    );
+  });
 
 const canSubmit = computed(() => {
   return !!selectedFile.value;
@@ -365,7 +395,7 @@ const submitLkpd = async () => {
           </div>
         </div>
 
-        <a :href="templateLink" target="_blank"
+        <a v-if="templateLink" :href="templateLink" target="_blank"
           class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
 
           <ExternalLink class="h-4 w-4" />
@@ -373,6 +403,54 @@ const submitLkpd = async () => {
           Buka Template
         </a>
       </div>
+    </section>
+    <!-- FILE TEMPLATE -->
+    <section v-if="templateFile" class="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+        <div class="flex items-start gap-3">
+
+          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white">
+
+            <FileText class="h-5 w-5 text-emerald-600" />
+          </div>
+
+          <div>
+
+            <h2 class="text-sm font-bold text-emerald-700">
+
+              File Template LKPD
+            </h2>
+
+            <p class="mt-1 text-xs text-emerald-600">
+
+              Download template LKPD dari guru.
+            </p>
+          </div>
+        </div>
+
+        <a :href="`/storage/${templateFile}`" target="_blank"
+          class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700">
+
+          <ExternalLink class="h-4 w-4" />
+
+          Download Template
+        </a>
+      </div>
+    </section>
+    <!-- NOTE -->
+    <section v-if="submissionNote" class="rounded-xl border border-orange-200 bg-orange-50 p-4">
+
+      <h2 class="text-sm font-bold text-orange-700">
+
+        Catatan Pengumpulan
+      </h2>
+
+      <p class="mt-2 text-sm leading-relaxed text-orange-700">
+
+        {{ submissionNote }}
+      </p>
     </section>
 
     <!-- WARNING -->

@@ -19,6 +19,9 @@ const form = useForm({
   meeting_id:
     props.meeting.id,
 
+  template_file:
+    null as File | null,
+
   google_docs_url:
     props.meeting.lkpd
       ?.google_docs_url ?? '',
@@ -53,10 +56,42 @@ const submit =
 
     try {
 
+      const payload =
+        new FormData();
+
+      payload.append(
+        'meeting_id',
+        String(form.meeting_id)
+      );
+
+      if (form.template_file) {
+
+        payload.append(
+          'template_file',
+          form.template_file
+        );
+      }
+
+      payload.append(
+        'google_docs_url',
+        form.google_docs_url || ''
+      );
+
+      payload.append(
+        'submission_note',
+        form.submission_note || ''
+      );
+
       const response =
         await axios.post(
           '/teacher/lkpds',
-          form,
+          payload,
+          {
+            headers: {
+              'Content-Type':
+                'multipart/form-data',
+            },
+          }
         );
 
       props.meeting.lkpd =
@@ -133,8 +168,8 @@ const toggleLkpd =
 
       <!-- STATUS -->
       <button @click="toggleLkpd" class="rounded-lg px-3 py-2 text-xs font-semibold transition" :class="meeting.lkpd?.is_active
-          ? 'bg-emerald-500 text-white hover:bg-emerald-600'
-          : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+        ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+        : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
         ">
 
         {{
@@ -156,7 +191,13 @@ const toggleLkpd =
           Upload File LKPD
         </label>
 
-        <input type="file"
+        <input type="file" @change="(e) => {
+          const target = e.target as HTMLInputElement;
+
+          if (target.files?.length) {
+            form.template_file = target.files[0];
+          }
+        }"
           class="w-full rounded-lg border border-slate-200 p-2.5 text-sm outline-none transition focus:border-orange-500" />
       </div>
 
