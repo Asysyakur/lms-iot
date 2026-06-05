@@ -175,134 +175,163 @@ const submitLkpd = async () => {
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-4">
+
     <!-- HEADER -->
     <section
-      class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-600 to-amber-500 p-6 text-white shadow-lg">
-      <div class="absolute right-0 top-0 h-40 w-40 rounded-full bg-white/10" />
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-orange-600 to-amber-500 px-5 py-4 text-white shadow-sm">
 
-      <div>
-        <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold">
-          Pertemuan {{ meetingId }}
+      <div class="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10" />
+
+      <div class="relative z-10">
+
+        <span class="rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-semibold">
+
+          Pertemuan
+          {{ props.meeting.meeting_number }}
         </span>
 
-        <h1 class="mt-4 text-3xl font-bold">
-          📄 LKPD:
-          Sensor Cahaya pada
-          Micro:bit
+        <h1 class="mt-3 text-2xl font-bold">
+
+          📄 LKPD
+          {{ props.meeting.title }}
         </h1>
 
-        <p class="mt-2 text-orange-100">
+        <p class="mt-1 max-w-2xl text-sm text-orange-100">
+
           Kerjakan LKPD berdasarkan hasil
-          praktik dan kumpulkan link
-          dokumenmu.
+          praktik lalu upload file
+          pengerjaanmu.
         </p>
       </div>
     </section>
 
     <!-- FLOW -->
-    <section class="rounded-2xl bg-white p-5 shadow-sm">
-      <div class="flex items-center justify-between">
-        <div class="flex flex-1 items-center">
-          <!-- MATERI -->
-          <div class="flex flex-col items-center">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-sm font-bold text-white">
-              ✓
-            </div>
+    <section class="rounded-xl bg-white p-4 shadow-sm">
 
-            <p class="mt-2 text-xs font-semibold text-emerald-600">
-              Materi
-            </p>
+      <div class="flex items-center">
+
+        <!-- MATERI -->
+        <div class="flex flex-col items-center">
+
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
+
+            ✓
           </div>
 
-          <div class="mx-2 h-1 flex-1 rounded-full bg-emerald-500" />
+          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
 
-          <!-- REFLEKSI -->
-          <div class="flex flex-col items-center">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-sm font-bold text-white">
-              ✓
-            </div>
+            Materi
+          </p>
+        </div>
 
-            <p class="mt-2 text-xs font-semibold text-emerald-600">
-              Refleksi
-            </p>
+        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-emerald-500" />
+
+        <!-- REFLEKSI -->
+        <div class="flex flex-col items-center">
+
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
+
+            ✓
           </div>
 
-          <div class="mx-2 h-1 flex-1 rounded-full bg-emerald-500" />
+          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
 
-          <!-- KUIS -->
-          <div class="flex flex-col items-center">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-sm font-bold text-white">
-              ✓
-            </div>
+            Refleksi
+          </p>
+        </div>
 
-            <p class="mt-2 text-xs font-semibold text-emerald-600">
-              Kuis
-            </p>
+        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-emerald-500" />
+
+        <!-- KUIS -->
+        <div class="flex flex-col items-center">
+
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
+
+            ✓
           </div>
 
-          <div class="mx-2 h-1 flex-1 rounded-full bg-emerald-500" />
+          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
 
-          <!-- PRAKTIK -->
-          <div class="flex flex-col items-center">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-sm font-bold text-white">
-              ✓
-            </div>
+            Kuis
+          </p>
+        </div>
 
-            <p class="mt-2 text-xs font-semibold text-emerald-600">
-              Praktik
-            </p>
+        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-emerald-500" />
+
+        <!-- PRAKTIK -->
+        <div class="flex flex-col items-center">
+
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
+
+            ✓
           </div>
 
-          <div class="mx-2 h-1 flex-1 rounded-full bg-orange-500" />
+          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
 
-          <!-- LKPD -->
-          <div class="flex flex-col items-center">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-sm font-bold text-white">
-              5
-            </div>
+            Praktik
+          </p>
+        </div>
 
-            <p class="mt-2 text-xs font-semibold text-orange-600">
-              LKPD
-            </p>
+        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-orange-500" />
+
+        <!-- LKPD -->
+        <div class="flex flex-col items-center">
+
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">
+
+            5
           </div>
+
+          <p class="mt-2 text-[10px] font-semibold text-orange-600">
+
+            LKPD
+          </p>
         </div>
       </div>
     </section>
 
     <!-- INSTRUCTIONS -->
-    <section class="rounded-2xl bg-white p-5 shadow-sm">
-      <div class="mb-6 flex items-center gap-4">
-        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100">
-          <FileSpreadsheet class="h-6 w-6 text-orange-600" />
+    <section class="rounded-xl bg-white p-4 shadow-sm">
+
+      <div class="mb-4 flex items-center gap-3">
+
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100">
+
+          <FileSpreadsheet class="h-5 w-5 text-orange-600" />
         </div>
 
         <div>
-          <h2 class="text-lg font-bold text-slate-800">
-            Instruksi Pengerjaan
+
+          <h2 class="text-sm font-bold text-slate-800">
+
+            Instruksi LKPD
           </h2>
 
-          <p class="mt-1 text-sm text-slate-500">
-            Ikuti petunjuk berikut sebelum
-            mengumpulkan LKPD.
+          <p class="mt-1 text-xs text-slate-500">
+
+            Ikuti petunjuk berikut.
           </p>
         </div>
       </div>
 
-      <div class="space-y-4">
+      <div class="space-y-3">
+
         <div v-for="(instruction, index) in instructions" :key="instruction"
-          class="flex items-start gap-4 rounded-2xl border border-slate-200 p-4">
+          class="flex items-start gap-3 rounded-xl border border-slate-200 p-3">
+
           <div
-            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-500 text-sm font-bold text-white">
+            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-orange-500 text-[11px] font-bold text-white">
+
             {{ index + 1 }}
           </div>
 
-          <p class="text-sm leading-relaxed text-slate-700">
+          <p class="pt-1 text-sm leading-relaxed text-slate-700">
+
             {{ instruction }}
           </p>
         </div>
@@ -310,54 +339,62 @@ const submitLkpd = async () => {
     </section>
 
     <!-- TEMPLATE -->
-    <section class="rounded-3xl border border-blue-200 bg-blue-50 p-6">
-      <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-        <div class="flex items-start gap-4">
-          <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white">
-            <FileText class="h-7 w-7 text-blue-600" />
+    <section class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+        <div class="flex items-start gap-3">
+
+          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white">
+
+            <FileText class="h-5 w-5 text-blue-600" />
           </div>
 
           <div>
-            <h2 class="text-lg font-bold text-blue-700">
-              Template LKPD Google Docs
+
+            <h2 class="text-sm font-bold text-blue-700">
+
+              Template LKPD
             </h2>
 
-            <p class="mt-1 text-sm text-blue-600">
-              Klik tombol berikut untuk
-              membuat salinan template
-              LKPD.
+            <p class="mt-1 text-xs text-blue-600">
+
+              Buat salinan template sebelum
+              mengerjakan.
             </p>
           </div>
         </div>
 
         <a :href="templateLink" target="_blank"
-          class="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700">
-          <ExternalLink class="h-5 w-5" />
+          class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
 
-          Buat Salinan LKPD
+          <ExternalLink class="h-4 w-4" />
+
+          Buka Template
         </a>
       </div>
     </section>
 
     <!-- WARNING -->
-    <section class="rounded-3xl border border-amber-200 bg-amber-50 p-5">
-      <div class="flex items-start gap-4">
-        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
-          <Lock class="h-5 w-5 text-amber-600" />
+    <section class="rounded-xl border border-amber-200 bg-amber-50 p-4">
+
+      <div class="flex items-start gap-3">
+
+        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100">
+
+          <Lock class="h-4 w-4 text-amber-600" />
         </div>
 
         <div>
-          <h2 class="font-bold text-amber-700">
+
+          <h2 class="text-sm font-bold text-amber-700">
+
             Ketentuan Pengumpulan
           </h2>
 
           <p class="mt-1 text-sm leading-relaxed text-amber-700">
-            Pastikan akses Google Docs
-            diatur ke
-            <span class="font-semibold">
-              "Siapa saja yang memiliki
-              link"
-            </span>
+
+            Pastikan file dapat diakses guru
             sebelum dikumpulkan.
           </p>
         </div>
@@ -365,41 +402,47 @@ const submitLkpd = async () => {
     </section>
 
     <!-- SUBMIT -->
-    <section class="rounded-2xl bg-white p-5 shadow-sm">
-      <div class="mb-6 flex items-center gap-4">
-        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100">
-          <Upload class="h-6 w-6 text-emerald-600" />
+    <section class="rounded-xl bg-white p-4 shadow-sm">
+
+      <div class="mb-4 flex items-center gap-3">
+
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
+
+          <Upload class="h-5 w-5 text-emerald-600" />
         </div>
 
         <div>
-          <h2 class="text-lg font-bold text-slate-800">
-            Pengumpulan LKPD
+
+          <h2 class="text-sm font-bold text-slate-800">
+
+            Upload LKPD
           </h2>
 
-          <p class="mt-1 text-sm text-slate-500">
-            Upload file LKPD hasil
-            pengerjaanmu.
+          <p class="mt-1 text-xs text-slate-500">
+
+            Upload file hasil pengerjaanmu.
           </p>
         </div>
       </div>
 
-      <div class="space-y-5">
+      <div class="space-y-4">
 
         <!-- DROPZONE -->
         <div @drop="handleDrop" @dragover="handleDragOver" @dragleave="handleDragLeave" :class="isDragging
-          ? 'border-orange-500 bg-orange-100 scale-[1.01]'
+          ? 'border-orange-500 bg-orange-100'
           : 'border-orange-300 bg-orange-50'
           "
-          class="flex cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed px-6 py-14 text-center transition">
+          class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-5 py-10 text-center transition">
 
-          <Upload class="mb-4 h-12 w-12 text-orange-500" />
+          <Upload class="mb-3 h-9 w-9 text-orange-500" />
 
-          <h3 class="text-lg font-bold text-slate-700">
-            Klik atau Seret File ke Sini
+          <h3 class="text-sm font-bold text-slate-700">
+
+            Klik atau Seret File
           </h3>
 
-          <p class="mt-2 text-sm text-slate-500">
-            Format didukung:
+          <p class="mt-1 text-xs text-slate-500">
+
             PDF, DOCX, JPG, PNG
             (maks 10 MB)
           </p>
@@ -407,29 +450,36 @@ const submitLkpd = async () => {
           <input ref="fileInput" type="file" class="hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
             @change="handleFileChange" />
 
-          <button type="button" @click="$refs.fileInput.click()"
-            class="mt-5 rounded-2xl bg-orange-500 px-5 py-2 font-semibold text-white transition hover:bg-orange-600">
+          <button type="button" @click="fileInput?.click()"
+            class="mt-4 rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-600">
+
             Pilih File
           </button>
         </div>
 
-        <!-- FILE BARU DIPILIH -->
-        <div v-if="selectedFile" class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+        <!-- FILE BARU -->
+        <div v-if="selectedFile" class="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+
           <div class="flex items-center justify-between gap-3">
+
             <div class="flex items-center gap-3">
-              <FileText class="h-5 w-5 text-emerald-600" />
+
+              <FileText class="h-4 w-4 text-emerald-600" />
 
               <div>
-                <p class="font-semibold text-emerald-700">
+
+                <p class="text-sm font-semibold text-emerald-700">
+
                   {{ selectedFile.name }}
                 </p>
 
-                <p class="text-sm text-emerald-600">
+                <p class="text-xs text-emerald-600">
+
                   {{
                     (
-                      selectedFile.size /
-                      1024 /
-                      1024
+                      selectedFile.size
+                      / 1024
+                      / 1024
                     ).toFixed(2)
                   }}
                   MB
@@ -437,46 +487,56 @@ const submitLkpd = async () => {
               </div>
             </div>
 
-            <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+            <span class="rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-700">
+
               File Baru
             </span>
           </div>
         </div>
 
-        <!-- FILE LAMA DARI DB -->
-        <div v-else-if="existingFile" class="rounded-2xl border border-blue-200 bg-blue-50 p-4">
+        <!-- FILE LAMA -->
+        <div v-else-if="existingFile" class="rounded-xl border border-blue-200 bg-blue-50 p-3">
+
           <div class="flex items-center justify-between gap-3">
+
             <div class="flex items-center gap-3">
-              <FileText class="h-5 w-5 text-blue-600" />
+
+              <FileText class="h-4 w-4 text-blue-600" />
 
               <div>
-                <p class="font-semibold text-blue-700">
+
+                <p class="text-sm font-semibold text-blue-700">
+
                   {{ existingFileName }}
                 </p>
 
-                <p class="text-sm text-blue-600">
-                  File LKPD yang sudah dikumpulkan
+                <p class="text-xs text-blue-600">
+
+                  File sudah dikumpulkan
                 </p>
               </div>
             </div>
 
             <a :href="`/storage/${existingFile}`" target="_blank"
-              class="rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
-              Lihat File
+              class="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700">
+
+              Lihat
             </a>
           </div>
         </div>
 
         <!-- BUTTON -->
         <div class="flex justify-end">
+
           <button @click="submitLkpd" :disabled="!canSubmit" :class="canSubmit
             ? 'bg-orange-500 hover:bg-orange-600'
             : 'cursor-not-allowed bg-slate-300 text-slate-500'
-            " class="rounded-2xl px-6 py-3 font-semibold text-white transition">
+            " class="rounded-lg px-4 py-2 text-sm font-semibold text-white transition">
+
             {{
               canSubmit
-                ? '🚀 Upload LKPD Sekarang'
-                : '🔒 Pilih File LKPD'
+                ? '🚀 Upload LKPD'
+                : '🔒 Pilih File'
             }}
           </button>
         </div>
@@ -484,26 +544,39 @@ const submitLkpd = async () => {
 
       <!-- SUCCESS -->
       <div v-if="submitted"
-        class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700">
-        ✅ LKPD berhasil dikumpulkan.
+        class="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">
+
+        <div class="flex items-center gap-2">
+
+          <CheckCircle2 class="h-4 w-4" />
+
+          LKPD berhasil dikumpulkan.
+        </div>
       </div>
     </section>
 
     <!-- FOOTER -->
-    <section class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-      <a
-        :href="`/student/meetings/${props.meeting.id}/practice`"
-        class="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+    <section class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+
+      <a :href="`/student/meetings/${props.meeting.id}/practice`"
+        class="rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+
         ← Kembali ke Praktik
       </a>
 
-      <a v-if="evalOpened && currentSubmission?.file_path" :href="`/student/meetings/${props.meeting.id}/evaluation`"
-        class="rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700">
+      <a v-if="
+        evalOpened &&
+        currentSubmission?.file_path
+      " :href="`/student/meetings/${props.meeting.id}/evaluation`"
+        class="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
+
         🚀 Lanjut ke Evaluation
       </a>
 
-      <button v-else class="rounded-2xl bg-slate-300 px-6 py-3 font-semibold text-slate-500">
-        🔒 Lanjut ke Evaluation
+      <button v-else disabled
+        class="cursor-not-allowed rounded-lg bg-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-500">
+
+        🔒 Evaluation Terkunci
       </button>
     </section>
   </div>

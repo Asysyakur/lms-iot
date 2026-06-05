@@ -128,34 +128,44 @@ const submit = () => {
 </script>
 
 <template>
-  <div class="rounded-3xl bg-white p-5 shadow-sm">
+  <div class="rounded-xl bg-white p-4 shadow-sm">
 
-    <div class="mb-5 flex items-center gap-3">
+    <!-- HEADER -->
+    <div class="mb-4 flex items-center gap-3">
 
-      <div
-        class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100">
-        <FileQuestion class="h-6 w-6 text-emerald-600" />
+      <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
+
+        <FileQuestion class="h-5 w-5 text-emerald-600" />
       </div>
 
       <div>
-        <h2 class="text-lg font-bold text-slate-800">
+
+        <h2 class="text-sm font-bold text-slate-800">
+
           Form Soal
         </h2>
-      </div>
 
+        <p class="mt-1 text-xs text-slate-500">
+
+          Tambahkan atau edit soal
+          assessment.
+        </p>
+      </div>
     </div>
 
+    <!-- CONTENT -->
     <div class="space-y-4">
 
       <!-- TYPE -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label class="mb-2 block text-xs font-semibold text-slate-700">
+
           Tipe Soal
         </label>
 
-        <select
-          v-model="form.question_type"
-          class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500">
+        <select v-model="form.question_type"
+          class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500">
 
           <option value="multiple_choice">
             Pilihan Ganda
@@ -164,100 +174,91 @@ const submit = () => {
           <option value="essay">
             Uraian
           </option>
-
         </select>
       </div>
 
       <!-- QUESTION -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label class="mb-2 block text-xs font-semibold text-slate-700">
+
           Pertanyaan
         </label>
 
-        <textarea
-          v-model="form.question"
-          rows="4"
-          placeholder="Masukkan pertanyaan..."
-          class="w-full rounded-2xl border border-slate-200 p-4 text-sm outline-none focus:border-emerald-500" />
+        <textarea v-model="form.question" rows="4" placeholder="Masukkan pertanyaan..."
+          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-500" />
       </div>
 
       <!-- OPTIONS -->
-      <div
-        v-if="form.question_type === 'multiple_choice'"
-        class="grid gap-3">
+      <div v-if="
+        form.question_type ===
+        'multiple_choice'
+      " class="space-y-3">
 
-        <input
-          v-model="form.option_a"
-          type="text"
-          placeholder="Opsi A"
-          class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+        <input v-model="form.option_a" type="text" placeholder="Opsi A"
+          class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
 
-        <input
-          v-model="form.option_b"
-          type="text"
-          placeholder="Opsi B"
-          class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+        <input v-model="form.option_b" type="text" placeholder="Opsi B"
+          class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
 
-        <input
-          v-model="form.option_c"
-          type="text"
-          placeholder="Opsi C"
-          class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+        <input v-model="form.option_c" type="text" placeholder="Opsi C"
+          class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
 
-        <input
-          v-model="form.option_d"
-          type="text"
-          placeholder="Opsi D"
-          class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+        <input v-model="form.option_d" type="text" placeholder="Opsi D"
+          class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
 
-        <input
-          v-model="form.option_e"
-          type="text"
-          placeholder="Opsi E"
-          class="rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+        <input v-model="form.option_e" type="text" placeholder="Opsi E"
+          class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
       </div>
 
       <!-- ANSWER -->
-      <select
-        v-if="form.question_type === 'multiple_choice'"
-        v-model="form.answer"
-        class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500">
+      <div v-if="
+        form.question_type ===
+        'multiple_choice'
+      ">
 
-        <option value="A">
-          A
-        </option>
+        <label class="mb-2 block text-xs font-semibold text-slate-700">
 
-        <option value="B">
-          B
-        </option>
+          Jawaban Benar
+        </label>
 
-        <option value="C">
-          C
-        </option>
+        <select v-model="form.answer"
+          class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500">
 
-        <option value="D">
-          D
-        </option>
+          <option value="A">
+            Jawaban A
+          </option>
 
-        <option value="E">
-          E
-        </option>
+          <option value="B">
+            Jawaban B
+          </option>
 
-      </select>
+          <option value="C">
+            Jawaban C
+          </option>
+
+          <option value="D">
+            Jawaban D
+          </option>
+
+          <option value="E">
+            Jawaban E
+          </option>
+        </select>
+      </div>
 
       <!-- BUTTON -->
-      <button
-        @click="submit"
-        type="button"
-        :disabled="form.processing"
-        class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-600">
+      <button @click="submit" type="button" :disabled="form.processing"
+        class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-50">
 
         <Plus class="h-4 w-4" />
 
         {{
-          form.id
-            ? 'Update Soal'
-            : 'Tambahkan Soal'
+          form.processing
+            ? 'Menyimpan...'
+            : form.id
+              ? 'Update Soal'
+              : 'Tambahkan Soal'
         }}
       </button>
     </div>

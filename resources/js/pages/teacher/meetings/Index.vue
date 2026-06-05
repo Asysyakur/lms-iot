@@ -253,150 +253,119 @@ const resetMeetingForm =
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-4">
 
     <!-- HEADER -->
-    <section
-      class="rounded-2xl bg-white p-5 shadow-sm">
+    <section class="rounded-xl bg-white p-4 shadow-sm">
 
-      <div
-        class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
+        <!-- LEFT -->
         <div>
-          <h1
-            class="text-2xl font-bold text-slate-800">
+
+          <h1 class="text-2xl font-bold text-slate-800">
+
             📚 Manajemen Pertemuan
           </h1>
 
-          <p
-            class="mt-1 text-sm text-slate-500">
+          <p class="mt-1 text-sm text-slate-500">
+
             Kelola materi, kuis,
             praktik, LKPD,
-            dan evaluasi.
+            dan evaluasi pembelajaran.
           </p>
         </div>
 
-        <button
-          @click="showMeetingModal = true"
-          class="rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600">
+        <!-- BUTTON -->
+        <button @click="showMeetingModal = true"
+          class="rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600">
 
           + Tambah Pertemuan
         </button>
       </div>
 
       <!-- SLIDER -->
-      <div
-        v-if="meetings.length"
-        class="mt-5">
+      <div v-if="meetings.length" class="mt-5">
 
         <!-- CONTROL -->
-        <div
-          class="mb-4 flex justify-end gap-2">
+        <div class="mb-3 flex justify-end gap-2">
 
-          <button
-            type="button"
-            @click="slideMeetings('left')"
-            class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-emerald-300 hover:text-emerald-600">
+          <button type="button" @click="slideMeetings('left')"
+            class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:border-emerald-300 hover:text-emerald-600">
 
             <ChevronLeft class="h-4 w-4" />
           </button>
 
-          <button
-            type="button"
-            @click="slideMeetings('right')"
-            class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:border-emerald-300 hover:text-emerald-600">
+          <button type="button" @click="slideMeetings('right')"
+            class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:border-emerald-300 hover:text-emerald-600">
 
             <ChevronRight class="h-4 w-4" />
           </button>
         </div>
 
         <!-- CARDS -->
-        <div
-          class="overflow-hidden">
+        <div class="overflow-hidden">
 
-          <div
-            ref="meetingSlider"
-            class="flex gap-4 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div ref="meetingSlider"
+            class="flex gap-3 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
 
-            <MeetingCard
-              v-for="meeting in meetings"
-              :key="meeting.id"
-              :meeting="meeting"
-              :active="
-                activeMeeting?.id ===
-                meeting.id
-              "
-              @click="
+            <MeetingCard v-for="meeting in meetings" :key="meeting.id" :meeting="meeting" :active="activeMeeting?.id ===
+              meeting.id
+              " @click="
                 activeMeeting = meeting
-              "
-              @edit="
+                " @edit="
                 editMeeting(meeting)
-              "
-              @delete="
+                " @delete="
                 removeMeeting(meeting)
-              "
-              class="flex-[0_0_240px]"
-            />
+                " class="flex-[0_0_220px]" />
           </div>
         </div>
       </div>
     </section>
 
     <!-- CONTENT -->
-    <div
-      v-if="activeMeeting"
-      class="space-y-6">
+    <div v-if="activeMeeting" class="space-y-4">
 
-      <MaterialTab
-        :meeting="activeMeeting" />
+      <MaterialTab :meeting="activeMeeting" />
 
-      <QuizTab
-        :meeting="activeMeeting" />
+      <QuizTab :meeting="activeMeeting" />
 
-      <PracticeTab
-        :meeting="activeMeeting" />
+      <PracticeTab :meeting="activeMeeting" />
 
-      <LkpdTab
-        :meeting="activeMeeting" />
+      <LkpdTab :meeting="activeMeeting" />
 
-      <EvaluationTab
-        :meeting="activeMeeting" />
+      <EvaluationTab :meeting="activeMeeting" />
     </div>
 
     <!-- EMPTY -->
-    <div
-      v-else
-      class="rounded-2xl bg-white p-10 text-center shadow-sm">
+    <div v-else class="rounded-xl bg-white p-8 text-center shadow-sm">
 
-      <h2
-        class="text-xl font-bold text-slate-800">
+      <h2 class="text-lg font-bold text-slate-800">
+
         Belum Ada Pertemuan
       </h2>
 
-      <p
-        class="mt-2 text-sm text-slate-500">
+      <p class="mt-2 text-sm text-slate-500">
+
         Tambahkan pertemuan
         pertama untuk mulai
-        mengelola materi.
+        mengelola pembelajaran.
       </p>
     </div>
   </div>
 
   <!-- MODAL -->
-  <div
-    v-if="showMeetingModal"
+  <div v-if="showMeetingModal"
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
 
-    <div
-      class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+    <div class="w-full max-w-md rounded-xl bg-white p-5 shadow-xl">
 
       <!-- HEADER -->
-      <div
-        class="flex items-start justify-between">
+      <div class="flex items-start justify-between">
 
         <div>
-          <h2
-            class="text-xl font-bold text-slate-800">
+
+          <h2 class="text-lg font-bold text-slate-800">
 
             {{
               meetingForm.id
@@ -405,100 +374,76 @@ const resetMeetingForm =
             }}
           </h2>
 
-          <p
-            class="mt-1 text-sm text-slate-500">
+          <p class="mt-1 text-sm text-slate-500">
 
-            Atur data pertemuan.
+            Atur informasi pertemuan.
           </p>
         </div>
 
-        <button
-          @click="
-            showMeetingModal = false
-          "
-          class="text-xl text-slate-400 transition hover:text-slate-600">
+        <button @click="
+          showMeetingModal = false
+          " class="text-lg text-slate-400 transition hover:text-slate-600">
 
           ×
         </button>
       </div>
 
       <!-- FORM -->
-      <div
-        class="mt-6 space-y-4">
+      <div class="mt-5 space-y-4">
 
         <!-- NUMBER -->
         <div>
-          <label
-            class="mb-2 block text-sm font-semibold text-slate-700">
+
+          <label class="mb-2 block text-sm font-semibold text-slate-700">
 
             Nomor Pertemuan
           </label>
 
-          <input
-            v-model="
-              meetingForm.meeting_number
-            "
-            type="number"
-            min="1"
-            placeholder="Contoh: 1"
-            class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
+          <input v-model="meetingForm.meeting_number
+            " type="number" min="1" placeholder="Contoh: 1"
+            class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
         </div>
 
         <!-- TITLE -->
         <div>
-          <label
-            class="mb-2 block text-sm font-semibold text-slate-700">
+
+          <label class="mb-2 block text-sm font-semibold text-slate-700">
 
             Judul Pertemuan
           </label>
 
-          <input
-            v-model="
-              meetingForm.title
-            "
-            type="text"
-            placeholder="Contoh: Pengenalan Micro:bit"
-            class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
+          <input v-model="meetingForm.title
+            " type="text" placeholder="Contoh: Pengenalan Micro:bit"
+            class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
         </div>
 
         <!-- DESCRIPTION -->
         <div>
-          <label
-            class="mb-2 block text-sm font-semibold text-slate-700">
+
+          <label class="mb-2 block text-sm font-semibold text-slate-700">
 
             Deskripsi
           </label>
 
-          <textarea
-            v-model="
-              meetingForm.description
-            "
-            rows="4"
-            placeholder="Contoh: Materi pengenalan tentang Micro:bit"
-            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-500" />
+          <textarea v-model="meetingForm.description
+            " rows="4" placeholder="Contoh: Materi pengenalan tentang Micro:bit"
+            class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-500" />
         </div>
 
         <!-- BUTTON -->
-        <div
-          class="flex justify-end gap-3 pt-2">
+        <div class="flex justify-end gap-3 pt-2">
 
-          <button
-            @click="
-              showMeetingModal = false
-            "
-            type="button"
-            class="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-100">
+          <button @click="
+            showMeetingModal = false
+            " type="button"
+            class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-100">
 
             Batal
           </button>
 
-          <button
-            @click="createMeeting"
-            type="button"
-            :disabled="
-              meetingForm.processing
+          <button @click="createMeeting" type="button" :disabled="meetingForm.processing
             "
-            class="rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-50">
+            class="rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-50">
 
             {{
               meetingForm.id

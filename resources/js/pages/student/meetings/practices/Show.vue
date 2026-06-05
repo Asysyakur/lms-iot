@@ -2,16 +2,20 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+
 import axios from 'axios';
+
 import { toast } from 'vue-sonner';
-import StudentSidebarLayout from '@/layouts/student/StudentSidebarLayout.vue';
+
+import StudentSidebarLayout
+  from '@/layouts/student/StudentSidebarLayout.vue';
 
 import {
   FlaskConical,
-  CheckCircle2,
   ExternalLink,
   Link as LinkIcon,
   Lock,
+  CheckCircle2,
 } from 'lucide-vue-next';
 
 defineOptions({
@@ -24,214 +28,316 @@ const props = defineProps<{
   submission: any;
 }>();
 
-const practiceLink = ref(
-  props.submission?.project_url || ''
-);
+/**
+ * LINK
+ */
+const practiceLink =
+  ref(
+    props.submission?.project_url || ''
+  );
 
-const submitted = ref(
-  !!props.submission
-);
+/**
+ * SUBMITTED
+ */
+const submitted =
+  ref(
+    !!props.submission
+  );
 
+/**
+ * CURRENT SUBMISSION
+ */
 const currentSubmission =
   ref(
     props.submission
   );
 
-const instructions = computed(() => {
+/**
+ * INSTRUCTIONS
+ */
+const instructions =
+  computed(() => {
 
-  if (!props.practice?.instruction) {
-    return [];
-  }
+    if (!props.practice?.instruction) {
+      return [];
+    }
 
-  return props.practice.instruction
-    .split('\n')
-    .filter(item => item.trim() !== '');
-
-});
-
-const canSubmit = computed(() => {
-  return practiceLink.value.trim().length > 0;
-});
-
-const lkpdOpened = computed(() => {
-  return props.meeting.lkpd?.is_active;
-});
-
-console.log(props.meeting, lkpdOpened.value, props.submission?.project_url);
-
-const submitPractice = async () => {
-
-  const request =
-    axios.post(
-      `/student/meetings/${props.meeting.id}/practice/submit`,
-      {
-        project_url:
-          practiceLink.value,
-      }
-    );
-
-  toast.promise(request, {
-
-    loading:
-      'Mengumpulkan praktikum...',
-
-    success: () => {
-
-      submitted.value = true;
-
-      currentSubmission.value = {
-        project_url:
-          practiceLink.value,
-      };
-
-      return 'Praktikum berhasil dikumpulkan';
-    },
-
-    error: (error: any) => {
-
-      return (
-        error.response?.data?.errors
-          ?.project_url?.[0]
-
-        ||
-
-        'Link tidak valid'
+    return props.practice.instruction
+      .split('\n')
+      .filter(item =>
+        item.trim() !== ''
       );
-    },
+
   });
 
-  await request;
-};
+/**
+ * CAN SUBMIT
+ */
+const canSubmit =
+  computed(() => {
+
+    return (
+      practiceLink.value
+        .trim()
+        .length > 0
+    );
+
+  });
+
+/**
+ * LKPD
+ */
+const lkpdOpened =
+  computed(() => {
+
+    return props.meeting
+      .lkpd?.is_active;
+
+  });
+
+/**
+ * SUBMIT
+ */
+const submitPractice =
+  async () => {
+
+    const request =
+      axios.post(
+        `/student/meetings/${props.meeting.id}/practice/submit`,
+        {
+          project_url:
+            practiceLink.value,
+        }
+      );
+
+    toast.promise(request, {
+
+      loading:
+        'Mengumpulkan praktikum...',
+
+      success: () => {
+
+        submitted.value = true;
+
+        currentSubmission.value = {
+          project_url:
+            practiceLink.value,
+        };
+
+        return 'Praktikum berhasil dikumpulkan';
+      },
+
+      error: (error: any) => {
+
+        return (
+          error.response?.data?.errors
+            ?.project_url?.[0]
+
+          ||
+
+          'Link tidak valid'
+        );
+      },
+    });
+
+    await request;
+  };
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-4">
+
     <!-- HEADER -->
     <section
-      class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-700 to-cyan-600 p-6 text-white shadow-lg">
-      <div class="absolute right-0 top-0 h-40 w-40 rounded-full bg-white/10" />
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-emerald-700 to-cyan-600 px-5 py-4 text-white shadow-sm">
 
-      <div>
-        <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold">
-          Pertemuan {{ props.meeting.meeting_number }} : {{ props.meeting.title }}
+      <div
+        class="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10" />
+
+      <div class="relative z-10">
+
+        <!-- BADGE -->
+        <span
+          class="rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-semibold">
+
+          Pertemuan
+          {{ props.meeting.meeting_number }}
         </span>
 
-        <h1 class="mt-4 text-3xl font-bold">
-          🧪 Praktik:
-          {{ props.meeting.title || 'Praktik Belum Tersedia' }}
+        <!-- TITLE -->
+        <h1
+          class="mt-3 text-2xl font-bold">
+
+          🧪 Praktikum
+          {{ props.meeting.title }}
         </h1>
 
-        <p class="mt-2 text-emerald-100">
+        <!-- DESC -->
+        <p
+          class="mt-1 max-w-2xl text-sm text-emerald-100">
+
           Kerjakan praktikum menggunakan
-          MakeCode dan kumpulkan link
+          MakeCode lalu kumpulkan link
           proyekmu.
         </p>
       </div>
     </section>
 
     <!-- FLOW -->
-    <section class="rounded-2xl bg-white p-5 shadow-sm">
-      <div class="flex items-center justify-between">
-        <div class="flex flex-1 items-center">
-          <!-- MATERI -->
-          <div class="flex flex-col items-center">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-sm font-bold text-white">
-              ✓
-            </div>
+    <section
+      class="rounded-xl bg-white p-4 shadow-sm">
 
-            <p class="mt-2 text-xs font-semibold text-emerald-600">
-              Materi
-            </p>
+      <div
+        class="flex items-center">
+
+        <!-- MATERI -->
+        <div
+          class="flex flex-col items-center">
+
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
+
+            ✓
           </div>
 
-          <div class="mx-2 h-1 flex-1 rounded-full bg-emerald-500" />
+          <p
+            class="mt-2 text-[10px] font-semibold text-emerald-600">
 
-          <!-- REFLEKSI -->
-          <div class="flex flex-col items-center">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-sm font-bold text-white">
-              ✓
-            </div>
+            Materi
+          </p>
+        </div>
 
-            <p class="mt-2 text-xs font-semibold text-emerald-600">
-              Refleksi
-            </p>
+        <div
+          class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-emerald-500" />
+
+        <!-- REFLEKSI -->
+        <div
+          class="flex flex-col items-center">
+
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
+
+            ✓
           </div>
 
-          <div class="mx-2 h-1 flex-1 rounded-full bg-emerald-500" />
+          <p
+            class="mt-2 text-[10px] font-semibold text-emerald-600">
 
-          <!-- KUIS -->
-          <div class="flex flex-col items-center">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500 text-sm font-bold text-white">
-              ✓
-            </div>
+            Refleksi
+          </p>
+        </div>
 
-            <p class="mt-2 text-xs font-semibold text-emerald-600">
-              Kuis
-            </p>
+        <div
+          class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-emerald-500" />
+
+        <!-- QUIZ -->
+        <div
+          class="flex flex-col items-center">
+
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
+
+            ✓
           </div>
 
-          <div class="mx-2 h-1 flex-1 rounded-full bg-blue-500" />
+          <p
+            class="mt-2 text-[10px] font-semibold text-emerald-600">
 
-          <!-- PRAKTIK -->
-          <div class="flex flex-col items-center">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
-              4
-            </div>
+            Kuis
+          </p>
+        </div>
 
-            <p class="mt-2 text-xs font-semibold text-blue-600">
-              Praktik
-            </p>
+        <div
+          class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-blue-500" />
+
+        <!-- PRACTICE -->
+        <div
+          class="flex flex-col items-center">
+
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+
+            4
           </div>
 
-          <div class="mx-2 h-1 flex-1 rounded-full bg-slate-200" />
+          <p
+            class="mt-2 text-[10px] font-semibold text-blue-600">
 
-          <!-- LKPD -->
-          <div class="flex flex-col items-center">
-            <div
-              class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 text-sm font-bold text-slate-500">
-              5
-            </div>
+            Praktik
+          </p>
+        </div>
 
-            <p class="mt-2 text-xs font-semibold text-slate-500">
-              LKPD
-            </p>
+        <div
+          class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-slate-200" />
+
+        <!-- LKPD -->
+        <div
+          class="flex flex-col items-center">
+
+          <div
+            class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-500">
+
+            5
           </div>
+
+          <p
+            class="mt-2 text-[10px] font-semibold text-slate-500">
+
+            LKPD
+          </p>
         </div>
       </div>
     </section>
 
     <!-- INSTRUCTIONS -->
-    <section class="rounded-2xl bg-white p-5 shadow-sm">
-      <div class="mb-6 flex items-center gap-4">
-        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100">
-          <FlaskConical class="h-6 w-6 text-blue-600" />
+    <section
+      class="rounded-xl bg-white p-4 shadow-sm">
+
+      <!-- TOP -->
+      <div
+        class="mb-4 flex items-center gap-3">
+
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100">
+
+          <FlaskConical
+            class="h-5 w-5 text-blue-600" />
         </div>
 
         <div>
-          <h2 class="text-lg font-bold text-slate-800">
+
+          <h2
+            class="text-sm font-bold text-slate-800">
+
             Instruksi Praktikum
           </h2>
 
-          <p class="mt-1 text-sm text-slate-500">
-            Ikuti langkah berikut untuk
-            menyelesaikan praktik.
+          <p
+            class="mt-1 text-xs text-slate-500">
+
+            Ikuti langkah berikut.
           </p>
         </div>
       </div>
 
-      <div class="space-y-4">
-        <div v-for="(instruction, index) in instructions" :key="instruction"
-          class="flex items-center gap-4 rounded-2xl border border-slate-200 p-4">
+      <!-- LIST -->
+      <div
+        class="space-y-3">
+
+        <div
+          v-for="(instruction, index) in instructions"
+          :key="instruction"
+          class="flex items-start gap-3 rounded-xl border border-slate-200 p-3">
+
           <div
-            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white">
+
             {{ index + 1 }}
           </div>
 
-          <p class="text-sm leading-relaxed text-slate-700">
+          <p
+            class="pt-1 text-sm leading-relaxed text-slate-700">
+
             {{ instruction }}
           </p>
         </div>
@@ -239,22 +345,37 @@ const submitPractice = async () => {
     </section>
 
     <!-- MAKECODE -->
-    <section class="rounded-3xl border border-blue-200 bg-blue-50 p-6">
-      <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+    <section
+      class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+
+      <div
+        class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+        <!-- LEFT -->
         <div>
-          <h2 class="text-lg font-bold text-blue-700">
-            💻 Buka MakeCode Editor
+
+          <h2
+            class="text-sm font-bold text-blue-700">
+
+            💻 Buka MakeCode
           </h2>
 
-          <p class="mt-1 text-sm text-blue-600">
-            Gunakan MakeCode untuk membuat
-            program Microbit.
+          <p
+            class="mt-1 text-xs text-blue-600">
+
+            Gunakan editor MakeCode untuk
+            membuat program Microbit.
           </p>
         </div>
 
-        <a :href="props.practice.makecode_url || 'https://makecode.microbit.org/'" target="_blank"
-          class="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700">
-          <ExternalLink class="h-5 w-5" />
+        <!-- BUTTON -->
+        <a
+          :href="props.practice.makecode_url || 'https://makecode.microbit.org/'"
+          target="_blank"
+          class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
+
+          <ExternalLink
+            class="h-4 w-4" />
 
           Buka MakeCode
         </a>
@@ -262,89 +383,147 @@ const submitPractice = async () => {
     </section>
 
     <!-- WARNING -->
-    <section class="rounded-3xl border border-amber-200 bg-amber-50 p-5">
-      <div class="flex items-start gap-4">
-        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
-          <Lock class="h-5 w-5 text-amber-600" />
+    <section
+      class="rounded-xl border border-amber-200 bg-amber-50 p-4">
+
+      <div
+        class="flex items-start gap-3">
+
+        <div
+          class="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100">
+
+          <Lock
+            class="h-4 w-4 text-amber-600" />
         </div>
 
         <div>
-          <h2 class="font-bold text-amber-700">
+
+          <h2
+            class="text-sm font-bold text-amber-700">
+
             Ketentuan Pengumpulan
           </h2>
 
-          <p class="mt-1 text-sm leading-relaxed text-amber-700">
+          <p
+            class="mt-1 text-sm leading-relaxed text-amber-700">
+
             Pastikan link MakeCode dapat
-            diakses oleh guru sebelum
-            dikumpulkan.
+            diakses sebelum dikumpulkan.
           </p>
         </div>
       </div>
     </section>
 
     <!-- SUBMIT -->
-    <section class="rounded-2xl bg-white p-5 shadow-sm">
-      <div class="mb-6 flex items-center gap-4">
-        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100">
-          <LinkIcon class="h-6 w-6 text-emerald-600" />
+    <section
+      class="rounded-xl bg-white p-4 shadow-sm">
+
+      <!-- TOP -->
+      <div
+        class="mb-4 flex items-center gap-3">
+
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
+
+          <LinkIcon
+            class="h-5 w-5 text-emerald-600" />
         </div>
 
         <div>
-          <h2 class="text-lg font-bold text-slate-800">
+
+          <h2
+            class="text-sm font-bold text-slate-800">
+
             Pengumpulan Praktikum
           </h2>
 
-          <p class="mt-1 text-sm text-slate-500">
-            Tempelkan link hasil proyek
-            MakeCode kamu.
+          <p
+            class="mt-1 text-xs text-slate-500">
+
+            Tempelkan link MakeCode proyekmu.
           </p>
         </div>
       </div>
 
-      <div class="space-y-5">
+      <!-- FORM -->
+      <div
+        class="space-y-4">
+
         <div>
-          <label class="mb-2 block text-sm font-semibold text-slate-700">
-            Link MakeCode Proyek
+
+          <label
+            class="mb-2 block text-sm font-semibold text-slate-700">
+
+            Link MakeCode
           </label>
 
-          <input v-model="practiceLink" type="text" placeholder="https://makecode.microbit.org/..."
-            class="w-full rounded-2xl border border-slate-200 px-4 py-4 outline-none transition focus:border-blue-500" />
+          <input
+            v-model="practiceLink"
+            type="text"
+            placeholder="https://makecode.microbit.org/..."
+            class="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm outline-none transition focus:border-blue-500" />
         </div>
 
-        <div class="flex justify-end">
-          <button @click="submitPractice" :disabled="!canSubmit" :class="canSubmit
-            ? 'bg-emerald-500 hover:bg-emerald-600'
-            : 'cursor-not-allowed bg-slate-300 text-slate-500'
-            " class="cursor-pointer rounded-2xl px-6 py-3 font-semibold text-white transition">
+        <div
+          class="flex justify-end">
+
+          <button
+            @click="submitPractice"
+            :disabled="!canSubmit"
+            :class="canSubmit
+              ? 'bg-emerald-500 hover:bg-emerald-600'
+              : 'cursor-not-allowed bg-slate-300 text-slate-500'
+              "
+            class="rounded-lg px-4 py-2 text-sm font-semibold text-white transition">
+
             {{
               canSubmit
-                ? '🚀 Kumpulkan Praktikum'
-                : '🔒 Masukkan Link Praktikum'
+                ? '🚀 Kumpulkan'
+                : '🔒 Masukkan Link'
             }}
           </button>
         </div>
       </div>
 
       <!-- SUCCESS -->
-      <div v-if="submitted"
-        class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700">
-        ✅ Praktikum berhasil
-        dikumpulkan.
+      <div
+        v-if="submitted"
+        class="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">
+
+        <div
+          class="flex items-center gap-2">
+
+          <CheckCircle2
+            class="h-4 w-4" />
+
+          Praktikum berhasil dikumpulkan.
+        </div>
       </div>
     </section>
 
     <!-- FOOTER -->
-    <section class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-end">
-      <a v-if="
-        lkpdOpened &&
-        currentSubmission?.project_url
-      " :href="`/student/meetings/${props.meeting.id}/lkpd`"
-        class="rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700">
+    <section
+      class="flex justify-end">
+
+      <!-- ACTIVE -->
+      <a
+        v-if="
+          lkpdOpened &&
+          currentSubmission?.project_url
+        "
+        :href="`/student/meetings/${props.meeting.id}/lkpd`"
+        class="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
+
         🚀 Lanjut ke LKPD
       </a>
 
-      <button v-else class="rounded-2xl bg-slate-300 px-6 py-3 font-semibold text-slate-500">
-        🔒 Lanjut ke LKPD
+      <!-- LOCKED -->
+      <button
+        v-else
+        disabled
+        class="cursor-not-allowed rounded-lg bg-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-500">
+
+        🔒 LKPD Terkunci
       </button>
     </section>
   </div>

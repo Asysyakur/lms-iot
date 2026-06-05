@@ -9,6 +9,7 @@ import {
     nextTick,
     watch,
 } from 'vue';
+
 import { Link } from '@inertiajs/vue3';
 
 import StudentSidebarLayout from '@/layouts/student/StudentSidebarLayout.vue';
@@ -17,7 +18,9 @@ import {
     BookOpen,
     Download,
 } from 'lucide-vue-next';
+
 import axios from 'axios';
+
 import { toast } from 'vue-sonner';
 
 import * as pdfjsLib from 'pdfjs-dist';
@@ -40,13 +43,6 @@ const props = defineProps<{
 
 let heartbeatInterval: any = null;
 
-const reflectionSaved =
-    ref(
-        props.progress
-            ?.reflection_completed
-        ?? false
-    );
-
 /**
  * PDF
  */
@@ -67,6 +63,13 @@ const progressStorageKey =
 const reflectionAnswers =
     ref<string[]>([]);
 
+const reflectionSaved =
+    ref(
+        props.progress
+            ?.reflection_completed
+        ?? false
+    );
+
 const reflectionCompleted =
     computed(() => {
 
@@ -83,6 +86,12 @@ const reflectionCompleted =
         );
 
     });
+
+const triggerAnswer =
+    ref(
+        props.progress?.trigger_answer
+        ?? ''
+    );
 
 const reflectionUnlocked =
     computed(() => {
@@ -109,12 +118,6 @@ const canProceed =
 
     });
 
-const triggerAnswer =
-    ref(
-        props.progress?.trigger_answer
-        ?? ''
-    );
-
 readingProgress.value =
     props.progress?.reading_progress
     ?? 0;
@@ -138,9 +141,6 @@ const youtubeEmbedUrl =
 
         let videoId = '';
 
-        /**
-         * WATCH
-         */
         if (url.includes('watch?v=')) {
 
             videoId =
@@ -149,9 +149,6 @@ const youtubeEmbedUrl =
 
         }
 
-        /**
-         * SHORT URL
-         */
         else if (
             url.includes('youtu.be/')
         ) {
@@ -162,9 +159,6 @@ const youtubeEmbedUrl =
 
         }
 
-        /**
-         * SHORTS
-         */
         else if (
             url.includes('/shorts/')
         ) {
@@ -175,9 +169,6 @@ const youtubeEmbedUrl =
 
         }
 
-        /**
-         * EMBED
-         */
         else if (
             url.includes('/embed/')
         ) {
@@ -197,8 +188,8 @@ const youtubeEmbedUrl =
     });
 
 /**
-* SAVE READING PROGRESS LOCAL
-*/
+ * LOCAL SAVE
+ */
 const saveReadingProgressLocal =
     () => {
 
@@ -212,8 +203,8 @@ const saveReadingProgressLocal =
     };
 
 /**
-* PROGRESS
-*/
+ * PROGRESS
+ */
 const updateProgress = () => {
 
     if (!pdfContainer.value) {
@@ -254,21 +245,15 @@ const updateProgress = () => {
 
     saveTimeout = setTimeout(async () => {
 
-        /**
-         * SAVE LOCAL
-         */
         saveReadingProgressLocal();
 
-        /**
-         * SAVE DATABASE
-         */
         await saveReadingProgress();
 
     }, 1000);
 };
 
 /**
- * RENDER PDF
+ * PDF
  */
 const renderPdf = async () => {
 
@@ -302,23 +287,17 @@ const renderPdf = async () => {
 
         const viewport =
             page.getViewport({
-                scale: 2,
+                scale: 1.8,
             });
 
-        /**
-         * PAGE WRAPPER
-         */
         const pageWrapper =
             document.createElement(
                 'div'
             );
 
         pageWrapper.className =
-            'relative mb-6 flex items-center justify-center rounded-2xl bg-white shadow';
+            'relative mb-4 flex items-center justify-center rounded-xl bg-white shadow-sm';
 
-        /**
-         * CANVAS
-         */
         const canvas =
             document.createElement(
                 'canvas'
@@ -351,118 +330,11 @@ const renderPdf = async () => {
             pageWrapper
         );
 
-        /**
-         * RENDER PDF KE CANVAS
-         */
         await page.render({
             canvasContext:
                 context as any,
-
             viewport,
         } as any).promise;
-
-        /**
- * TEXT LAYER MANUAL
- */
-        const textLayer =
-            document.createElement('div');
-
-        textLayer.style.position =
-            'absolute';
-
-        textLayer.style.left =
-            '0';
-
-        textLayer.style.top =
-            '0';
-
-        textLayer.style.width =
-            `${viewport.width}px`;
-
-        textLayer.style.height =
-            `${viewport.height}px`;
-
-        textLayer.style.pointerEvents =
-            'auto';
-
-        textLayer.style.userSelect =
-            'text';
-
-        pageWrapper.appendChild(
-            textLayer
-        );
-
-        const textContent =
-            await page.getTextContent();
-
-        textContent.items.forEach(
-            (item: any) => {
-
-                const span =
-                    document.createElement(
-                        'span'
-                    );
-
-                const tx =
-                    pdfjsLib.Util.transform(
-                        viewport.transform,
-                        item.transform
-                    );
-
-                const angle =
-                    Math.atan2(
-                        tx[1],
-                        tx[0]
-                    );
-
-                const fontHeight =
-                    Math.sqrt(
-                        tx[2] * tx[2] +
-                        tx[3] * tx[3]
-                    );
-
-                span.textContent =
-                    item.str;
-
-                span.style.position =
-                    'absolute';
-
-                span.style.left =
-                    `${tx[4]}px`;
-
-                span.style.top =
-                    `${tx[5] - fontHeight}px`;
-
-                span.style.fontSize =
-                    `${fontHeight}px`;
-
-                span.style.fontFamily =
-                    'sans-serif';
-
-                span.style.transform =
-                    `rotate(${angle}rad)`;
-
-                span.style.transformOrigin =
-                    'left bottom';
-
-                span.style.whiteSpace =
-                    'pre';
-
-                span.style.color =
-                    'transparent';
-
-                span.style.cursor =
-                    'text';
-
-                span.style.lineHeight =
-                    '1';
-
-                textLayer.appendChild(
-                    span
-                );
-            }
-        );
-
     }
 
     nextTick(() => {
@@ -495,16 +367,10 @@ onMounted(async () => {
 
     renderPdf();
 
-    /**
-     * START READING
-     */
     await axios.post(
         `/student/meetings/${props.meeting.id}/start-reading`
     );
 
-    /**
-     * HEARTBEAT
-     */
     heartbeatInterval =
         setInterval(async () => {
 
@@ -543,16 +409,11 @@ const saveReadingProgress =
 
         } catch (error) {
 
-            console.error(
-                'Failed save reading progress',
-                error
-            );
+            console.error(error);
+
         }
     };
 
-/**
- * SAVE TRIGGER ANSWER
- */
 const saveTriggerAnswer =
     async () => {
 
@@ -567,22 +428,17 @@ const saveTriggerAnswer =
             );
 
             toast.success(
-                'Jawaban pemantik berhasil disimpan'
+                'Jawaban berhasil disimpan'
             );
 
         } catch (error) {
 
-            console.error(error);
-
             toast.error(
-                'Gagal menyimpan jawaban pemantik'
+                'Gagal menyimpan jawaban'
             );
         }
     };
 
-/**
- * SAVE REFLECTION
- */
 const saveReflection =
     async () => {
 
@@ -607,8 +463,6 @@ const saveReflection =
 
         } catch (error) {
 
-            console.error(error);
-
             toast.error(
                 'Gagal menyimpan refleksi'
             );
@@ -629,246 +483,286 @@ watch(
 </script>
 
 <template>
-    <div class="space-y-6">
+    <div class="space-y-4">
+
         <!-- HEADER -->
-        <section class="relative overflow-hidden rounded-3xl bg-[#173B74] p-6 text-white shadow-lg">
-            <div class="absolute right-0 top-0 h-40 w-40 rounded-full bg-cyan-400/10" />
+        <section
+            class="relative overflow-hidden rounded-xl bg-[#173B74] px-4 py-3 text-white shadow-sm">
+
+            <div class="absolute right-0 top-0 h-28 w-28 rounded-full bg-cyan-400/10" />
 
             <div>
-                <span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+
+                <span
+                    class="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-semibold text-blue-700">
+
                     {{ meeting.title }}
                 </span>
 
-                <h1 class="mt-4 text-3xl font-bold">
+                <h1 class="mt-2 text-xl font-bold md:text-2xl">
+
                     {{ material.title }}
                 </h1>
 
-                <p class="mt-2 max-w-3xl text-slate-300">
+                <p class="mt-1 max-w-2xl text-xs text-slate-300">
+
                     {{ material.description }}
                 </p>
             </div>
         </section>
 
-        <section v-if="material.video_url" class="rounded-2xl bg-white p-5 shadow-sm">
-            <h2 class="mb-4 text-lg font-bold text-slate-800">
+        <!-- VIDEO -->
+        <section
+            v-if="material.video_url"
+            class="rounded-xl bg-white p-3 shadow-sm">
+
+            <h2 class="mb-3 text-sm font-bold text-slate-800">
+
                 🎥 Video Pembelajaran
             </h2>
 
-            <iframe v-if="youtubeEmbedUrl" :src="youtubeEmbedUrl" class="h-[400px] w-full rounded-2xl" frameborder="0"
+            <iframe
+                v-if="youtubeEmbedUrl"
+                :src="youtubeEmbedUrl"
+                class="h-[280px] w-full rounded-lg xl:h-[320px]"
+                frameborder="0"
                 allowfullscreen />
         </section>
 
-        <!-- PERTANYAAN PEMANTIK -->
-        <section class="rounded-2xl bg-white p-5 shadow-sm">
-            <div class="mb-6 flex items-center justify-between">
+        <!-- PEMANTIK -->
+        <section class="rounded-xl bg-white p-3 shadow-sm">
+
+            <div class="mb-4 flex items-center justify-between">
+
                 <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100">
-                        <BookOpen class="h-5 w-5 text-purple-600" />
+
+                    <div
+                        class="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-100">
+
+                        <BookOpen class="h-4 w-4 text-purple-600" />
                     </div>
 
                     <div>
-                        <h2 class="font-bold text-slate-800">
-                            Pertanyaan
-                            Pemantik
+
+                        <h2 class="text-sm font-bold text-slate-800">
+
+                            Pertanyaan Pemantik
                         </h2>
 
-                        <p class="text-sm text-slate-500">
-                            Jawablah
-                            pertanyaan
-                            berikut sebelum
-                            membaca materi.
+                        <p class="text-xs text-slate-500">
+
+                            Jawab sebelum membaca materi
                         </p>
                     </div>
                 </div>
 
-                <span class="rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700">
-                    Wajib diisi
+                <span
+                    class="rounded-full bg-purple-100 px-2 py-1 text-[10px] font-semibold text-purple-700">
+
+                    Wajib
                 </span>
             </div>
 
-            <div class="space-y-5">
+            <div class="space-y-4">
+
                 <div>
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+                    <label
+                        class="mb-2 block text-sm font-semibold text-slate-700">
+
                         {{ material.trigger_question }}
                     </label>
 
-                    <textarea v-model="triggerAnswer" rows="5" placeholder="Tulis jawabanmu di sini..."
-                        class="w-full rounded-2xl border border-slate-200 p-4 outline-none transition focus:border-blue-500" />
+                    <textarea
+                        v-model="triggerAnswer"
+                        rows="3"
+                        placeholder="Tulis jawabanmu..."
+                        class="w-full rounded-lg border border-slate-200 p-2.5 text-sm outline-none transition focus:border-blue-500" />
                 </div>
 
                 <div class="flex justify-end">
-                    <button :disabled="triggerAnswer.trim() === ''" @click="saveTriggerAnswer" :class="triggerAnswer.trim() !== ''
-                        ? 'bg-purple-600 hover:bg-purple-700'
-                        : 'cursor-not-allowed bg-slate-200 text-slate-500'
-                        " class="cursor-pointer rounded-2xl px-6 py-3 text-sm font-semibold text-white transition">
+
+                    <button
+                        :disabled="triggerAnswer.trim() === ''"
+                        @click="saveTriggerAnswer"
+                        :class="triggerAnswer.trim() !== ''
+                            ? 'bg-purple-600 hover:bg-purple-700'
+                            : 'cursor-not-allowed bg-slate-200 text-slate-500'
+                            "
+                        class="rounded-lg px-4 py-2 text-xs font-semibold text-white transition">
+
                         Simpan Jawaban
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- READING PROGRESS -->
-        <section class="rounded-2xl bg-white p-5 shadow-sm">
+        <!-- PROGRESS -->
+        <section class="rounded-xl bg-white p-3 shadow-sm">
+
             <div class="flex items-center justify-between">
+
                 <div>
-                    <h2 class="font-bold text-slate-800">
+
+                    <h2 class="text-sm font-bold text-slate-800">
+
                         📖 Progress Membaca
                     </h2>
 
-                    <p class="mt-1 text-sm text-slate-500">
-                        Kamu telah membaca
+                    <p class="mt-1 text-xs text-slate-500">
+
+                        Progress membaca materi
                     </p>
                 </div>
 
-                <div class="text-right">
-                    <h2 class="text-4xl font-bold text-emerald-500">
-                        {{
-                            readingProgress
-                        }}%
-                    </h2>
-                </div>
+                <h2 class="text-3xl font-bold text-emerald-500">
+
+                    {{ readingProgress }}%
+                </h2>
             </div>
 
-            <div class="mt-4 h-3 overflow-hidden rounded-full bg-slate-200">
-                <div class="h-full rounded-full bg-emerald-500 transition-all duration-300" :style="{
-                    width:
-                        readingProgress +
-                        '%',
-                }" />
-            </div>
+            <div
+                class="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
 
-            <p class="mt-3 text-sm text-slate-500">
-                Teruskan membaca sampai
-                selesai untuk membuka
-                tahap berikutnya.
-            </p>
+                <div
+                    class="h-full rounded-full bg-emerald-500 transition-all duration-300"
+                    :style="{
+                        width:
+                            readingProgress +
+                            '%',
+                    }" />
+            </div>
         </section>
 
-        <!-- MATERI -->
-        <section class="rounded-2xl bg-white p-5 shadow-sm">
-            <div ref="pdfContainer"
-                class="flex flex-col items-center h-[680px] overflow-y-scroll rounded-2xl border border-slate-200 bg-slate-100 p-5" />
+        <!-- PDF -->
+        <section class="rounded-xl bg-white p-3 shadow-sm">
+
+            <div
+                ref="pdfContainer"
+                class="flex h-[520px] flex-col items-center overflow-y-scroll rounded-xl border border-slate-200 bg-slate-100 p-4" />
         </section>
 
         <!-- REFLECTION -->
-        <section " class=" rounded-2xl bg-white p-5 shadow-sm">
-            <div class="mb-6 flex items-center justify-between">
+        <section class="rounded-xl bg-white p-3 shadow-sm">
+
+            <div class="mb-4 flex items-center justify-between">
+
                 <div>
-                    <h2 class="text-lg font-bold text-slate-800">
+
+                    <h2 class="text-sm font-bold text-slate-800">
+
                         💭 Refleksi
                     </h2>
 
-                    <p class="mt-1 text-sm text-slate-500">
-                        Isi refleksi sebelum
-                        melanjutkan ke kuis.
+                    <p class="mt-1 text-xs text-slate-500">
+
+                        Isi refleksi sebelum lanjut
                     </p>
                 </div>
 
-                <span class="rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700">
-                    Wajib diisi
+                <span
+                    class="rounded-full bg-purple-100 px-2 py-1 text-[10px] font-semibold text-purple-700">
+
+                    Wajib
                 </span>
             </div>
 
-            <!-- UNLOCKED -->
-            <div v-if="reflectionUnlocked" class="space-y-5">
-                <div v-for="(question, index) in material.reflection_questions" :key="index">
-                    <label class="mb-2 block text-sm font-semibold text-slate-700">
-                        {{ index + 1 }}. {{ question }}
+            <div
+                v-if="reflectionUnlocked"
+                class="space-y-4">
+
+                <div
+                    v-for="(question, index) in material.reflection_questions"
+                    :key="index">
+
+                    <label
+                        class="mb-2 block text-sm font-semibold text-slate-700">
+
+                        {{ index + 1 }}.
+                        {{ question }}
                     </label>
 
-                    <textarea v-model="reflectionAnswers[index]" rows="4"
-                        class="w-full rounded-2xl border border-slate-200 p-4 outline-none transition focus:border-blue-500" />
+                    <textarea
+                        v-model="reflectionAnswers[index]"
+                        rows="3"
+                        class="w-full rounded-lg border border-slate-200 p-2.5 text-sm outline-none transition focus:border-blue-500" />
                 </div>
 
                 <div class="flex justify-end">
-                    <button :disabled="!reflectionCompleted
-                        ||
-                        readingProgress < 70
-                        " @click="saveReflection" :class="reflectionCompleted
-                            &&
-                            readingProgress >= 70
+
+                    <button
+                        :disabled="!reflectionCompleted || readingProgress < 70"
+                        @click="saveReflection"
+                        :class="reflectionCompleted && readingProgress >= 70
                             ? 'bg-purple-600 hover:bg-purple-700'
                             : 'cursor-not-allowed bg-slate-200 text-slate-500'
-                            " class="cursor-pointer rounded-2xl px-6 py-3 text-sm font-semibold text-white transition">
+                            "
+                        class="rounded-lg px-4 py-2 text-xs font-semibold text-white transition">
+
                         {{
                             reflectionSaved
-                                ? '✅ Refleksi Tersimpan'
+                                ? '✅ Tersimpan'
                                 : 'Simpan Refleksi'
                         }}
                     </button>
                 </div>
             </div>
-            <!-- LOCKED STATE -->
-            <div v-else class="space-y-5">
-                <div class="rounded-2xl border border-amber-200 bg-amber-50 p-5">
-                    <div class="flex items-start gap-4">
-                        <div class="mt-1 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
-                            🔒
-                        </div>
 
-                        <div>
-                            <h3 class="font-semibold text-amber-800">
-                                Refleksi Belum
-                                Terbuka
-                            </h3>
+            <!-- LOCKED -->
+            <div
+                v-else
+                class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700">
 
-                            <p class="mt-1 text-sm text-amber-700">
-                                Isi pertanyaan
-                                pemantik terlebih
-                                dahulu untuk
-                                membuka sesi
-                                refleksi.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SKELETON -->
-                <div class="animate-pulse space-y-5">
-                    <div v-for="(_, index) in material.reflection_questions" :key="index" class="space-y-3">
-                        <!-- TITLE -->
-                        <div class="h-5 w-1/3 rounded bg-slate-200" />
-
-                        <!-- TEXTAREA -->
-                        <div class="h-28 rounded-2xl bg-slate-100" />
-                    </div>
-                </div>
+                🔒 Isi pertanyaan pemantik
+                terlebih dahulu untuk membuka
+                refleksi.
             </div>
+
             <!-- INFO -->
-            <div class="mt-6 rounded-2xl border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700">
-                🔒 Kuis akan terbuka
-                setelah refleksi selesai
-                diisi.
+            <div
+                class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-3 text-xs text-blue-700">
+
+                🔒 Kuis akan terbuka setelah
+                refleksi selesai diisi.
             </div>
         </section>
 
-        <!-- DOWNLOAD PDF -->
-        <section class="rounded-2xl bg-white p-5 shadow-sm">
-            <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                <div class="flex items-start gap-4">
-                    <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100">
-                        <Download class="h-7 w-7 text-red-500" />
+        <!-- DOWNLOAD -->
+        <section class="rounded-xl bg-white p-3 shadow-sm">
+
+            <div
+                class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+                <div class="flex items-start gap-3">
+
+                    <div
+                        class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
+
+                        <Download class="h-5 w-5 text-red-500" />
                     </div>
 
                     <div>
-                        <h2 class="text-lg font-bold text-slate-800">
-                            Unduh Materi
-                            (PDF)
+
+                        <h2 class="text-sm font-bold text-slate-800">
+
+                            Unduh Materi PDF
                         </h2>
 
-                        <p class="mt-1 text-sm text-slate-500">
-                            Unduh versi PDF
-                            materi untuk
-                            dipelajari secara
-                            offline atau
-                            dicetak.
+                        <p class="mt-1 text-xs text-slate-500">
+
+                            Download materi untuk
+                            belajar offline.
                         </p>
                     </div>
                 </div>
 
-                <a v-if="material.pdf_url" :href="material.pdf_url" target="_blank"
-                    class="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700">
-                    <Download class="h-5 w-5" />
+                <a
+                    v-if="material.pdf_url"
+                    :href="material.pdf_url"
+                    target="_blank"
+                    class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
+
+                    <Download class="h-4 w-4" />
 
                     Unduh PDF
                 </a>
@@ -876,25 +770,31 @@ watch(
         </section>
 
         <!-- FOOTER -->
-        <section class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <section
+            class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
 
-            <a :href="`/student/meetings/${props.meeting.id}`"
-                class="rounded-2xl border border-slate-200 bg-white px-6 py-3 font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
-                ← Kembali ke Pertemuan
+            <a
+                :href="`/student/meetings/${props.meeting.id}`"
+                class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
+
+                ← Kembali
             </a>
 
-            <!-- ACTIVE -->
-            <Link v-if="canProceed" :href="`/student/meetings/${props.meeting.id}/quiz`"
-                class="rounded-2xl bg-emerald-500 px-6 py-3 font-semibold text-white transition hover:bg-emerald-600">
+            <Link
+                v-if="canProceed"
+                :href="`/student/meetings/${props.meeting.id}/quiz`"
+                class="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600">
+
                 Lanjut ke Kuis →
             </Link>
 
-            <!-- DISABLED -->
-            <button v-else disabled
-                class="cursor-not-allowed rounded-2xl bg-slate-300 px-6 py-3 font-semibold text-slate-500">
+            <button
+                v-else
+                disabled
+                class="cursor-not-allowed rounded-lg bg-slate-300 px-4 py-2 text-sm font-semibold text-slate-500">
+
                 🔒 Selesaikan Refleksi
             </button>
-
         </section>
     </div>
 </template>

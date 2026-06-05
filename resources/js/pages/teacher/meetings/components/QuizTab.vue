@@ -281,39 +281,38 @@ const toggleQuizMeeting =
 </script>
 
 <template>
-  <section
-    class="rounded-2xl bg-white p-5 shadow-sm">
+  <section class="rounded-xl bg-white p-4 shadow-sm">
 
     <!-- HEADER -->
-    <div
-      class="flex items-center justify-between">
+    <div class="flex items-center justify-between">
 
-      <h2
-        class="text-lg font-bold text-slate-800">
+      <div>
 
-        📝 Pengaturan Kuis
-      </h2>
+        <h2 class="text-sm font-bold text-slate-800">
 
-      <div
-        class="flex items-center gap-2">
+          📝 Pengaturan Kuis
+        </h2>
 
-        <button
-          v-if="editingQuiz"
-          @click="resetForm"
-          class="rounded-xl bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-700">
+        <p class="mt-1 text-xs text-slate-500">
+
+          Kelola soal dan jawaban kuis.
+        </p>
+      </div>
+
+      <!-- ACTION -->
+      <div class="flex items-center gap-2">
+
+        <button v-if="editingQuiz" @click="resetForm"
+          class="rounded-lg bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
 
           Batal
         </button>
 
-        <button
-          v-if="meeting.quizzes?.length"
-          @click="toggleQuizMeeting"
-          class="rounded-xl px-3 py-2 text-xs font-semibold transition"
-          :class="
-            meeting.quizzes?.[0]?.is_active
+        <button v-if="meeting.quizzes?.length" @click="toggleQuizMeeting"
+          class="rounded-lg px-3 py-2 text-xs font-semibold transition" :class="meeting.quizzes?.[0]?.is_active
               ? 'bg-emerald-500 text-white hover:bg-emerald-600'
               : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-          ">
+            ">
 
           {{
             meeting.quizzes?.[0]?.is_active
@@ -325,152 +324,131 @@ const toggleQuizMeeting =
     </div>
 
     <!-- FORM -->
-    <div
-      class="mt-5 space-y-4">
+    <div class="mt-5 space-y-4">
 
       <!-- QUESTION -->
       <div>
 
-        <label
-          class="mb-2 block text-sm font-semibold text-slate-700">
+        <label class="mb-2 block text-sm font-semibold text-slate-700">
 
           Pertanyaan
         </label>
 
-        <textarea
-          v-model="form.question"
-          rows="4"
-          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+        <textarea v-model="form.question" rows="4" placeholder="Masukkan pertanyaan..."
+          class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-500" />
       </div>
 
       <!-- OPTIONS -->
-      <div
-        class="grid gap-4 md:grid-cols-2">
+      <div class="grid gap-3 md:grid-cols-2">
 
-        <input
-          v-model="form.option_a"
-          type="text"
-          placeholder="Opsi A"
-          class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+        <input v-model="form.option_a" type="text" placeholder="Opsi A"
+          class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
 
-        <input
-          v-model="form.option_b"
-          type="text"
-          placeholder="Opsi B"
-          class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+        <input v-model="form.option_b" type="text" placeholder="Opsi B"
+          class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
 
-        <input
-          v-model="form.option_c"
-          type="text"
-          placeholder="Opsi C"
-          class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+        <input v-model="form.option_c" type="text" placeholder="Opsi C"
+          class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
 
-        <input
-          v-model="form.option_d"
-          type="text"
-          placeholder="Opsi D"
-          class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500" />
+        <input v-model="form.option_d" type="text" placeholder="Opsi D"
+          class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
 
-        <input
-          v-model="form.option_e"
-          type="text"
-          placeholder="Opsi E"
-          class="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500 md:col-span-2" />
+        <input v-model="form.option_e" type="text" placeholder="Opsi E"
+          class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500 md:col-span-2" />
       </div>
 
       <!-- ANSWER -->
-      <select
-        v-model="form.answer"
-        class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-500">
+      <div>
 
-        <option value="A">
-          Jawaban A
-        </option>
+        <label class="mb-2 block text-sm font-semibold text-slate-700">
 
-        <option value="B">
-          Jawaban B
-        </option>
+          Jawaban Benar
+        </label>
 
-        <option value="C">
-          Jawaban C
-        </option>
+        <select v-model="form.answer"
+          class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500">
 
-        <option value="D">
-          Jawaban D
-        </option>
+          <option value="A">
+            Jawaban A
+          </option>
 
-        <option value="E">
-          Jawaban E
-        </option>
-      </select>
+          <option value="B">
+            Jawaban B
+          </option>
+
+          <option value="C">
+            Jawaban C
+          </option>
+
+          <option value="D">
+            Jawaban D
+          </option>
+
+          <option value="E">
+            Jawaban E
+          </option>
+        </select>
+      </div>
 
       <!-- BUTTON -->
-      <button
-        @click="submit"
-        :disabled="form.processing"
-        class="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50">
+      <div class="pt-1">
 
-        <Plus class="h-4 w-4" />
+        <button @click="submit" :disabled="form.processing"
+          class="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50">
 
-        {{
-          editingQuiz
-            ? 'Update Soal'
-            : 'Tambah Soal'
-        }}
-      </button>
+          <Plus class="h-4 w-4" />
+
+          {{
+            editingQuiz
+              ? 'Update Soal'
+              : 'Tambah Soal'
+          }}
+        </button>
+      </div>
     </div>
 
     <!-- TABLE -->
-    <div
-      class="mt-8">
+    <div class="mt-7">
 
-      <h3
-        class="mb-4 text-base font-bold text-slate-800">
+      <h3 class="mb-3 text-sm font-bold text-slate-800">
 
         Daftar Soal
       </h3>
 
-      <div
-        class="space-y-3">
+      <div class="space-y-3">
 
-        <div
-          v-for="quiz in meeting.quizzes"
-          :key="quiz.id"
-          class="rounded-xl border border-slate-200 p-4">
+        <!-- ITEM -->
+        <div v-for="quiz in meeting.quizzes" :key="quiz.id" class="rounded-lg border border-slate-200 p-4">
 
-          <div
-            class="flex items-start justify-between gap-4">
+          <div class="flex items-start justify-between gap-4">
 
             <!-- CONTENT -->
             <div class="flex-1">
 
-              <h4
-                class="text-sm font-semibold text-slate-800">
+              <h4 class="text-sm font-semibold leading-relaxed text-slate-800">
 
                 {{ quiz.question }}
               </h4>
 
-              <p
-                class="mt-2 text-xs text-slate-500">
+              <p class="mt-2 text-xs text-slate-500">
 
                 Jawaban:
-                {{ quiz.answer }}
+                <span class="font-semibold text-emerald-600">
+                  {{ quiz.answer }}
+                </span>
               </p>
             </div>
 
             <!-- ACTION -->
-            <div
-              class="flex items-center gap-2">
+            <div class="flex items-center gap-2">
 
-              <button
-                @click="editQuiz(quiz)"
+              <button @click="editQuiz(quiz)"
                 class="rounded-lg bg-slate-100 p-2 text-slate-700 transition hover:bg-slate-200">
 
                 <Pencil class="h-3.5 w-3.5" />
               </button>
 
-              <button
-                @click="removeQuiz(quiz.id)"
+              <button @click="removeQuiz(quiz.id)"
                 class="rounded-lg bg-red-500 p-2 text-white transition hover:bg-red-600">
 
                 <Trash2 class="h-3.5 w-3.5" />
@@ -480,9 +458,8 @@ const toggleQuizMeeting =
         </div>
 
         <!-- EMPTY -->
-        <div
-          v-if="!meeting.quizzes?.length"
-          class="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500">
+        <div v-if="!meeting.quizzes?.length"
+          class="rounded-lg border border-dashed border-slate-300 p-5 text-center text-sm text-slate-500">
 
           Belum ada soal quiz
         </div>

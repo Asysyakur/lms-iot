@@ -116,26 +116,28 @@ const togglePractice =
 </script>
 
 <template>
-  <section
-    class="rounded-2xl bg-white p-5 shadow-sm">
+  <section class="rounded-xl bg-white p-4 shadow-sm">
 
     <!-- HEADER -->
-    <div
-      class="flex items-center justify-between">
+    <div class="flex items-center justify-between">
 
-      <h2
-        class="text-lg font-bold text-slate-800">
+      <div>
 
-        🧪 Pengaturan Praktik
-      </h2>
+        <h2 class="text-sm font-bold text-slate-800">
 
-      <button
-        @click="togglePractice"
-        class="rounded-xl px-3 py-2 text-xs font-semibold transition"
-        :class="
-          meeting.practice?.is_active
-            ? 'bg-emerald-500 text-white hover:bg-emerald-600'
-            : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+          🧪 Pengaturan Praktik
+        </h2>
+
+        <p class="mt-1 text-xs text-slate-500">
+
+          Atur instruksi dan link MakeCode.
+        </p>
+      </div>
+
+      <!-- STATUS -->
+      <button @click="togglePractice" class="rounded-lg px-3 py-2 text-xs font-semibold transition" :class="meeting.practice?.is_active
+          ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+          : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
         ">
 
         {{
@@ -147,55 +149,47 @@ const togglePractice =
     </div>
 
     <!-- CONTENT -->
-    <div
-      class="mt-5 space-y-4">
+    <div class="mt-5 space-y-4">
 
       <!-- INSTRUCTION -->
       <div>
 
-        <label
-          class="mb-2 block text-sm font-semibold text-slate-700">
+        <label class="mb-2 block text-sm font-semibold text-slate-700">
 
           Instruksi Praktik
         </label>
 
-        <textarea
-          v-model="form.instruction"
-          rows="6"
-          placeholder="Masukkan instruksi praktik..."
-          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-purple-500" />
+        <textarea v-model="form.instruction" rows="6" placeholder="Masukkan instruksi praktik..."
+          class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-purple-500" />
       </div>
 
       <!-- MAKECODE -->
       <div>
 
-        <label
-          class="mb-2 block text-sm font-semibold text-slate-700">
+        <label class="mb-2 block text-sm font-semibold text-slate-700">
 
           Link MakeCode
         </label>
 
-        <input
-          v-model="form.makecode_url"
-          type="text"
-          placeholder="https://makecode.microbit.org/..."
-          class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-purple-500" />
+        <input v-model="form.makecode_url" type="text" placeholder="https://makecode.microbit.org/..."
+          class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-purple-500" />
       </div>
 
       <!-- BUTTON -->
-      <button
-        @click="submit"
-        :disabled="form.processing"
-        class="inline-flex items-center gap-2 rounded-xl bg-purple-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-600 disabled:opacity-50">
+      <div class="pt-1">
 
-        <Save class="h-4 w-4" />
+        <button @click="submit" :disabled="form.processing"
+          class="inline-flex items-center gap-2 rounded-lg bg-purple-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-600 disabled:opacity-50">
 
-        {{
-          form.processing
-            ? 'Menyimpan...'
-            : 'Simpan Praktik'
-        }}
-      </button>
+          <Save class="h-4 w-4" />
+
+          {{
+            form.processing
+              ? 'Menyimpan...'
+              : 'Simpan Praktik'
+          }}
+        </button>
+      </div>
     </div>
   </section>
 </template>

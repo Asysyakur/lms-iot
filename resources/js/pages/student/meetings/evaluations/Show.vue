@@ -68,19 +68,25 @@ const submitEvaluation =
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-4">
 
     <!-- HEADER -->
     <section
-      class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-violet-700 to-purple-500 p-6 text-white shadow-lg">
-      <div class="absolute right-0 top-0 h-40 w-40 rounded-full bg-white/10" />
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-violet-700 to-purple-500 px-5 py-4 text-white shadow-sm">
 
-      <div>
-        <span class="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold">
+      <div class="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10" />
+
+      <div class="relative z-10">
+
+        <!-- BADGE -->
+        <span class="rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-semibold">
+
           Evaluasi
         </span>
 
-        <h1 class="mt-4 text-3xl font-bold">
+        <!-- TITLE -->
+        <h1 class="mt-3 text-2xl font-bold">
+
           Evaluasi Pertemuan
           {{
             props.meeting
@@ -88,62 +94,76 @@ const submitEvaluation =
           }}
         </h1>
 
-        <p class="mt-2 text-violet-100">
-          Pertanyaan evaluasi dibuka
-          dan diatur oleh guru.
+        <!-- DESC -->
+        <p class="mt-1 max-w-2xl text-sm text-violet-100">
+
+          Jawab pertanyaan evaluasi
+          berdasarkan materi dan praktik
+          yang telah dipelajari.
         </p>
       </div>
     </section>
 
     <!-- INFO -->
-    <section class="rounded-2xl border border-blue-200 bg-blue-50 p-4">
+    <section class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+
       <div class="flex items-start gap-3">
-        <div class="mt-0.5 flex h-8 w-8 items-center justify-center rounded-xl bg-blue-100">
+
+        <div class="mt-0.5 flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100">
+
           <Info class="h-4 w-4 text-blue-600" />
         </div>
 
         <div>
-          <h3 class="font-semibold text-blue-700">
-            Evaluasi berbeda dari
-            refleksi.
+
+          <h3 class="text-sm font-bold text-blue-700">
+
+            Informasi Evaluasi
           </h3>
 
           <p class="mt-1 text-sm leading-relaxed text-blue-600">
-            Refleksi ada di akhir
-            materi, sedangkan evaluasi
-            berisi pertanyaan akhir
-            pertemuan yang dibuka oleh
-            guru.
+
+            Evaluasi berbeda dari
+            refleksi. Evaluasi berisi
+            pertanyaan akhir pertemuan
+            yang dibuka oleh guru.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- QUESTION CARD -->
-    <section class="rounded-2xl bg-white p-5 shadow-sm">
-      <div class="mb-8 flex items-center gap-4">
-        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-100">
-          <BadgeHelp class="h-6 w-6 text-violet-600" />
+    <!-- QUESTION -->
+    <section class="rounded-xl bg-white p-4 shadow-sm">
+
+      <!-- TOP -->
+      <div class="mb-5 flex items-center gap-3">
+
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100">
+
+          <BadgeHelp class="h-5 w-5 text-violet-600" />
         </div>
 
         <div>
-          <h2 class="text-lg font-bold text-slate-800">
+
+          <h2 class="text-sm font-bold text-slate-800">
+
             Pertanyaan Evaluasi
           </h2>
 
-          <p class="mt-1 text-sm text-slate-500">
-            Jawab berdasarkan praktik
-            dan materi yang telah
-            dipelajari.
+          <p class="mt-1 text-xs text-slate-500">
+
+            Jawab sesuai pemahamanmu.
           </p>
         </div>
       </div>
 
-      <div class="space-y-6">
+      <div class="space-y-5">
 
         <!-- QUESTION -->
         <div>
-          <h3 class="mb-3 font-semibold text-slate-700">
+
+          <h3 class="mb-3 text-sm font-semibold leading-relaxed text-slate-700">
+
             1.
             {{
               props.evaluation.question
@@ -151,13 +171,14 @@ const submitEvaluation =
           </h3>
 
           <textarea v-model="answers[0]" rows="6" placeholder="Tuliskan jawabanmu..."
-            class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-violet-500" />
+            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-violet-500" />
         </div>
 
         <!-- BUTTON -->
         <button @click="submitEvaluation"
-          class="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-700 to-purple-500 px-6 py-4 font-semibold text-white transition hover:opacity-90">
-          <SendHorizonal class="h-5 w-5" />
+          class="flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-violet-700 to-purple-500 px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90">
+
+          <SendHorizonal class="h-4 w-4" />
 
           Kirim Evaluasi
         </button>

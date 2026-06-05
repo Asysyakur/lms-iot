@@ -101,78 +101,98 @@ const submit = () => {
 </script>
 
 <template>
-  <div class="rounded-3xl bg-white p-5 shadow-sm">
+  <div class="rounded-xl bg-white p-4 shadow-sm">
 
-    <div class="mb-5 flex items-center gap-3">
+    <!-- HEADER -->
+    <div class="mb-4 flex items-center gap-3">
 
-      <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100">
-        <Clock3 class="h-6 w-6 text-blue-600" />
+      <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100">
+
+        <Clock3 class="h-5 w-5 text-blue-600" />
       </div>
 
       <div>
-        <h2 class="text-lg font-bold text-slate-800">
+
+        <h2 class="text-sm font-bold text-slate-800">
+
           Pengaturan Waktu
         </h2>
-      </div>
 
+        <p class="mt-1 text-xs text-slate-500">
+
+          Atur jadwal dan durasi
+          assessment.
+        </p>
+      </div>
     </div>
 
+    <!-- CONTENT -->
     <div class="space-y-4">
 
       <!-- DATE -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label class="mb-2 block text-xs font-semibold text-slate-700">
+
           Tanggal Dibuka
         </label>
 
         <div class="relative">
 
-          <CalendarDays class="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <CalendarDays class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
 
           <input v-model="form.open_date" type="date"
-            class="w-full rounded-2xl border border-slate-200 py-3 pl-11 pr-4 text-sm outline-none focus:border-blue-500" />
+            class="w-full rounded-xl border border-slate-200 py-2.5 pl-10 pr-4 text-sm outline-none transition focus:border-blue-500" />
         </div>
       </div>
 
       <!-- TIME -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label class="mb-2 block text-xs font-semibold text-slate-700">
+
           Jam Dibuka
         </label>
 
         <input v-model="form.open_time" type="time"
-          class="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-500" />
+          class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500" />
       </div>
 
       <!-- DURATION -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label class="mb-2 block text-xs font-semibold text-slate-700">
+
           Durasi Pengerjaan
         </label>
 
         <div class="relative">
 
           <input v-model="form.duration" type="number" min="1" max="300" placeholder="Contoh: 60"
-            class="w-full rounded-2xl border border-slate-200 px-4 py-3 pr-20 text-sm outline-none focus:border-blue-500" />
+            class="w-full rounded-xl border border-slate-200 px-4 py-2.5 pr-16 text-sm outline-none transition focus:border-blue-500" />
 
-          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-500">
+          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] font-medium text-slate-500">
+
             menit
           </span>
         </div>
       </div>
 
-      <!-- ATTEMPT -->
+      <!-- ATTEMPTS -->
       <div>
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+        <label class="mb-2 block text-xs font-semibold text-slate-700">
+
           Kesempatan Pengerjaan
         </label>
 
         <div class="relative">
 
           <input v-model="form.attempts" type="number" min="1" max="10" placeholder="Contoh: 1"
-            class="w-full rounded-2xl border border-slate-200 px-4 py-3 pr-20 text-sm outline-none focus:border-blue-500" />
+            class="w-full rounded-xl border border-slate-200 px-4 py-2.5 pr-16 text-sm outline-none transition focus:border-blue-500" />
 
-          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-500">
+          <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[11px] font-medium text-slate-500">
+
             kali
           </span>
         </div>
@@ -180,13 +200,16 @@ const submit = () => {
 
       <!-- BUTTON -->
       <button @click="submit" type="button" :disabled="form.processing"
-        class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
+        class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
 
         <ClipboardCheck class="h-4 w-4" />
 
-        Simpan Pengaturan
+        {{
+          form.processing
+            ? 'Menyimpan...'
+            : 'Simpan Pengaturan'
+        }}
       </button>
-
     </div>
   </div>
 </template>

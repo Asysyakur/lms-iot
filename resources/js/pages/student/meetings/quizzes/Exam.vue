@@ -2,7 +2,9 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+
 import axios from 'axios';
+
 import { router } from '@inertiajs/vue3';
 
 import StudentSidebarLayout
@@ -18,13 +20,13 @@ const props = defineProps<{
 }>();
 
 /**
- * INDEX SOAL SEKARANG
+ * CURRENT QUESTION
  */
 const currentQuestionIndex =
   ref(0);
 
 /**
- * SOAL AKTIF
+ * ACTIVE QUESTION
  */
 const currentQuestion =
   computed(() => {
@@ -43,13 +45,13 @@ const currentQuestion =
   });
 
 /**
- * JAWABAN SISWA
+ * ANSWERS
  */
 const answers =
   ref<Record<number, string>>({});
 
 /**
- * PILIH JAWABAN
+ * SELECT
  */
 const selectAnswer = (
   questionId: number,
@@ -58,10 +60,11 @@ const selectAnswer = (
 
   answers.value[questionId] =
     answer;
+
 };
 
 /**
- * TOTAL YANG SUDAH DIJAWAB
+ * ANSWERED
  */
 const answeredQuestions =
   computed(() => {
@@ -129,7 +132,6 @@ const prevQuestion = () => {
 /**
  * SUBMIT
  */
-
 const submitQuiz =
   async () => {
 
@@ -149,65 +151,124 @@ const submitQuiz =
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-4">
+
     <!-- HEADER -->
-    <section class="rounded-3xl bg-[#173B74] p-5 text-white shadow-lg">
-      <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+    <section
+      class="rounded-xl bg-[#173B74] px-5 py-4 text-white shadow-sm">
+
+      <div
+        class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+
         <div>
-          <span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
-            Pertemuan {{ props.meeting.meeting_number }} : {{ props.meeting.title }}
+
+          <!-- BADGE -->
+          <span
+            class="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-semibold text-blue-700">
+
+            Pertemuan
+            {{ props.meeting.meeting_number }}
           </span>
 
-          <h1 class="mt-3 text-2xl font-bold">
-            🧠 Kuis {{ props.meeting.title || 'Kuis Belum Tersedia' }}
+          <!-- TITLE -->
+          <h1
+            class="mt-3 text-2xl font-bold">
+
+            🧠 Kuis
+            {{ props.meeting.title || 'Kuis' }}
           </h1>
+
+          <!-- DESC -->
+          <p
+            class="mt-1 text-sm text-slate-300">
+
+            Pilih jawaban yang paling tepat.
+          </p>
+        </div>
+
+        <!-- PROGRESS -->
+        <div
+          class="rounded-xl bg-white/10 px-4 py-3 backdrop-blur-sm">
+
+          <p
+            class="text-xs text-slate-300">
+
+            Progress
+          </p>
+
+          <h2
+            class="mt-1 text-2xl font-bold">
+
+            {{ progress }}%
+          </h2>
         </div>
       </div>
     </section>
 
     <!-- CONTENT -->
-    <div class="grid gap-6 xl:grid-cols-12">
+    <div
+      class="grid gap-4 xl:grid-cols-12">
+
       <!-- QUESTION -->
-      <div v-if="currentQuestion" class="rounded-2xl bg-white p-5 shadow-sm xl:col-span-8">
-        <p class="mb-6 text-sm font-semibold text-blue-600">
-          Soal {{ currentQuestionIndex + 1 }}
+      <div
+        v-if="currentQuestion"
+        class="rounded-xl bg-white p-4 shadow-sm xl:col-span-8">
+
+        <!-- NUMBER -->
+        <p
+          class="mb-4 text-xs font-semibold text-blue-600">
+
+          Soal
+          {{ currentQuestionIndex + 1 }}
+          dari
+          {{ props.questions.length }}
         </p>
 
-        <h2 class="text-lg font-semibold text-slate-800">
+        <!-- QUESTION -->
+        <h2
+          class="text-base font-semibold leading-relaxed text-slate-800 md:text-lg">
+
           {{ currentQuestion.question }}
         </h2>
 
         <!-- OPTIONS -->
-        <div class="mt-8 space-y-4">
-          <button v-for="option in ['a', 'b', 'c', 'd']" :key="option" @click="
-            selectAnswer(
-              currentQuestion.id,
-              option.toUpperCase()
-            )
+        <div
+          class="mt-6 space-y-3">
+
+          <button
+            v-for="option in ['a', 'b', 'c', 'd']"
+            :key="option"
+            @click="
+              selectAnswer(
+                currentQuestion.id,
+                option.toUpperCase()
+              )
             "
-            class="cursor-pointer group flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-200"
-            :class="answers[currentQuestion.id] ===
-              option.toUpperCase()
+            class="group flex w-full cursor-pointer items-start gap-3 rounded-xl border p-3 text-left transition-all duration-200"
+            :class="answers[currentQuestion.id] === option.toUpperCase()
               ? 'border-blue-500 bg-blue-50'
               : 'border-slate-200 bg-white hover:border-blue-300 hover:bg-slate-50'
               ">
-            <!-- CIRCLE -->
+
+            <!-- BADGE -->
             <div
-              class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border text-sm font-bold transition"
-              :class="answers[currentQuestion.id] ===
-                option.toUpperCase()
+              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-xs font-bold transition"
+              :class="answers[currentQuestion.id] === option.toUpperCase()
                 ? 'border-blue-500 bg-blue-500 text-white'
                 : 'border-slate-300 bg-white text-slate-600 group-hover:border-blue-400'
                 ">
+
               {{ option.toUpperCase() }}
             </div>
 
             <!-- TEXT -->
-            <div class="text-sm font-medium leading-relaxed" :class="answers[currentQuestion.id] ===
-              option.toUpperCase()
-              ? 'text-blue-700'
-              : 'text-slate-700'
-              ">
+            <div
+              class="pt-1 text-sm leading-relaxed"
+              :class="answers[currentQuestion.id] === option.toUpperCase()
+                ? 'text-blue-700'
+                : 'text-slate-700'
+                ">
+
               {{
                 currentQuestion[
                 `option_${option}`
@@ -218,69 +279,116 @@ const submitQuiz =
         </div>
 
         <!-- FOOTER -->
-        <div class="mt-10 flex items-center justify-between">
-          <button @click="prevQuestion" :disabled="currentQuestionIndex === 0
-            " :class="currentQuestionIndex === 0
+        <div
+          class="mt-8 flex items-center justify-between">
+
+          <!-- PREV -->
+          <button
+            @click="prevQuestion"
+            :disabled="currentQuestionIndex === 0"
+            :class="currentQuestionIndex === 0
               ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400'
               : 'cursor-pointer border-slate-300 bg-white text-slate-700 hover:border-blue-400 hover:bg-blue-50'
               "
-            class="rounded-xl border text-slate-700 border-slate-200 px-5 py-3 text-sm font-semibold disabled:opacity-50 ">
+            class="rounded-lg border px-4 py-2 text-sm font-semibold transition">
+
             ← Sebelumnya
           </button>
 
-          <button v-if="
-            currentQuestionIndex <
-            props.questions.length - 1
-          " @click="nextQuestion"
-            class="cursor-pointer rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white">
+          <!-- NEXT -->
+          <button
+            v-if="
+              currentQuestionIndex <
+              props.questions.length - 1
+            "
+            @click="nextQuestion"
+            class="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
+
             Selanjutnya →
           </button>
 
-          <button v-else @click="submitQuiz"
-            class="cursor-pointer rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white">
+          <!-- SUBMIT -->
+          <button
+            v-else
+            @click="submitQuiz"
+            class="cursor-pointer rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700">
+
             🚀 Selesai
           </button>
         </div>
       </div>
 
       <!-- SIDEBAR -->
-      <div class="space-y-6 xl:col-span-4">
+      <div
+        class="space-y-4 xl:col-span-4">
+
         <!-- PROGRESS -->
-        <div class="rounded-2xl bg-white p-5 shadow-sm">
-          <h2 class="font-bold text-slate-800">
+        <div
+          class="rounded-xl bg-white p-4 shadow-sm">
+
+          <h2
+            class="text-sm font-bold text-slate-800">
+
             Progress
           </h2>
 
-          <p class="mt-1 text-sm text-slate-500">
+          <p
+            class="mt-1 text-xs text-slate-500">
+
             {{ answeredQuestions }}
-            dari {{ props.questions.length }} soal dijawab
+            dari
+            {{ props.questions.length }}
+            soal dijawab
           </p>
 
-          <div class="mt-4 h-3 overflow-hidden rounded-full bg-slate-200">
-            <div class="h-full rounded-full bg-emerald-500" :style="{
-              width: progress + '%',
-            }" />
+          <!-- BAR -->
+          <div
+            class="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
+
+            <div
+              class="h-full rounded-full bg-emerald-500 transition-all"
+              :style="{
+                width: progress + '%',
+              }" />
           </div>
         </div>
 
         <!-- NAVIGATION -->
-        <div class="rounded-2xl bg-white p-5 shadow-sm">
-          <h2 class="mb-5 font-bold text-slate-800">
+        <div
+          class="rounded-xl bg-white p-4 shadow-sm">
+
+          <h2
+            class="mb-4 text-sm font-bold text-slate-800">
+
             Navigasi Soal
           </h2>
 
-          <div class="grid grid-cols-5 gap-3">
-            <button v-for="(question, index) in props.questions" :key="question.id"
+          <div
+            class="grid grid-cols-5 gap-2">
+
+            <button
+              v-for="(question, index) in props.questions"
+              :key="question.id"
               @click="currentQuestionIndex = index"
-              class="cursor-pointer flex h-11 w-11 items-center justify-center rounded-xl border text-sm font-semibold transition"
+              class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border text-xs font-semibold transition"
               :class="index === currentQuestionIndex
                 ? 'border-blue-600 bg-blue-600 text-white'
                 : answers[question.id]
                   ? 'border-emerald-500 bg-emerald-500 text-white'
-                  : 'border-slate-200 hover:border-blue-500 text-slate-700 hover:bg-blue-50'
+                  : 'border-slate-200 text-slate-700 hover:border-blue-500 hover:bg-blue-50'
                 ">
+
               {{ index + 1 }}
             </button>
+          </div>
+
+          <!-- INFO -->
+          <div
+            class="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-3 text-xs text-blue-700">
+
+            💡 Pastikan semua soal
+            sudah dijawab sebelum
+            mengumpulkan kuis.
           </div>
         </div>
       </div>

@@ -45,56 +45,54 @@ const handleEdit = (
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-4">
 
     <!-- HEADER -->
-    <section
-      :class="colorClass"
-      class="relative overflow-hidden rounded-3xl bg-linear-to-r p-6 text-white shadow-lg">
+    <section :class="colorClass"
+      class="relative overflow-hidden rounded-xl bg-linear-to-r px-5 py-4 text-white shadow-sm">
 
-      <div
-        class="absolute right-0 top-0 h-44 w-44 rounded-full bg-white/10" />
+      <div class="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10" />
 
       <div class="relative z-10">
 
-        <span
-          class="rounded-full bg-white/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wider">
+        <!-- BADGE -->
+        <span class="rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide">
 
           Pengaturan Assessment
-
         </span>
 
-        <h1 class="mt-3 text-3xl font-black">
+        <!-- TITLE -->
+        <h1 class="mt-3 text-2xl font-bold">
+
           Pengaturan {{ title }}
         </h1>
 
+        <!-- DESC -->
+        <p class="mt-1 max-w-2xl text-sm text-white/80">
+
+          Kelola pengaturan assessment,
+          tambah soal, dan atur status
+          {{ title }}.
+        </p>
       </div>
     </section>
 
     <!-- CONTENT -->
-    <section class="grid gap-6 xl:grid-cols-12">
+    <section class="grid gap-4 xl:grid-cols-12">
 
       <!-- SETTINGS -->
       <div class="xl:col-span-5">
-        <AssessmentSettings
-          :type="props.type"
-          :assessment="props.assessment" />
+        <AssessmentSettings :type="props.type" :assessment="props.assessment" />
       </div>
 
       <!-- FORM -->
       <div class="xl:col-span-7">
-        <QuestionForm
-          :type="props.type"
-          :editing-question="editingQuestion" />
+        <QuestionForm :type="props.type" :editing-question="editingQuestion" />
       </div>
-
     </section>
 
     <!-- TABLE -->
-    <QuestionTable
-      :type="props.type"
-      :questions="props.questions"
-      @edit="handleEdit" />
+    <QuestionTable :type="props.type" :questions="props.questions" @edit="handleEdit" />
 
   </div>
 </template>
