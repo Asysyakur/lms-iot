@@ -17,9 +17,9 @@ const form = useForm({
   meeting_id:
     props.meeting.id,
 
-  question:
-    props.meeting.evaluation?.question
-    ?? '',
+  questions:
+    props.meeting.evaluation?.questions
+    ?? [''],
 });
 
 watch(
@@ -33,11 +33,33 @@ watch(
     form.meeting_id =
       meeting.id;
 
-    form.question =
-      meeting.evaluation?.question
-      ?? '';
+    form.questions =
+      meeting.evaluation?.questions
+      ?? [''];
   },
 );
+
+const addQuestion = () => {
+
+  form.questions.push('');
+
+};
+
+const removeQuestion = (
+  index: number
+) => {
+
+  if (
+    form.questions.length === 1
+  ) {
+    return;
+  }
+
+  form.questions.splice(
+    index,
+    1
+  );
+};
 
 const submit =
   async () => {
@@ -123,8 +145,8 @@ const toggleEvaluation =
 
       <!-- STATUS -->
       <button @click="toggleEvaluation" class="rounded-lg px-3 py-2 text-xs font-semibold transition" :class="meeting.evaluation?.is_active
-          ? 'bg-emerald-500 text-white hover:bg-emerald-600'
-          : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+        ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+        : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
         ">
 
         {{
@@ -139,15 +161,30 @@ const toggleEvaluation =
     <div class="mt-5 space-y-4">
 
       <!-- QUESTION -->
-      <div>
+      <div class="space-y-4">
 
-        <label class="mb-2 block text-sm font-semibold text-slate-700">
+        <div v-for="(question, index) in form.questions" :key="index" class="rounded-xl border border-slate-200 p-4">
 
-          Pertanyaan Evaluasi
-        </label>
+          <div class="mb-3 flex items-center justify-between">
 
-        <textarea v-model="form.question" rows="4" placeholder="Masukkan pertanyaan evaluasi..."
-          class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-rose-500" />
+            <label class="text-sm font-semibold text-slate-700">
+              Pertanyaan {{ index + 1 }}
+            </label>
+
+            <button type="button" @click="removeQuestion(index)" class="text-xs font-semibold text-red-500">
+              Hapus
+            </button>
+          </div>
+
+          <textarea v-model="form.questions[index]" rows="3" placeholder="Masukkan pertanyaan evaluasi..."
+            class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-rose-500" />
+        </div>
+
+        <!-- ADD -->
+        <button type="button" @click="addQuestion"
+          class="rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
+          + Tambah Pertanyaan
+        </button>
       </div>
 
       <!-- BUTTON -->

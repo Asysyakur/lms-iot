@@ -289,7 +289,7 @@ const formatAnswer =
 
             <tr v-for="(
 student,
-                  index
+  index
               ) in props.students" :key="index"
               class="border-b border-slate-100 text-sm text-slate-700 hover:bg-slate-50">
 
@@ -389,13 +389,38 @@ student,
               </td>
 
               <!-- EVALUASI -->
-              <td class="min-w-[220px] px-4 py-3 text-xs leading-relaxed">
+              <td class="min-w-[340px] px-4 py-3 align-top">
 
-                {{
-                  formatAnswer(
-                    student.evaluation
-                  ) || '-'
-                }}
+                <!-- EMPTY -->
+                <div v-if="!student.evaluation" class="text-xs text-slate-400">
+                  -
+                </div>
+
+                <!-- ANSWERS -->
+                <div v-else class="space-y-3">
+
+                  <div v-for="(
+answer,
+          answerIndex
+      ) in (
+            Array.isArray(student.evaluation)
+              ? student.evaluation
+              : JSON.parse(student.evaluation)
+          )" :key="answerIndex" class="rounded-xl border border-slate-200 bg-slate-50 p-3">
+
+                    <!-- NUMBER -->
+                    <div
+                      class="mb-2 inline-flex rounded-full bg-violet-100 px-2 py-1 text-[10px] font-bold text-violet-700">
+                      Jawaban
+                      {{ answerIndex + 1 }}
+                    </div>
+
+                    <!-- TEXT -->
+                    <p class="text-xs leading-6 whitespace-pre-line text-slate-700">
+                      {{ answer }}
+                    </p>
+                  </div>
+                </div>
               </td>
 
               <!-- SCORE EVALUASI -->

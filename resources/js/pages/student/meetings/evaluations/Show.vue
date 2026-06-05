@@ -24,7 +24,13 @@ const props = defineProps<{
 }>();
 
 const answers = ref(
-  props.submission?.answers || ['']
+  props.submission?.answers
+  ||
+  props.evaluation?.questions?.map(
+    () => ''
+  )
+  ||
+  []
 );
 
 const submitEvaluation =
@@ -132,17 +138,17 @@ const submitEvaluation =
       <div class="space-y-5">
 
         <!-- QUESTION -->
-        <div>
+        <div v-for="(question, index) in props.evaluation.questions" :key="index"
+          class="rounded-xl border border-slate-200 p-4">
 
+          <!-- NUMBER -->
           <h3 class="mb-3 text-sm font-semibold leading-relaxed text-slate-700">
-
-            1.
-            {{
-              props.evaluation.question
-            }}
+            {{ index + 1 }}.
+            {{ question }}
           </h3>
 
-          <textarea v-model="answers[0]" rows="6" placeholder="Tuliskan jawabanmu..."
+          <!-- ANSWER -->
+          <textarea v-model="answers[index]" rows="5" placeholder="Tuliskan jawabanmu..."
             class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-violet-500" />
         </div>
 

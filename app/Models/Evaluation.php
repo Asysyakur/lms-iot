@@ -8,8 +8,12 @@ class Evaluation extends Model
 {
     protected $fillable = [
         'meeting_id',
-        'question',
+        'questions',
         'is_active',
+    ];
+
+    protected $casts = [
+        'questions' => 'array',
     ];
 
     public function meeting()

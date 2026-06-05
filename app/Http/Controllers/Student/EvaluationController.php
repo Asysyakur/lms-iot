@@ -51,11 +51,13 @@ class EvaluationController extends Controller
 
         $request->validate([
 
-            'answers' =>
-            ['required', 'array'],
+            'answers' => [
+                'required',
+                'array',
+                'min:1',
+            ],
 
-            'answers.0' =>
-            [
+            'answers.*' => [
                 'required',
                 'string',
                 'min:10',

@@ -10,15 +10,25 @@ class EvaluationController extends Controller
 {
     public function store(Request $request)
     {
+        $request->validate([
+            'questions' => ['required', 'array', 'min:1'],
+            'questions.*' => ['required', 'string'],
+        ]);
+
         Evaluation::updateOrCreate(
             [
                 'meeting_id' => $request->meeting_id,
             ],
             [
-                'question' => $request->question,
+                'questions' => $request->questions,
             ]
         );
-        $evaluation = Evaluation::where('meeting_id', $request->meeting_id)->first();
+
+        $evaluation = Evaluation::where(
+            'meeting_id',
+            $request->meeting_id
+        )->first();
+
         return response()->json([
             'success' => true,
             'evaluation' => $evaluation,
