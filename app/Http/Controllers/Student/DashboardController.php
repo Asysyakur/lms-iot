@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 
 use App\Models\AssessmentResult;
+use App\Models\EvaluationSubmission;
+use App\Models\LkpdSubmission;
+use App\Models\MaterialProgress;
 use App\Models\Meeting;
+use App\Models\PracticeSubmission;
 use App\Models\QuizAttempt;
 
 use Inertia\Inertia;
@@ -50,31 +54,12 @@ class DashboardController extends Controller
                     'user_id',
                     $user->id
                 )
-                ->where(
-                    'passed',
-                    true
-                )
-                ->avg('score') ?? 0
-            );
-
-        /*
-        |--------------------------------------------------------------------------
-        | MEETING COMPLETED
-        |--------------------------------------------------------------------------
-        */
-
-        $totalMeetings =
-            Meeting::count();
-
-        $completedMeetings =
-            Meeting::get()
-                ->filter(
-                    fn($meeting) =>
-                    $meeting->hasCompletedEvaluation(
-                        $user->id
+                    ->where(
+                        'passed',
+                        true
                     )
-                )
-                ->count();
+                    ->avg('score') ?? 0
+            );
 
         /*
         |--------------------------------------------------------------------------
@@ -93,19 +78,149 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | PROGRESS
+        | ACTIVITY PROGRESS
+        |--------------------------------------------------------------------------
+        */
+
+        $totalActivities = 0;
+
+        $completedActivities = 0;
+
+        $meetings =
+            Meeting::with([
+                'material',
+                'practice',
+                'lkpd',
+                'evaluation',
+            ])->get();
+
+        foreach ($meetings as $meeting) {
+
+            /*
+|--------------------------------------------------------------------------
+| MATERIAL
+|--------------------------------------------------------------------------
+*/
+
+            if ($meeting->material) {
+
+                $totalActivities++;
+
+                $materialCompleted =
+                    MaterialProgress::where(
+                        'user_id',
+                        $user->id
+                    )
+                    ->where(
+                        'meeting_id',
+                        $meeting->id
+                    )
+                    ->where(
+                        'reading_progress',
+                        '>=',
+                        100
+                    )
+                    ->exists();
+
+                if ($materialCompleted) {
+                    $completedActivities++;
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | PRACTICE
+            |--------------------------------------------------------------------------
+            */
+
+            if ($meeting->practice) {
+
+                $totalActivities++;
+
+                $practiceCompleted =
+                    PracticeSubmission::where(
+                        'user_id',
+                        $user->id
+                    )
+                    ->where(
+                        'meeting_id',
+                        $meeting->id
+                    )
+                    ->exists();
+
+                if ($practiceCompleted) {
+                    $completedActivities++;
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | LKPD
+            |--------------------------------------------------------------------------
+            */
+
+            if ($meeting->lkpd) {
+
+                $totalActivities++;
+
+                $lkpdCompleted =
+                    LkpdSubmission::where(
+                        'user_id',
+                        $user->id
+                    )
+                    ->where(
+                        'meeting_id',
+                        $meeting->id
+                    )
+                    ->exists();
+
+                if ($lkpdCompleted) {
+                    $completedActivities++;
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | EVALUATION
+            |--------------------------------------------------------------------------
+            */
+
+            if ($meeting->evaluation) {
+
+                $totalActivities++;
+
+                $evaluationCompleted =
+                    EvaluationSubmission::where(
+                        'user_id',
+                        $user->id
+                    )
+                    ->where(
+                        'meeting_id',
+                        $meeting->id
+                    )
+                    ->exists();
+
+                if ($evaluationCompleted) {
+                    $completedActivities++;
+                }
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | FINAL PROGRESS
         |--------------------------------------------------------------------------
         */
 
         $progress =
-            $totalMeetings > 0
-                ? round(
-                    (
-                        $completedMeetings
-                        / $totalMeetings
-                    ) * 100
-                )
-                : 0;
+            $totalActivities > 0
+            ? round(
+                (
+                    $completedActivities
+                    / $totalActivities
+                ) * 100
+            )
+            : 0;
 
         /*
         |--------------------------------------------------------------------------
@@ -157,6 +272,12 @@ class DashboardController extends Controller
 
         $activities = [];
 
+        /*
+        |--------------------------------------------------------------------------
+        | PRETEST
+        |--------------------------------------------------------------------------
+        */
+
         if ($pretest) {
 
             $activities[] = [
@@ -169,6 +290,12 @@ class DashboardController extends Controller
             ];
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | QUIZ
+        |--------------------------------------------------------------------------
+        */
+
         if ($quizAverage > 0) {
 
             $activities[] = [
@@ -177,8 +304,109 @@ class DashboardController extends Controller
                 'Mengerjakan kuis',
 
                 'status' =>
-                'Nilai ' .
-                $quizAverage,
+                'Nilai ' . $quizAverage,
+            ];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | MATERIAL
+        |--------------------------------------------------------------------------
+        */
+
+        $materialCount =
+            MaterialProgress::where(
+                'user_id',
+                $user->id
+            )
+            ->where(
+                'reading_progress',
+                '>=',
+                100
+            )
+            ->count();
+
+        if ($materialCount > 0) {
+
+            $activities[] = [
+
+                'title' =>
+                'Menyelesaikan materi pembelajaran',
+
+                'status' =>
+                $materialCount . ' materi',
+            ];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | PRACTICE
+        |--------------------------------------------------------------------------
+        */
+
+        $practiceCount =
+            PracticeSubmission::where(
+                'user_id',
+                $user->id
+            )->count();
+
+        if ($practiceCount > 0) {
+
+            $activities[] = [
+
+                'title' =>
+                'Mengumpulkan praktikum',
+
+                'status' =>
+                $practiceCount . ' praktik',
+            ];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | LKPD
+        |--------------------------------------------------------------------------
+        */
+
+        $lkpdCount =
+            LkpdSubmission::where(
+                'user_id',
+                $user->id
+            )->count();
+
+        if ($lkpdCount > 0) {
+
+            $activities[] = [
+
+                'title' =>
+                'Mengumpulkan LKPD',
+
+                'status' =>
+                $lkpdCount . ' LKPD',
+            ];
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | EVALUATION
+        |--------------------------------------------------------------------------
+        */
+
+        $evaluationCount =
+            EvaluationSubmission::where(
+                'user_id',
+                $user->id
+            )->count();
+
+        if ($evaluationCount > 0) {
+
+            $activities[] = [
+
+                'title' =>
+                'Menyelesaikan evaluasi',
+
+                'status' =>
+                $evaluationCount . ' evaluasi',
             ];
         }
 
@@ -230,13 +458,13 @@ class DashboardController extends Controller
 
                     [
                         'title' =>
-                        'Pertemuan Selesai',
+                        'Aktivitas Selesai',
 
                         'value' =>
-                        "{$completedMeetings}/{$totalMeetings}",
+                        "{$completedActivities}/{$totalActivities}",
 
                         'status' =>
-                        'Selesai',
+                        'Progress',
 
                         'color' =>
                         'bg-emerald-50 text-emerald-600',
