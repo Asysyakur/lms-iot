@@ -21,64 +21,68 @@ const getOptionText = (
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div class="space-y-4">
 
     <!-- HEADER -->
     <div
-      class="rounded-3xl bg-[#173B74] p-8 text-white shadow-lg"
-    >
-      <h1 class="text-3xl font-bold">
+      class="rounded-2xl bg-[#173B74] p-5 text-white shadow-lg">
+
+      <h1
+        class="text-2xl font-bold">
         🎉 Assessment Selesai
       </h1>
 
-      <p class="mt-2 text-slate-300">
+      <p
+        class="mt-1 text-sm text-slate-300">
         Berikut hasil pengerjaan
         {{ assessment.title }}
       </p>
 
       <!-- STATS -->
       <div
-        class="mt-8 grid gap-5 md:grid-cols-3"
-      >
+        class="mt-5 grid gap-3 md:grid-cols-3">
+
         <!-- SCORE -->
         <div
-          class="rounded-2xl bg-white/10 p-5 backdrop-blur-sm"
-        >
-          <p class="text-sm text-slate-300">
+          class="rounded-xl bg-white/10 p-4 backdrop-blur-sm">
+
+          <p
+            class="text-xs text-slate-300">
             Score
           </p>
 
-          <h2 class="mt-2 text-5xl font-bold">
+          <h2
+            class="mt-1 text-4xl font-bold">
             {{ result.score }}
           </h2>
         </div>
 
         <!-- CORRECT -->
         <div
-          class="rounded-2xl bg-emerald-500/20 p-5"
-        >
-          <p class="text-sm text-emerald-100">
+          class="rounded-xl bg-emerald-500/20 p-4">
+
+          <p
+            class="text-xs text-emerald-100">
             Jawaban Benar
           </p>
 
           <h2
-            class="mt-2 text-5xl font-bold text-emerald-300"
-          >
+            class="mt-1 text-4xl font-bold text-emerald-300">
             {{ result.correct_answers }}
           </h2>
         </div>
 
         <!-- WRONG -->
         <div
-          class="rounded-2xl bg-red-500/20 p-5"
-        >
-          <p class="text-sm text-red-100">
+          class="rounded-xl bg-red-500/20 p-4">
+
+          <p
+            class="text-xs text-red-100">
             Jawaban Salah
           </p>
 
           <h2
-            class="mt-2 text-5xl font-bold text-red-300"
-          >
+            class="mt-1 text-4xl font-bold text-red-300">
             {{ result.wrong_answers }}
           </h2>
         </div>
@@ -86,40 +90,35 @@ const getOptionText = (
     </div>
 
     <!-- REVIEW -->
-    <div class="space-y-5">
+    <div class="space-y-4">
 
       <div
-        v-for="(
-          answer,
-          index
-        ) in result.answers"
+        v-for="(answer, index) in result.answers"
         :key="answer.id"
-        class="overflow-hidden rounded-3xl border bg-white shadow-sm"
+        class="overflow-hidden rounded-2xl border bg-white shadow-sm"
         :class="
           answer.is_correct
             ? 'border-emerald-300'
             : 'border-red-300'
-        "
-      >
+        ">
 
         <!-- TOP -->
         <div
-          class="flex items-center justify-between border-b border-b-slate-200 bg-slate-50 px-6 py-4"
-        >
+          class="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-4 py-3">
+
           <h2
-            class="font-bold text-slate-800"
-          >
+            class="text-sm font-bold text-slate-800">
             Soal {{ index + 1 }}
           </h2>
 
           <div
-            class="rounded-full px-3 py-1 text-xs font-bold"
+            class="rounded-full px-2.5 py-1 text-[10px] font-bold"
             :class="
               answer.is_correct
                 ? 'bg-emerald-100 text-emerald-700'
                 : 'bg-red-100 text-red-700'
-            "
-          >
+            ">
+
             {{
               answer.is_correct
                 ? 'Benar'
@@ -129,12 +128,11 @@ const getOptionText = (
         </div>
 
         <!-- CONTENT -->
-        <div class="p-6">
+        <div class="p-4">
 
           <!-- QUESTION -->
           <h3
-            class="text-lg font-semibold text-slate-800"
-          >
+            class="text-[15px] font-semibold text-slate-800">
             {{
               answer.question.question
             }}
@@ -142,32 +140,30 @@ const getOptionText = (
 
           <!-- ANSWERS -->
           <div
-            class="mt-6 grid gap-4 md:grid-cols-2"
-          >
+            class="mt-4 grid gap-3 md:grid-cols-2">
 
-            <!-- USER ANSWER -->
+            <!-- USER -->
             <div
               :class="
                 answer.is_correct
                   ? 'border-emerald-200 bg-emerald-50'
                   : 'border-red-200 bg-red-50'
               "
-              class="rounded-2xl border p-4"
-            >
+              class="rounded-xl border p-3">
+
               <p
-                class="text-xs font-bold uppercase tracking-wide text-slate-500"
-              >
+                class="text-[10px] font-bold uppercase tracking-wide text-slate-500">
                 Jawaban Siswa
               </p>
 
               <h4
-                class="mt-2 font-semibold"
+                class="mt-1 text-sm font-semibold"
                 :class="
                   answer.is_correct
                     ? 'text-emerald-700'
                     : 'text-red-700'
-                "
-              >
+                ">
+
                 {{ answer.answer }}.
                 {{
                   getOptionText(
@@ -178,19 +174,18 @@ const getOptionText = (
               </h4>
             </div>
 
-            <!-- CORRECT ANSWER -->
+            <!-- CORRECT -->
             <div
-              class="rounded-2xl border border-blue-200 bg-blue-50 p-4"
-            >
+              class="rounded-xl border border-blue-200 bg-blue-50 p-3">
+
               <p
-                class="text-xs font-bold uppercase tracking-wide text-slate-500"
-              >
+                class="text-[10px] font-bold uppercase tracking-wide text-slate-500">
                 Jawaban Benar
               </p>
 
               <h4
-                class="mt-2 font-semibold text-blue-700"
-              >
+                class="mt-1 text-sm font-semibold text-blue-700">
+
                 {{
                   answer.question.answer
                 }}.
@@ -203,20 +198,18 @@ const getOptionText = (
                 }}
               </h4>
             </div>
-
           </div>
 
           <!-- EXPLANATION -->
           <div
-            class="mt-5 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600"
-          >
+            class="mt-4 rounded-xl bg-slate-50 p-3 text-sm text-slate-600">
+
             💡
             {{
               answer.question.explanation ??
               'Pelajari kembali materi terkait soal ini.'
             }}
           </div>
-
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-```vue
 <script setup lang="ts">
 import { ref } from 'vue';
 
@@ -24,21 +23,22 @@ const sidebarOpen =
 
         <!-- MOBILE TOPBAR -->
         <header
-            class="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white/90 px-4 py-4 backdrop-blur lg:hidden">
+            class="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white/90 px-3 py-3 backdrop-blur lg:hidden">
 
             <!-- LEFT -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2.5">
+
                 <div
-                    class="flex h-11 w-11 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-teal-500 font-black text-white shadow-lg">
+                    class="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-500 text-sm font-black text-white shadow-lg">
                     IoT
                 </div>
 
                 <div>
-                    <h1 class="text-base font-black text-slate-800">
+                    <h1 class="text-sm font-black leading-tight text-slate-800">
                         LMS IoT
                     </h1>
 
-                    <p class="text-xs text-slate-500">
+                    <p class="text-[11px] text-slate-500">
                         Student Panel
                     </p>
                 </div>
@@ -46,14 +46,21 @@ const sidebarOpen =
 
             <!-- BURGER -->
             <button
-                class="flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:bg-slate-50"
+                class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm transition hover:bg-slate-50"
                 @click="sidebarOpen = !sidebarOpen">
 
                 <Transition mode="out-in" name="icon">
 
-                    <Menu v-if="!sidebarOpen" key="menu" class="h-5 w-5 text-slate-700" />
+                    <Menu
+                        v-if="!sidebarOpen"
+                        key="menu"
+                        class="h-4.5 w-4.5 text-slate-700" />
 
-                    <X v-else key="close" class="h-5 w-5 text-slate-700" />
+                    <X
+                        v-else
+                        key="close"
+                        class="h-4.5 w-4.5 text-slate-700" />
+
                 </Transition>
             </button>
         </header>
@@ -62,13 +69,17 @@ const sidebarOpen =
 
             <!-- BACKDROP -->
             <Transition name="fade">
-                <div v-if="sidebarOpen" class="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] lg:hidden"
+                <div
+                    v-if="sidebarOpen"
+                    class="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px] lg:hidden"
                     @click="sidebarOpen = false" />
             </Transition>
 
             <!-- MOBILE SIDEBAR -->
             <Transition name="slide">
-                <div v-if="sidebarOpen" class="fixed left-0 top-0 z-50 h-screen lg:hidden">
+                <div
+                    v-if="sidebarOpen"
+                    class="fixed left-0 top-0 z-50 h-screen lg:hidden">
 
                     <StudentSidebar />
                 </div>
@@ -80,7 +91,7 @@ const sidebarOpen =
             </div>
 
             <!-- CONTENT -->
-            <main class="min-w-0 flex-1 p-4 md:p-6 lg:ml-72">
+            <main class="min-w-0 flex-1 p-3 md:p-5 lg:ml-60">
                 <slot />
             </main>
 
@@ -91,7 +102,7 @@ const sidebarOpen =
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.25s ease;
+    transition: opacity 0.22s ease;
 }
 
 .fade-enter-from,
@@ -102,8 +113,8 @@ const sidebarOpen =
 .slide-enter-active,
 .slide-leave-active {
     transition:
-        transform 0.28s ease,
-        opacity 0.28s ease;
+        transform 0.25s ease,
+        opacity 0.25s ease;
 }
 
 .slide-enter-from,
@@ -122,7 +133,6 @@ const sidebarOpen =
 .icon-enter-from,
 .icon-leave-to {
     opacity: 0;
-    transform: scale(0.7) rotate(90deg);
+    transform: scale(0.75) rotate(90deg);
 }
 </style>
-```
