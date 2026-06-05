@@ -66,14 +66,6 @@ const handleEdit = (
 
           Pengaturan {{ title }}
         </h1>
-
-        <!-- DESC -->
-        <p class="mt-1 max-w-2xl text-sm text-white/80">
-
-          Kelola pengaturan assessment,
-          tambah soal, dan atur status
-          {{ title }}.
-        </p>
       </div>
     </section>
 

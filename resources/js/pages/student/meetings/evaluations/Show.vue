@@ -104,34 +104,6 @@ const submitEvaluation =
       </div>
     </section>
 
-    <!-- INFO -->
-    <section class="rounded-xl border border-blue-200 bg-blue-50 p-4">
-
-      <div class="flex items-start gap-3">
-
-        <div class="mt-0.5 flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100">
-
-          <Info class="h-4 w-4 text-blue-600" />
-        </div>
-
-        <div>
-
-          <h3 class="text-sm font-bold text-blue-700">
-
-            Informasi Evaluasi
-          </h3>
-
-          <p class="mt-1 text-sm leading-relaxed text-blue-600">
-
-            Evaluasi berbeda dari
-            refleksi. Evaluasi berisi
-            pertanyaan akhir pertemuan
-            yang dibuka oleh guru.
-          </p>
-        </div>
-      </div>
-    </section>
-
     <!-- QUESTION -->
     <section class="rounded-xl bg-white p-4 shadow-sm">
 

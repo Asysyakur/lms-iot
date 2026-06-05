@@ -125,7 +125,7 @@ const togglePractice =
 
         <h2 class="text-sm font-bold text-slate-800">
 
-          🧪 Pengaturan Praktik
+          Pengaturan Praktik
         </h2>
 
         <p class="mt-1 text-xs text-slate-500">

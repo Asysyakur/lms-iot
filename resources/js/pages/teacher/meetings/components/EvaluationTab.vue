@@ -112,7 +112,7 @@ const toggleEvaluation =
 
         <h2 class="text-sm font-bold text-slate-800">
 
-          📋 Evaluasi
+          Evaluasi
         </h2>
 
         <p class="mt-1 text-xs text-slate-500">

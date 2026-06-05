@@ -237,11 +237,6 @@ const displayedActivities = computed(() => {
                         class="mt-1 text-xs font-medium">
                         {{ item.title }}
                     </p>
-
-                    <span
-                        class="mt-1 block text-xs font-semibold">
-                        {{ item.status }}
-                    </span>
                 </div>
             </div>
         </div>
@@ -291,13 +286,6 @@ const displayedActivities = computed(() => {
                             }" />
                     </div>
                 </div>
-            </div>
-
-            <div
-                class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-3 text-xs text-blue-700">
-                Nilai minimum kuis adalah 80.
-                Jika belum mencapai batas,
-                siswa dapat mengulang kuis.
             </div>
         </div>
 

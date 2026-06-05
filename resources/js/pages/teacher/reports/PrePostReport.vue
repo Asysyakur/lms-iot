@@ -24,7 +24,7 @@ defineOptions({
 
           <h1 class="text-lg font-bold">
 
-            📄 Hasil Pre-test & Post-test
+            Hasil Pre-test & Post-test
           </h1>
 
           <p class="mt-1 text-xs text-blue-100">

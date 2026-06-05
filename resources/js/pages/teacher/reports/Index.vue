@@ -26,7 +26,7 @@ const props = defineProps<{
 
           <h1 class="text-lg font-bold text-slate-800">
 
-            📑 Monitoring dan Laporan
+            Monitoring dan Laporan
           </h1>
 
           <p class="mt-1 text-xs text-slate-500">

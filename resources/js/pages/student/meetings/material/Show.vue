@@ -287,7 +287,7 @@ const renderPdf = async () => {
 
         const viewport =
             page.getViewport({
-                scale: 1.8,
+                scale: 1,
             });
 
         const pageWrapper =
@@ -486,15 +486,13 @@ watch(
     <div class="space-y-4">
 
         <!-- HEADER -->
-        <section
-            class="relative overflow-hidden rounded-xl bg-[#173B74] px-4 py-3 text-white shadow-sm">
+        <section class="relative overflow-hidden rounded-xl bg-[#173B74] px-4 py-3 text-white shadow-sm">
 
             <div class="absolute right-0 top-0 h-28 w-28 rounded-full bg-cyan-400/10" />
 
             <div>
 
-                <span
-                    class="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-semibold text-blue-700">
+                <span class="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-semibold text-blue-700">
 
                     {{ meeting.title }}
                 </span>
@@ -512,21 +510,15 @@ watch(
         </section>
 
         <!-- VIDEO -->
-        <section
-            v-if="material.video_url"
-            class="rounded-xl bg-white p-3 shadow-sm">
+        <section v-if="material.video_url" class="rounded-xl bg-white p-3 shadow-sm">
 
             <h2 class="mb-3 text-sm font-bold text-slate-800">
 
-                🎥 Video Pembelajaran
+                Video Pembelajaran
             </h2>
 
-            <iframe
-                v-if="youtubeEmbedUrl"
-                :src="youtubeEmbedUrl"
-                class="h-[280px] w-full rounded-lg xl:h-[320px]"
-                frameborder="0"
-                allowfullscreen />
+            <iframe v-if="youtubeEmbedUrl" :src="youtubeEmbedUrl" class="h-[280px] w-full rounded-lg xl:h-[320px]"
+                frameborder="0" allowfullscreen />
         </section>
 
         <!-- PEMANTIK -->
@@ -536,8 +528,7 @@ watch(
 
                 <div class="flex items-center gap-3">
 
-                    <div
-                        class="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-100">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-100">
 
                         <BookOpen class="h-4 w-4 text-purple-600" />
                     </div>
@@ -556,8 +547,7 @@ watch(
                     </div>
                 </div>
 
-                <span
-                    class="rounded-full bg-purple-100 px-2 py-1 text-[10px] font-semibold text-purple-700">
+                <span class="rounded-full bg-purple-100 px-2 py-1 text-[10px] font-semibold text-purple-700">
 
                     Wajib
                 </span>
@@ -567,29 +557,21 @@ watch(
 
                 <div>
 
-                    <label
-                        class="mb-2 block text-sm font-semibold text-slate-700">
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">
 
                         {{ material.trigger_question }}
                     </label>
 
-                    <textarea
-                        v-model="triggerAnswer"
-                        rows="3"
-                        placeholder="Tulis jawabanmu..."
+                    <textarea v-model="triggerAnswer" rows="3" placeholder="Tulis jawabanmu..."
                         class="w-full rounded-lg border border-slate-200 p-2.5 text-sm outline-none transition focus:border-blue-500" />
                 </div>
 
                 <div class="flex justify-end">
 
-                    <button
-                        :disabled="triggerAnswer.trim() === ''"
-                        @click="saveTriggerAnswer"
-                        :class="triggerAnswer.trim() !== ''
-                            ? 'bg-purple-600 hover:bg-purple-700'
-                            : 'cursor-not-allowed bg-slate-200 text-slate-500'
-                            "
-                        class="rounded-lg px-4 py-2 text-xs font-semibold text-white transition">
+                    <button :disabled="triggerAnswer.trim() === ''" @click="saveTriggerAnswer" :class="triggerAnswer.trim() !== ''
+                        ? 'bg-purple-600 hover:bg-purple-700'
+                        : 'cursor-not-allowed bg-slate-200 text-slate-500'
+                        " class="rounded-lg px-4 py-2 text-xs font-semibold text-white transition">
 
                         Simpan Jawaban
                     </button>
@@ -606,7 +588,7 @@ watch(
 
                     <h2 class="text-sm font-bold text-slate-800">
 
-                        📖 Progress Membaca
+                        Progress Membaca
                     </h2>
 
                     <p class="mt-1 text-xs text-slate-500">
@@ -621,24 +603,20 @@ watch(
                 </h2>
             </div>
 
-            <div
-                class="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
+            <div class="mt-3 h-2 overflow-hidden rounded-full bg-slate-200">
 
-                <div
-                    class="h-full rounded-full bg-emerald-500 transition-all duration-300"
-                    :style="{
-                        width:
-                            readingProgress +
-                            '%',
-                    }" />
+                <div class="h-full rounded-full bg-emerald-500 transition-all duration-300" :style="{
+                    width:
+                        readingProgress +
+                        '%',
+                }" />
             </div>
         </section>
 
         <!-- PDF -->
         <section class="rounded-xl bg-white p-3 shadow-sm">
 
-            <div
-                ref="pdfContainer"
+            <div ref="pdfContainer"
                 class="flex h-[520px] flex-col items-center overflow-y-scroll rounded-xl border border-slate-200 bg-slate-100 p-4" />
         </section>
 
@@ -651,7 +629,7 @@ watch(
 
                     <h2 class="text-sm font-bold text-slate-800">
 
-                        💭 Refleksi
+                        Refleksi
                     </h2>
 
                     <p class="mt-1 text-xs text-slate-500">
@@ -660,48 +638,36 @@ watch(
                     </p>
                 </div>
 
-                <span
-                    class="rounded-full bg-purple-100 px-2 py-1 text-[10px] font-semibold text-purple-700">
+                <span class="rounded-full bg-purple-100 px-2 py-1 text-[10px] font-semibold text-purple-700">
 
                     Wajib
                 </span>
             </div>
 
-            <div
-                v-if="reflectionUnlocked"
-                class="space-y-4">
+            <div v-if="reflectionUnlocked" class="space-y-4">
 
-                <div
-                    v-for="(question, index) in material.reflection_questions"
-                    :key="index">
+                <div v-for="(question, index) in material.reflection_questions" :key="index">
 
-                    <label
-                        class="mb-2 block text-sm font-semibold text-slate-700">
+                    <label class="mb-2 block text-sm font-semibold text-slate-700">
 
                         {{ index + 1 }}.
                         {{ question }}
                     </label>
 
-                    <textarea
-                        v-model="reflectionAnswers[index]"
-                        rows="3"
+                    <textarea v-model="reflectionAnswers[index]" rows="3"
                         class="w-full rounded-lg border border-slate-200 p-2.5 text-sm outline-none transition focus:border-blue-500" />
                 </div>
 
                 <div class="flex justify-end">
 
-                    <button
-                        :disabled="!reflectionCompleted || readingProgress < 70"
-                        @click="saveReflection"
-                        :class="reflectionCompleted && readingProgress >= 70
-                            ? 'bg-purple-600 hover:bg-purple-700'
-                            : 'cursor-not-allowed bg-slate-200 text-slate-500'
-                            "
-                        class="rounded-lg px-4 py-2 text-xs font-semibold text-white transition">
+                    <button :disabled="!reflectionCompleted || readingProgress < 70" @click="saveReflection" :class="reflectionCompleted && readingProgress >= 70
+                        ? 'bg-purple-600 hover:bg-purple-700'
+                        : 'cursor-not-allowed bg-slate-200 text-slate-500'
+                        " class="rounded-lg px-4 py-2 text-xs font-semibold text-white transition">
 
                         {{
                             reflectionSaved
-                                ? '✅ Tersimpan'
+                                ? 'Tersimpan'
                                 : 'Simpan Refleksi'
                         }}
                     </button>
@@ -709,20 +675,17 @@ watch(
             </div>
 
             <!-- LOCKED -->
-            <div
-                v-else
-                class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700">
+            <div v-else class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700">
 
-                🔒 Isi pertanyaan pemantik
+                Isi pertanyaan pemantik
                 terlebih dahulu untuk membuka
                 refleksi.
             </div>
 
             <!-- INFO -->
-            <div
-                class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-3 text-xs text-blue-700">
+            <div class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-3 text-xs text-blue-700">
 
-                🔒 Kuis akan terbuka setelah
+                Kuis akan terbuka setelah
                 refleksi selesai diisi.
             </div>
         </section>
@@ -730,13 +693,11 @@ watch(
         <!-- DOWNLOAD -->
         <section class="rounded-xl bg-white p-3 shadow-sm">
 
-            <div
-                class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
                 <div class="flex items-start gap-3">
 
-                    <div
-                        class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100">
 
                         <Download class="h-5 w-5 text-red-500" />
                     </div>
@@ -756,10 +717,7 @@ watch(
                     </div>
                 </div>
 
-                <a
-                    v-if="material.pdf_url"
-                    :href="material.pdf_url"
-                    target="_blank"
+                <a v-if="material.pdf_url" :href="material.pdf_url" target="_blank"
                     class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
 
                     <Download class="h-4 w-4" />
@@ -770,30 +728,24 @@ watch(
         </section>
 
         <!-- FOOTER -->
-        <section
-            class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <section class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
 
-            <a
-                :href="`/student/meetings/${props.meeting.id}`"
+            <a :href="`/student/meetings/${props.meeting.id}`"
                 class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
 
                 ← Kembali
             </a>
 
-            <Link
-                v-if="canProceed"
-                :href="`/student/meetings/${props.meeting.id}/quiz`"
+            <Link v-if="canProceed" :href="`/student/meetings/${props.meeting.id}/quiz`"
                 class="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-600">
 
                 Lanjut ke Kuis →
             </Link>
 
-            <button
-                v-else
-                disabled
+            <button v-else disabled
                 class="cursor-not-allowed rounded-lg bg-slate-300 px-4 py-2 text-sm font-semibold text-slate-500">
 
-                🔒 Selesaikan Refleksi
+                Selesaikan Refleksi
             </button>
         </section>
     </div>

@@ -168,7 +168,7 @@ const submitPractice =
         <h1
           class="mt-3 text-2xl font-bold">
 
-          🧪 Praktikum
+          Praktikum
           {{ props.meeting.title }}
         </h1>
 
@@ -357,7 +357,7 @@ const submitPractice =
           <h2
             class="text-sm font-bold text-blue-700">
 
-            💻 Buka MakeCode
+            Buka MakeCode
           </h2>
 
           <p
@@ -478,8 +478,8 @@ const submitPractice =
 
             {{
               canSubmit
-                ? '🚀 Kumpulkan'
-                : '🔒 Masukkan Link'
+                ? 'Kumpulkan'
+                : 'Masukkan Link'
             }}
           </button>
         </div>
@@ -514,7 +514,7 @@ const submitPractice =
         :href="`/student/meetings/${props.meeting.id}/lkpd`"
         class="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
 
-        🚀 Lanjut ke LKPD
+        Lanjut ke LKPD
       </a>
 
       <!-- LOCKED -->
@@ -523,7 +523,7 @@ const submitPractice =
         disabled
         class="cursor-not-allowed rounded-lg bg-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-500">
 
-        🔒 LKPD Terkunci
+        LKPD Terkunci
       </button>
     </section>
   </div>

@@ -241,7 +241,7 @@ const iconMap = {
       <!-- NOTE -->
       <div class="mt-4 rounded-xl border border-blue-200 bg-blue-50 p-3 text-xs text-blue-700">
 
-        📌 Kamu harus menyelesaikan
+        Kamu harus menyelesaikan
         tahapan sebelumnya sebelum
         membuka tahap berikutnya.
       </div>

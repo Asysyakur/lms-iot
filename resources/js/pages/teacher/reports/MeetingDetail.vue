@@ -172,7 +172,7 @@ const formatAnswer =
 
           <h1 class="text-lg font-bold">
 
-            📘 {{ props.meeting.title }}
+            {{ props.meeting.title }}
           </h1>
 
           <p class="mt-1 text-xs text-emerald-100">

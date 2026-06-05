@@ -193,7 +193,7 @@ const submitLkpd = async () => {
 
         <h1 class="mt-3 text-2xl font-bold">
 
-          📄 LKPD
+          LKPD
           {{ props.meeting.title }}
         </h1>
 
@@ -535,8 +535,8 @@ const submitLkpd = async () => {
 
             {{
               canSubmit
-                ? '🚀 Upload LKPD'
-                : '🔒 Pilih File'
+                ? 'Upload LKPD'
+                : 'Pilih File'
             }}
           </button>
         </div>
@@ -570,13 +570,13 @@ const submitLkpd = async () => {
       " :href="`/student/meetings/${props.meeting.id}/evaluation`"
         class="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
 
-        🚀 Lanjut ke Evaluation
+        Lanjut ke Evaluation
       </a>
 
       <button v-else disabled
         class="cursor-not-allowed rounded-lg bg-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-500">
 
-        🔒 Evaluation Terkunci
+        Evaluation Terkunci
       </button>
     </section>
   </div>

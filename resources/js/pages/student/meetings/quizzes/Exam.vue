@@ -174,7 +174,7 @@ const submitQuiz =
           <h1
             class="mt-3 text-2xl font-bold">
 
-            🧠 Kuis
+            Kuis
             {{ props.meeting.title || 'Kuis' }}
           </h1>
 
@@ -313,7 +313,7 @@ const submitQuiz =
             @click="submitQuiz"
             class="cursor-pointer rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700">
 
-            🚀 Selesai
+            Selesai
           </button>
         </div>
       </div>
@@ -386,7 +386,7 @@ const submitQuiz =
           <div
             class="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-3 text-xs text-blue-700">
 
-            💡 Pastikan semua soal
+            Pastikan semua soal
             sudah dijawab sebelum
             mengumpulkan kuis.
           </div>

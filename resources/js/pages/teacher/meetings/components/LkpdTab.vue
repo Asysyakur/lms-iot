@@ -121,7 +121,7 @@ const toggleLkpd =
 
         <h2 class="text-sm font-bold text-slate-800">
 
-          📄 Pengaturan LKPD
+          Pengaturan LKPD
         </h2>
 
         <p class="mt-1 text-xs text-slate-500">

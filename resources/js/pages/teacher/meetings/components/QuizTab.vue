@@ -290,7 +290,7 @@ const toggleQuizMeeting =
 
         <h2 class="text-sm font-bold text-slate-800">
 
-          📝 Pengaturan Kuis
+          Pengaturan Kuis
         </h2>
 
         <p class="mt-1 text-xs text-slate-500">
