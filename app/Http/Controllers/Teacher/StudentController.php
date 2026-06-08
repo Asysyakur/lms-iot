@@ -13,23 +13,58 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+
             'name' => ['required'],
-            'class' => ['required'],
-            'username' => ['required', 'unique:users,username'],
-            'password' => ['required', 'min:6'],
+
+            'role' => [
+                'required',
+                Rule::in([
+                    'student',
+                    'teacher',
+                ]),
+            ],
+
+            'class' => [
+                Rule::requiredIf(
+                    $request->role === 'student'
+                ),
+            ],
+
+            'username' => [
+                'required',
+                'unique:users,username',
+            ],
+
+            'password' => [
+                'required',
+                'min:6',
+            ],
         ]);
 
         User::create([
+
             'name' => $request->name,
-            'class' => $request->class,
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
-            'role' => 'student',
+
+            'class' =>
+                $request->role === 'student'
+                ? $request->class
+                : null,
+
+            'username' =>
+                $request->username,
+
+            'password' =>
+                Hash::make(
+                    $request->password
+                ),
+
+            'role' =>
+                $request->role,
         ]);
 
         return back()->with(
             'success',
-            'Akun siswa berhasil dibuat'
+            'Akun berhasil dibuat'
         );
     }
 
@@ -39,7 +74,7 @@ class StudentController extends Controller
 
         return back()->with(
             'success',
-            'Akun siswa berhasil dihapus'
+            'Akun berhasil dihapus'
         );
     }
 
@@ -52,7 +87,19 @@ class StudentController extends Controller
 
             'name' => ['required'],
 
-            'class' => ['required'],
+            'role' => [
+                'required',
+                Rule::in([
+                    'student',
+                    'teacher',
+                ]),
+            ],
+
+            'class' => [
+                Rule::requiredIf(
+                    $request->role === 'student'
+                ),
+            ],
 
             'username' => [
 
@@ -68,34 +115,37 @@ class StudentController extends Controller
         $user->update([
 
             'name' =>
-            $request->name,
+                $request->name,
 
             'class' =>
-            $request->class,
+                $request->role === 'student'
+                ? $request->class
+                : null,
 
             'username' =>
-            $request->username,
+                $request->username,
+
+            'role' =>
+                $request->role,
         ]);
 
         /**
          * PASSWORD OPTIONAL
          */
-        if (
-            $request->password
-        ) {
+        if ($request->password) {
 
             $user->update([
 
                 'password' =>
-                Hash::make(
-                    $request->password
-                ),
+                    Hash::make(
+                        $request->password
+                    ),
             ]);
         }
 
         return back()->with(
             'success',
-            'Akun siswa berhasil diupdate'
+            'Akun berhasil diupdate'
         );
     }
 }

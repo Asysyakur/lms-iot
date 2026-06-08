@@ -29,12 +29,14 @@ defineOptions({
     TeacherSidebarLayout,
 });
 
+// interface
 interface Student {
   id: number;
   name: string;
-  class: string;
+  class: string | null;
   username: string;
   password: string;
+  role: 'student' | 'teacher';
   last_seen_at: string | null;
 }
 
@@ -45,12 +47,13 @@ const props = defineProps<{
 const form = useForm({
   name: '',
 
-  class:
-    'X TKJ-T-1',
+  class: 'X TKJ-T-1',
 
   username: '',
 
   password: '',
+
+  role: 'student',
 });
 
 const classOptions = [
@@ -68,25 +71,28 @@ const deletedStudents =
 const editingStudent =
   ref<any>(null);
 
-const editStudent =
-  (
-    student: Student
-  ) => {
+const editStudent = (
+  student: Student
+) => {
 
-    editingStudent.value =
-      student;
+  editingStudent.value =
+    student;
 
-    form.name =
-      student.name;
+  form.name =
+    student.name;
 
-    form.class =
-      student.class;
+  form.class =
+    student.class ??
+    'X TKJ-T-1';
 
-    form.username =
-      student.username;
+  form.username =
+    student.username;
 
-    form.password = '';
-  };
+  form.role =
+    student.role;
+
+  form.password = '';
+};
 
 const resetForm =
   () => {
@@ -104,6 +110,36 @@ const totalStudents =
   computed(() => {
 
     return props.students.length;
+  });
+
+const sortedStudents =
+  computed(() => {
+
+    return [
+      ...props.students
+    ].sort((a, b) => {
+
+      /**
+       * TEACHER DI ATAS
+       */
+      if (
+        a.role === 'teacher'
+        &&
+        b.role !== 'teacher'
+      ) {
+        return -1;
+      }
+
+      if (
+        a.role !== 'teacher'
+        &&
+        b.role === 'teacher'
+      ) {
+        return 1;
+      }
+
+      return 0;
+    });
   });
 
 const activeStudents =
@@ -134,6 +170,15 @@ const activeStudents =
           5 * 60 * 1000
         );
       }
+    ).length;
+  });
+
+const studentCount =
+  computed(() => {
+
+    return props.students.filter(
+      (student) =>
+        student.role === 'student'
     ).length;
   });
 
@@ -207,7 +252,7 @@ const addStudent =
             () => {
 
               toast.success(
-                'Akun siswa berhasil diupdate',
+                'akun berhasil diupdate',
               );
 
               resetForm();
@@ -239,7 +284,7 @@ const addStudent =
           () => {
 
             toast.success(
-              'Akun siswa berhasil dibuat',
+              'akun berhasil dibuat',
             );
 
             resetForm();
@@ -249,7 +294,7 @@ const addStudent =
           () => {
 
             toast.error(
-              'Gagal membuat akun siswa',
+              'Gagal membuat akun',
             );
           },
       },
@@ -263,7 +308,7 @@ const removeStudent =
 
     const confirmed =
       confirm(
-        'Hapus akun siswa ini?',
+        'Hapus akun ini?',
       );
 
     if (!confirmed) {
@@ -282,7 +327,7 @@ const removeStudent =
             deletedStudents.value++;
 
             toast.success(
-              'Akun siswa berhasil dihapus',
+              'akun berhasil dihapus',
             );
           },
 
@@ -316,7 +361,7 @@ const removeStudent =
 
         <h1 class="mt-3 text-2xl font-bold">
 
-          Kelola Akun Siswa
+          Kelola Akun
         </h1>
       </div>
     </section>
@@ -341,14 +386,14 @@ const removeStudent =
 
               {{
                 editingStudent
-                  ? 'Edit Akun Siswa'
-                  : 'Tambah Akun Siswa'
+                  ? 'Edit Akun'
+                  : 'Tambah Akun'
               }}
             </h2>
 
             <p class="mt-1 text-xs text-slate-500">
 
-              Isi data akun siswa.
+              Isi data akun.
             </p>
           </div>
         </div>
@@ -369,7 +414,7 @@ const removeStudent =
           </div>
 
           <!-- KELAS -->
-          <div>
+          <div v-if="form.role === 'student'">
 
             <label class="mb-2 block text-sm font-semibold text-slate-700">
 
@@ -406,6 +451,23 @@ const removeStudent =
 
             <input v-model="form.password" type="text" placeholder="password123"
               class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500" />
+          </div>
+          <!-- ROLE -->
+          <div>
+            <label class="mb-2 block text-sm font-semibold text-slate-700">
+              Role
+            </label>
+
+            <select v-model="form.role"
+              class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500">
+              <option value="student">
+                Student
+              </option>
+
+              <option value="teacher">
+                Teacher
+              </option>
+            </select>
           </div>
         </div>
 
@@ -514,18 +576,18 @@ const removeStudent =
 
           <h2 class="text-sm font-bold text-slate-800">
 
-            Daftar Akun Siswa
+            Daftar Akun
           </h2>
 
           <p class="mt-1 text-xs text-slate-500">
 
-            Seluruh akun siswa.
+            Seluruh Akun.
           </p>
         </div>
 
         <div class="rounded-xl bg-slate-100 px-3 py-1.5 text-[11px] font-semibold text-slate-600">
 
-          {{ students.length }}
+          {{ studentCount }}
           Siswa
         </div>
       </div>
@@ -549,6 +611,8 @@ const removeStudent =
 
                 Nama
               </th>
+
+              <th class="px-4 py-3 text-left text-[11px] font-semibold"> Role </th>
 
               <th class="px-4 py-3 text-left text-[11px] font-semibold">
 
@@ -579,9 +643,9 @@ const removeStudent =
           <tbody>
 
             <tr v-for="(
-student,
-  index
-              ) in students" :key="student.id" class="border-b border-slate-100 transition hover:bg-slate-50">
+              student,
+                index
+              ) in sortedStudents" :key="student.id" class="border-b border-slate-100 transition hover:bg-slate-50">
 
               <!-- NO -->
               <td class="px-4 py-3 text-sm text-slate-700">
@@ -593,6 +657,13 @@ student,
               <td class="px-4 py-3 text-sm font-semibold text-slate-800">
 
                 {{ student.name }}
+              </td>
+
+              <!-- ROLE -->
+              <td class="px-4 py-3 text-sm"> <span v-if="student.role === 'teacher'"
+                  class="rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700"> Teacher </span>
+                <span v-else class="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700"> Student
+                </span>
               </td>
 
               <!-- CLASS -->
@@ -670,7 +741,7 @@ student,
 
               <td colspan="5" class="px-4 py-10 text-center text-sm text-slate-500">
 
-                Belum ada akun siswa
+                Belum ada akun
               </td>
             </tr>
 

@@ -235,16 +235,22 @@ Route::middleware([
         return Inertia::render(
             'teacher/students/Index',
             [
-                'students' => User::where(
+                'students' => User::whereIn(
                     'role',
-                    'student'
-                )->latest()->get([
-                    'id',
-                    'name',
-                    'class',
-                    'username',
-                    'last_seen_at',
-                ]),
+                    [
+                        'student',
+                        'teacher',
+                    ]
+                )
+                    ->latest()
+                    ->get([
+                        'id',
+                        'name',
+                        'class',
+                        'username',
+                        'role',
+                        'last_seen_at',
+                    ]),
             ]
         );
     })->name('teacher.students');
