@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, useForm } from '@inertiajs/vue3';
+import Logo from '@/../../public/LOGO.png';
 
 defineOptions({
     layout: undefined,
@@ -54,9 +55,12 @@ const submit = () => {
                 <div
                     class="relative z-10 flex w-full flex-col items-center justify-center px-12 text-center text-white">
 
-                    <h1 class="text-2xl font-black leading-tight">
+                    <h1 class="text-5xl font-black leading-tight">
                         Bit-Learn
                     </h1>
+
+                    <img :src="Logo" alt="Illustration"
+                        class="mt-6 h-48 w-auto rounded-2xl shadow-xl object-contain" />
 
                     <p class="mt-6 max-w-xl text-base leading-relaxed text-sky-100">
                         Platform pembelajaran interaktif

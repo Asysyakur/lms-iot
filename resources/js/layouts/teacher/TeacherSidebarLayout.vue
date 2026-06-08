@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
-
+import Logo from '@/../../public/LOGO.png';
 import {
   LayoutDashboard,
   Users,
@@ -72,37 +72,32 @@ const menus = [
 
     <!-- MOBILE HEADER -->
     <header
-      class="sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 shadow-sm lg:hidden">
+      class="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white/90 px-3 py-3 backdrop-blur lg:hidden">
 
-      <div>
-        <h1 class="text-sm font-black text-slate-800">
-          LMS IoT
-        </h1>
+      <div class="flex items-center gap-3">
+        <img :src="Logo" alt="Bit-Learn Logo" class="h-8 w-8 rounded-sm" />
+        <div>
+          <h1 class="text-sm font-black text-slate-800">
+            Bit-Learn
+          </h1>
 
-        <p class="text-[11px] text-slate-500">
-          Guru Panel
-        </p>
+          <p class="text-[11px] text-slate-500">
+            Guru Panel
+          </p>
+        </div>
+
       </div>
-
-      <button
-        @click="sidebarOpen = !sidebarOpen"
+      <button @click="sidebarOpen = !sidebarOpen"
         class="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white transition hover:bg-slate-50">
 
-        <Menu
-          class="h-5 w-5 text-slate-700 transition-all duration-300"
-          :class="
-            sidebarOpen
-              ? 'rotate-90 scale-0 opacity-0'
-              : 'rotate-0 scale-100 opacity-100'
-          "
-        />
+        <Menu class="h-5 w-5 text-slate-700 transition-all duration-300" :class="sidebarOpen
+          ? 'rotate-90 scale-0 opacity-0'
+          : 'rotate-0 scale-100 opacity-100'
+          " />
 
-        <div
-          class="absolute text-slate-700 transition-all duration-300"
-          :class="
-            sidebarOpen
-              ? 'rotate-0 scale-100 opacity-100'
-              : 'rotate-90 scale-0 opacity-0'
+        <div class="absolute text-slate-700 transition-all duration-300" :class="sidebarOpen
+          ? 'rotate-0 scale-100 opacity-100'
+          : 'rotate-90 scale-0 opacity-0'
           ">
           ✕
         </div>
@@ -110,97 +105,76 @@ const menus = [
     </header>
 
     <!-- OVERLAY -->
-    <div
-      v-if="sidebarOpen"
-      @click="sidebarOpen = false"
+    <div v-if="sidebarOpen" @click="sidebarOpen = false"
       class="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden" />
 
     <!-- SIDEBAR -->
-    <aside
-      :class="
-        sidebarOpen
-          ? 'translate-x-0'
-          : '-translate-x-full lg:translate-x-0'
+    <aside :class="sidebarOpen
+      ? 'translate-x-0'
+      : '-translate-x-full lg:translate-x-0'
       "
-      class="fixed top-0 left-0 z-50 flex h-screen w-64 flex-col overflow-y-auto bg-linear-to-b from-[#071A3D] to-[#0B2B63] text-white transition-transform duration-300">
+      class="fixed top-0 left-0 z-50 flex h-screen w-60 shrink-0 flex-col overflow-y-auto bg-linear-to-b from-[#071A3D] to-[#0B2B63] text-white shadow-2xl transition-transform duration-300">
 
       <!-- LOGO -->
-      <div class="border-b border-white/10 px-5 py-5">
-        <h1 class="text-lg font-black text-white">
-          LMS IoT
-        </h1>
+      <div class="p-4">
+        <Link href="/teacher/dashboard" class="flex items-center gap-3">
 
-        <p class="mt-1 text-xs text-slate-300">
-          Guru Panel
-        </p>
+          <img :src="Logo" alt="Bit-Learn Logo" class="h-11 w-11 rounded-sm" />
+
+          <div>
+            <h1 class="text-sm font-bold leading-tight">
+              Bit-Learn
+            </h1>
+
+            <p class="mt-0.5 text-xs text-slate-300">
+              Guru Panel
+            </p>
+          </div>
+        </Link>
       </div>
 
-      <!-- NAV -->
-      <div class="flex-1 px-3 py-5">
+      <!-- MENU -->
+      <div class="flex-1 px-3 pb-4">
 
-        <div
-          class="mb-4 px-3 text-[11px] font-bold uppercase tracking-widest text-slate-400">
-          Navigation
-        </div>
+        <nav class="space-y-1.5">
 
-        <nav class="space-y-2">
-          <Link
-            v-for="menu in menus"
-            :key="menu.title"
-            :href="menu.href"
-            @click="sidebarOpen = false"
-            class="group flex items-center gap-3 rounded-xl px-3 py-2.5 transition"
-            :class="
-              page.url.startsWith(menu.href)
-                ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
-                : 'text-slate-300 hover:bg-white/10 hover:text-white'
-            ">
-
-            <div
-              class="flex h-9 w-9 items-center justify-center rounded-lg"
-              :class="
-                page.url.startsWith(menu.href)
-                  ? 'bg-white/20'
-                  : menu.color
+          <Link v-for="menu in menus" :key="menu.title" :href="menu.href" @click="sidebarOpen = false"
+            class="flex items-center gap-2.5 rounded-xl px-3 py-2.5 transition" :class="page.url.startsWith(menu.href)
+              ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg'
+              : 'text-slate-200 hover:bg-white/10'
               ">
 
-              <component
-                :is="menu.icon"
-                class="h-4 w-4" />
+            <div class="flex h-7 w-7 items-center justify-center rounded-lg" :class="page.url.startsWith(menu.href)
+              ? 'bg-white/20'
+              : menu.color
+              ">
+
+              <component :is="menu.icon" class="h-3.5 w-3.5" />
             </div>
 
-            <span class="text-sm font-semibold">
+            <span class="text-sm font-medium">
               {{ menu.title }}
             </span>
           </Link>
+
         </nav>
       </div>
 
       <!-- FOOTER -->
       <div class="border-t border-white/10 p-3">
-        <Link
-          href="/logout"
-          method="post"
-          as="button"
-          class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-slate-300 transition hover:bg-red-500/20 hover:text-red-300">
 
-          <div
-            class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-500/20">
+        <Link href="/logout" method="post" as="button"
+          class="flex w-full cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-slate-300 transition hover:bg-red-500/20 hover:text-red-300">
 
-            <LogOut class="h-4 w-4" />
-          </div>
+          <LogOut class="h-4 w-4" />
 
-          <span class="text-sm font-semibold">
-            Log out
-          </span>
+          <span>Keluar</span>
         </Link>
       </div>
     </aside>
 
     <!-- CONTENT -->
-    <main
-      class="min-w-0 overflow-x-hidden p-4 md:p-5 lg:ml-64">
-
+    <main class="min-w-0 flex-1 p-3 md:p-5 lg:ml-60">
       <slot />
     </main>
   </div>

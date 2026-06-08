@@ -167,14 +167,12 @@ const getOptionText = (
           </div>
 
           <!-- EXPLANATION -->
-          <div class="mt-4 rounded-xl bg-slate-50 p-3 text-sm text-slate-600">
-
-
+          <!-- <div class="mt-4 rounded-xl bg-slate-50 p-3 text-sm text-slate-600">
             {{
               answer.question.explanation ??
               'Pelajari kembali materi terkait soal ini.'
             }}
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

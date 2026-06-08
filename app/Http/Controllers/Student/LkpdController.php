@@ -59,7 +59,7 @@ class LkpdController extends Controller
 
                 'file',
 
-                'mimes:pdf,doc,docx,jpg,jpeg,png',
+                'mimes:pdf,doc,docx',
 
                 'max:10240',
             ],

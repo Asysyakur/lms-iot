@@ -202,7 +202,7 @@ const toggleLkpd =
       </div>
 
       <!-- GOOGLE DOCS -->
-      <div>
+      <!-- <div>
 
         <label class="mb-2 block text-sm font-semibold text-slate-700">
 
@@ -211,7 +211,7 @@ const toggleLkpd =
 
         <input v-model="form.google_docs_url" type="text" placeholder="https://docs.google.com/..."
           class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-orange-500" />
-      </div>
+      </div> -->
 
       <!-- NOTE -->
       <div>

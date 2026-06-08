@@ -42,27 +42,50 @@ const instructions = [
   'Pastikan link Google Docs dapat diakses guru.',
 ];
 
-const templateLink =
+const allowedExtensions = [
+  'pdf',
+  'doc',
+  'docx',
+];
+
+const templateFileUrl =
   computed(() => {
 
-    return (
-      props.lkpd
-        ?.google_docs_url
-      ||
-      null
-    );
+    if (
+      !props.lkpd?.template_file
+    ) {
+      return null;
+    }
+
+    return `/storage/${props.lkpd.template_file}`;
   });
 
-const templateFile =
-  computed(() => {
+const validateFile = (
+  file: File
+) => {
 
-    return (
-      props.lkpd
-        ?.template_file
-      ||
-      null
+  const extension =
+    file.name
+      .split('.')
+      .pop()
+      ?.toLowerCase();
+
+  if (
+    !extension ||
+    !allowedExtensions.includes(
+      extension
+    )
+  ) {
+
+    toast.error(
+      'File harus PDF atau Word'
     );
-  });
+
+    return false;
+  }
+
+  return true;
+};
 
 const submissionNote =
   computed(() => {
@@ -95,8 +118,16 @@ const handleDrop = (
     return;
   }
 
-  selectedFile.value =
+  const file =
     event.dataTransfer.files[0];
+
+  if (
+    !validateFile(file)
+  ) {
+    return;
+  }
+
+  selectedFile.value = file;
 };
 
 const handleDragOver = (
@@ -124,8 +155,16 @@ const handleFileChange = (
     return;
   }
 
-  selectedFile.value =
+  const file =
     target.files[0];
+
+  if (
+    !validateFile(file)
+  ) {
+    return;
+  }
+
+  selectedFile.value = file;
 };
 
 const evalOpened = computed(() => {
@@ -369,7 +408,7 @@ const submitLkpd = async () => {
     </section>
 
     <!-- TEMPLATE -->
-    <section class="rounded-xl border border-blue-200 bg-blue-50 p-4">
+    <!-- <section class="rounded-xl border border-blue-200 bg-blue-50 p-4">
 
       <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
@@ -403,9 +442,9 @@ const submitLkpd = async () => {
           Buka Template
         </a>
       </div>
-    </section>
+    </section> -->
     <!-- FILE TEMPLATE -->
-    <section v-if="templateFile" class="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+    <section v-if="templateFileUrl" class="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
 
       <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
@@ -420,7 +459,7 @@ const submitLkpd = async () => {
 
             <h2 class="text-sm font-bold text-emerald-700">
 
-              File Template LKPD
+              Template LKPD
             </h2>
 
             <p class="mt-1 text-xs text-emerald-600">
@@ -430,7 +469,7 @@ const submitLkpd = async () => {
           </div>
         </div>
 
-        <a :href="`/storage/${templateFile}`" target="_blank"
+        <a :href="templateFileUrl" target="_blank"
           class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700">
 
           <ExternalLink class="h-4 w-4" />
@@ -451,32 +490,6 @@ const submitLkpd = async () => {
 
         {{ submissionNote }}
       </p>
-    </section>
-
-    <!-- WARNING -->
-    <section class="rounded-xl border border-amber-200 bg-amber-50 p-4">
-
-      <div class="flex items-start gap-3">
-
-        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100">
-
-          <Lock class="h-4 w-4 text-amber-600" />
-        </div>
-
-        <div>
-
-          <h2 class="text-sm font-bold text-amber-700">
-
-            Ketentuan Pengumpulan
-          </h2>
-
-          <p class="mt-1 text-sm leading-relaxed text-amber-700">
-
-            Pastikan file dapat diakses guru
-            sebelum dikumpulkan.
-          </p>
-        </div>
-      </div>
     </section>
 
     <!-- SUBMIT -->
@@ -521,12 +534,11 @@ const submitLkpd = async () => {
 
           <p class="mt-1 text-xs text-slate-500">
 
-            PDF, DOCX, JPG, PNG
+            PDF, DOC, DOCX
             (maks 10 MB)
           </p>
 
-          <input ref="fileInput" type="file" class="hidden" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-            @change="handleFileChange" />
+          <input ref="fileInput" type="file" class="hidden" accept=".pdf,.doc,.docx" @change="handleFileChange" />
 
           <button type="button" @click="fileInput?.click()"
             class="mt-4 rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-600">

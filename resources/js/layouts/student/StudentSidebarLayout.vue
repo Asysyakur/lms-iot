@@ -35,7 +35,7 @@ const sidebarOpen =
 
                 <div>
                     <h1 class="text-sm font-black leading-tight text-slate-800">
-                        LMS IoT
+                        Bit-Learn
                     </h1>
 
                     <p class="text-[11px] text-slate-500">

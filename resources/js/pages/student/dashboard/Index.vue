@@ -40,10 +40,10 @@ const displayedActivities = computed(() => {
             <div class="flex items-start gap-3">
 
                 <!-- AVATAR -->
-                <div
+                <!-- <div
                     class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-500 text-xl font-bold">
                     {{ props.student.name?.charAt(0) }}
-                </div>
+                </div> -->
 
                 <!-- INFO -->
                 <div class="min-w-0">
@@ -84,7 +84,7 @@ const displayedActivities = computed(() => {
                     </p>
 
                     <!-- TAG -->
-                    <div class="mt-3 flex flex-wrap gap-1.5">
+                    <!-- <div class="mt-3 flex flex-wrap gap-1.5">
 
                         <span
                             class="rounded-full bg-purple-100 px-2.5 py-1 text-[10px] font-semibold text-purple-700">
@@ -96,7 +96,7 @@ const displayedActivities = computed(() => {
                             class="rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-semibold text-amber-700">
                             Progress {{ props.progress }}%
                         </span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

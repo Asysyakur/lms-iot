@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
-
+import Logo from '@/../../public/LOGO.png';
 import {
   ChevronDown,
   ChevronRight,
@@ -54,19 +54,18 @@ const toggleMeeting = (id: number) => {
 
     <!-- LOGO -->
     <div class="p-4">
-      <Link href="/student/dashboard" class="flex items-start gap-3">
-        <div
-          class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500 text-sm font-bold shadow-lg">
-          IoT
-        </div>
+      <Link href="/student/dashboard" class="flex items-center gap-3">
+        <img :src="Logo"
+          class="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-emerald-500 text-sm font-bold shadow-lg" />
+
 
         <div>
           <h1 class="text-sm font-bold leading-tight">
-            Learning Management System
+            Bit-Learn
           </h1>
 
           <p class="mt-0.5 text-xs text-slate-300">
-            IoT Micro:bit — Kelas XI TKJ
+            Student Panel
           </p>
         </div>
       </Link>
