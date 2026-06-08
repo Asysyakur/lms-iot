@@ -29,6 +29,11 @@ const selectedFile = ref<File | null>(
   null
 );
 
+const fileInput =
+  ref<HTMLInputElement | null>(
+    null
+  );
+
 const submitted = ref(false);
 
 const currentSubmission = ref(
