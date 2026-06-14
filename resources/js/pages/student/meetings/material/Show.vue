@@ -25,11 +25,11 @@ import { toast } from 'vue-sonner';
 
 import * as pdfjsLib from 'pdfjs-dist';
 
+import pdfWorker from
+'pdfjs-dist/build/pdf.worker.min.js?url';
+
 pdfjsLib.GlobalWorkerOptions.workerSrc =
-    new URL(
-        'pdfjs-dist/build/pdf.worker.mjs',
-        import.meta.url,
-    ).toString();
+    pdfWorker;
 
 defineOptions({
     layout: StudentSidebarLayout,
@@ -264,99 +264,102 @@ const renderPdf = async () => {
         return;
     }
 
-    pdfContainer.value.innerHTML =
-        '';
+    try {
 
-    const pdf =
-        await pdfjsLib
-            .getDocument(
-                props.material.pdf_url
-            )
-            .promise;
+        pdfContainer.value.innerHTML =
+            '';
 
-    for (
-        let pageNum = 1;
-        pageNum <= pdf.numPages;
-        pageNum++
-    ) {
-
-        const page =
-            await pdf.getPage(
-                pageNum
-            );
-
-        const viewport =
-            page.getViewport({
-                scale: 1,
+        const loadingTask =
+            pdfjsLib.getDocument({
+                url: props.material.pdf_url,
             });
 
-        const pageWrapper =
-            document.createElement(
-                'div'
-            );
+        const pdf =
+            await loadingTask.promise;
 
-        pageWrapper.className =
-            'relative mb-4 flex items-center justify-center rounded-xl bg-white shadow-sm';
+        for (
+            let pageNum = 1;
+            pageNum <= pdf.numPages;
+            pageNum++
+        ) {
 
-        const canvas =
-            document.createElement(
-                'canvas'
-            );
-
-        const context =
-            canvas.getContext('2d');
-
-        if (!context) {
-            continue;
-        }
-
-        canvas.width =
-            viewport.width;
-
-        canvas.height =
-            viewport.height;
-
-        canvas.style.width =
-            `${viewport.width}px`;
-
-        canvas.style.height =
-            `${viewport.height}px`;
-
-        pageWrapper.appendChild(
-            canvas
-        );
-
-        pdfContainer.value.appendChild(
-            pageWrapper
-        );
-
-        await page.render({
-            canvasContext:
-                context as any,
-            viewport,
-        } as any).promise;
-    }
-
-    nextTick(() => {
-
-        updateProgress();
-
-        pdfContainer.value?.addEventListener(
-            'scroll',
-            () => {
-
-                requestAnimationFrame(
-                    updateProgress
+            const page =
+                await pdf.getPage(
+                    pageNum
                 );
 
-            },
-            {
-                passive: true,
+            const viewport =
+                page.getViewport({
+                    scale: 1.4,
+                });
+
+            const canvas =
+                document.createElement(
+                    'canvas'
+                );
+
+            const context =
+                canvas.getContext('2d');
+
+            if (!context) {
+                continue;
             }
+
+            canvas.width =
+                viewport.width;
+
+            canvas.height =
+                viewport.height;
+
+            canvas.className =
+                'mb-4 rounded-lg shadow';
+
+            pdfContainer.value.appendChild(
+                canvas
+            );
+
+            await page.render({
+                canvasContext:
+                    context,
+                viewport,
+            }).promise;
+        }
+
+        nextTick(() => {
+
+            updateProgress();
+
+            pdfContainer.value?.addEventListener(
+                'scroll',
+                () => {
+
+                    requestAnimationFrame(
+                        updateProgress
+                    );
+
+                },
+                {
+                    passive: true,
+                }
+            );
+        });
+
+    } catch (error) {
+
+        console.error(
+            'PDF ERROR:',
+            error
         );
 
-    });
+        if (pdfContainer.value) {
 
+            pdfContainer.value.innerHTML = `
+                <div class="flex h-full items-center justify-center text-sm text-red-500">
+                    Gagal memuat PDF
+                </div>
+            `;
+        }
+    }
 };
 
 onMounted(async () => {
