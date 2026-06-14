@@ -15,6 +15,18 @@ class QuizController extends Controller
         Meeting $meeting
     ) {
 
+        if (
+            !$meeting->quiz ||
+            !$meeting->quiz->is_active
+        ) {
+
+            return redirect()
+                ->route(
+                    'student.meeting.show',
+                    $meeting->id
+                );
+        }
+
         /*
     |--------------------------------------------------------------------------
     | CHECK PASSED QUIZ

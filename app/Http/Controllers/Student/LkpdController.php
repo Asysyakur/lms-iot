@@ -19,6 +19,18 @@ class LkpdController extends Controller
             'evaluation',
         ]);
 
+        if (
+            !$meeting->lkpd ||
+            !$meeting->lkpd->is_active
+        ) {
+
+            return redirect()
+                ->route(
+                    'student.meeting.show',
+                    $meeting->id
+                );
+        }
+
         $submission =
             LkpdSubmission::where(
                 'user_id',

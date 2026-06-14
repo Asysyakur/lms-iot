@@ -150,10 +150,8 @@ const submit =
           formData,
         );
 
-      Object.assign(
-        props.meeting.material,
-        response.data.material,
-      );
+      props.meeting.material =
+        response.data.material;
 
       toast.success(
         'Materi berhasil disimpan'
@@ -185,10 +183,8 @@ const toggleMaterial =
           `/teacher/materials/${props.meeting.material.id}/toggle`
         );
 
-      Object.assign(
-        props.meeting.material,
-        response.data.material,
-      );
+      props.meeting.material =
+        response.data.material;
 
       toast.success(
         response.data.material
@@ -227,8 +223,8 @@ const toggleMaterial =
 
       <!-- STATUS -->
       <button @click="toggleMaterial" class="rounded-lg px-3 py-2 text-xs font-semibold transition" :class="props.meeting?.material?.is_active
-          ? 'bg-emerald-500 text-white hover:bg-emerald-600'
-          : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+        ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+        : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
         ">
 
         {{

@@ -44,6 +44,11 @@ const iconMap = {
   FileSpreadsheet,
   ClipboardList,
 };
+
+const firstStep =
+  steps.find(
+    step => step.id === 1
+  );
 </script>
 
 <template>
@@ -114,11 +119,12 @@ const iconMap = {
 
                   <!-- CIRCLE -->
                   <div :class="step.completed
-                      ? 'bg-emerald-500 text-white'
-                      : step.active
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-slate-200 text-slate-500'
-                    " class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold shadow-sm">
+                    ? 'bg-emerald-500 text-white'
+                    : step.active
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-slate-200 text-slate-500'
+                    "
+                    class="relative z-10 flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold shadow-sm">
 
                     <CheckCircle2 v-if="step.completed" class="h-3.5 w-3.5" />
 
@@ -251,19 +257,24 @@ const iconMap = {
 
         <a href="/student/dashboard"
           class="flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-
           <ChevronLeft class="h-4 w-4" />
-
           Kembali
         </a>
 
-        <a :href="steps.find(step => step.id === 1)?.href"
+        <!-- ENABLE -->
+        <a v-if="firstStep?.unlocked" :href="firstStep.href"
           class="flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600">
-
           Lanjut ke Materi
-
           <ChevronRight class="h-4 w-4" />
         </a>
+
+        <!-- DISABLED -->
+        <button v-else disabled
+          class="cursor-not-allowed flex items-center gap-2 rounded-lg bg-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-500">
+          Lanjut ke Materi
+          <ChevronRight class="h-4 w-4" />
+        </button>
+
       </div>
     </section>
   </div>

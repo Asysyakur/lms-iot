@@ -17,6 +17,18 @@ class PracticeController extends Controller
             'lkpd',
         ]);
 
+        if (
+            !$meeting->practice ||
+            !$meeting->practice->is_active
+        ) {
+
+            return redirect()
+                ->route(
+                    'student.meeting.show',
+                    $meeting->id
+                );
+        }
+
         $practice =
             $meeting->practice;
 

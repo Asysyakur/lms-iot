@@ -14,6 +14,18 @@ class MeetingMaterialController extends Controller
     {
         $meeting->load('material');
 
+        if (
+            !$meeting->material ||
+            !$meeting->material->is_active
+        ) {
+
+            return redirect()
+                ->route(
+                    'student.meeting.show',
+                    $meeting->id
+                );
+        }
+
         $progress = MaterialProgress::firstOrCreate(
             [
                 'user_id' => auth()->id(),

@@ -17,6 +17,18 @@ class EvaluationController extends Controller
             'evaluation',
         ]);
 
+        if (
+            !$meeting->evaluation ||
+            !$meeting->evaluation->is_active
+        ) {
+
+            return redirect()
+                ->route(
+                    'student.meeting.show',
+                    $meeting->id
+                );
+        }
+
         $submission =
             EvaluationSubmission::where(
                 'user_id',
