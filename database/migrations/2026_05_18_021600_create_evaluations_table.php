@@ -18,8 +18,6 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->text('question');
-
             $table->boolean('is_active')->default(false);
 
             $table->timestamps();
