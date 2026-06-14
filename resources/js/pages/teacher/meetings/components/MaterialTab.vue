@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3';
-
+import { computed } from 'vue';
 import { Save } from 'lucide-vue-next';
 
 import {
@@ -84,6 +84,40 @@ watch(
     immediate: true,
   },
 );
+
+const existingPdfUrl =
+  computed(() => {
+
+    return props.meeting
+      ?.material
+      ?.pdf_url
+      ?? null;
+
+  });
+
+const existingPdfName =
+  computed(() => {
+
+    if (form.pdf_file) {
+
+      return form.pdf_file.name;
+
+    }
+
+    const path =
+      props.meeting
+        ?.material
+        ?.pdf_file;
+
+    if (!path) {
+      return null;
+    }
+
+    return path
+      .split('/')
+      .pop();
+
+  });
 
 const submit =
   async () => {
@@ -277,6 +311,27 @@ const toggleMaterial =
             form.pdf_file =
             $event.target.files[0]
             " class="w-full rounded-lg border border-slate-200 p-2.5 text-sm" />
+          <div v-if="existingPdfName" class="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+
+            <div class="flex items-center justify-between gap-3">
+
+              <div>
+
+                <p class="text-sm font-semibold text-slate-700">
+                  PDF tersedia
+                </p>
+
+                <p class="mt-1 break-all text-xs text-slate-500">
+                  {{ existingPdfName }}
+                </p>
+              </div>
+
+              <a v-if="existingPdfUrl" :href="existingPdfUrl" target="_blank"
+                class="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700">
+                Buka PDF
+              </a>
+            </div>
+          </div>
         </div>
 
         <!-- VIDEO -->

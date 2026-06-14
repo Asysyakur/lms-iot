@@ -307,14 +307,7 @@ Route::middleware([
     | MEETINGS MANAGEMENT
     |--------------------------------------------------------------------------
     */
-
-    Route::get('/meetings', function () {
-
-        return Inertia::render(
-            'teacher/meetings/Index'
-        );
-    })->name('teacher.meetings');
-
+    
     Route::resource(
         'meetings',
         MeetingController::class

@@ -19,6 +19,20 @@ class MeetingController extends Controller
             'evaluation',
         ])->get();
 
+        $meetings->each(function ($meeting) {
+
+            if ($meeting->material) {
+
+                $meeting->material->pdf_url =
+                    $meeting->material->pdf_file
+                    ? asset(
+                        'storage/' .
+                            $meeting->material->pdf_file
+                    )
+                    : null;
+            }
+        });
+
         return Inertia::render(
             'teacher/meetings/Index',
             [

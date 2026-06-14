@@ -10,7 +10,14 @@ class MaterialController extends Controller
 {
     public function store(Request $request)
     {
-        $pdfPath = null;
+        $existingMaterial =
+            Material::where(
+                'meeting_id',
+                $request->meeting_id
+            )->first();
+
+        $pdfPath =
+            $existingMaterial?->pdf_file;
 
         if ($request->hasFile('pdf_file')) {
 
@@ -22,30 +29,43 @@ class MaterialController extends Controller
                 );
         }
 
-        $material = Material::updateOrCreate(
-            [
-                'meeting_id' => $request->meeting_id,
-            ],
-            [
-                'title' => $request->title,
+        $material =
+            Material::updateOrCreate(
+                [
+                    'meeting_id' =>
+                    $request->meeting_id,
+                ],
+                [
+                    'title' =>
+                    $request->title,
 
-                'description' => $request->description,
+                    'description' =>
+                    $request->description,
 
-                'video_url' => $request->video_url,
+                    'video_url' =>
+                    $request->video_url,
 
-                'trigger_question' =>
-                $request->trigger_question,
+                    'trigger_question' =>
+                    $request->trigger_question,
 
-                'reflection_question' =>
-                $request->reflection_question,
+                    'reflection_question' =>
+                    $request->reflection_question,
 
-                'pdf_file' => $pdfPath,
-            ]
-        );
+                    'pdf_file' =>
+                    $pdfPath,
+                ]
+            );
+
+        $material->pdf_url =
+            $material->pdf_file
+            ? asset(
+                'storage/' .
+                    $material->pdf_file
+            )
+            : null;
 
         return response()->json([
             'success' => true,
-
             'material' => $material,
         ]);
     }

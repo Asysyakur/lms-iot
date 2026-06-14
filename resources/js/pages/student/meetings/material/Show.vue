@@ -616,8 +616,23 @@ watch(
         <!-- PDF -->
         <section class="rounded-xl bg-white p-3 shadow-sm">
 
-            <div ref="pdfContainer"
+            <div v-if="material.pdf_url" ref="pdfContainer"
                 class="flex h-[520px] flex-col items-center overflow-y-scroll rounded-xl border border-slate-200 bg-slate-100 p-4" />
+
+            <div v-else
+                class="flex h-[300px] items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50">
+                <div class="text-center">
+
+                    <p class="text-sm font-semibold text-slate-700">
+                        PDF belum tersedia
+                    </p>
+
+                    <p class="mt-1 text-xs text-slate-500">
+                        Guru belum mengupload file PDF.
+                    </p>
+                </div>
+            </div>
+
         </section>
 
         <!-- REFLECTION -->
