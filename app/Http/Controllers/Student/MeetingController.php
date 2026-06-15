@@ -105,7 +105,7 @@ class MeetingController extends Controller
                 'unlocked' => (
                     $meeting->is_active
                     &&
-                    $meeting->practice?->is_active
+                    $meeting->quiz?->is_active
                     &&
                     $quizCompleted
                 ),
@@ -145,7 +145,7 @@ class MeetingController extends Controller
                     &&
                     $meeting->practice?->is_active
                     &&
-                    $materialCompleted
+                    $quizCompleted
                 ),
 
                 'completed' =>
