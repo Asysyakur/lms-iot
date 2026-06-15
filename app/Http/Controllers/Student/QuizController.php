@@ -15,10 +15,12 @@ class QuizController extends Controller
         Meeting $meeting
     ) {
 
-        if (
-            !$meeting->quiz ||
-            !$meeting->quiz->is_active
-        ) {
+        $quizAvailable =
+            $meeting->quizzes()
+            ->where('is_active', true)
+            ->exists();
+
+        if (!$quizAvailable) {
 
             return redirect()
                 ->route(
@@ -26,12 +28,6 @@ class QuizController extends Controller
                     $meeting->id
                 );
         }
-
-        /*
-    |--------------------------------------------------------------------------
-    | CHECK PASSED QUIZ
-    |--------------------------------------------------------------------------
-    */
 
         $passedAttempt =
             QuizAttempt::where(
@@ -49,18 +45,11 @@ class QuizController extends Controller
             ->latest()
             ->first();
 
-        /*
-    |--------------------------------------------------------------------------
-    | IF PASSED
-    |--------------------------------------------------------------------------
-    */
-
         if ($passedAttempt) {
 
             return redirect()->route(
                 'student.meeting.quiz.review',
                 [
-
                     'meeting' =>
                     $meeting->id,
 
@@ -69,12 +58,6 @@ class QuizController extends Controller
                 ]
             );
         }
-
-        /*
-    |--------------------------------------------------------------------------
-    | SHOW QUIZ
-    |--------------------------------------------------------------------------
-    */
 
         $questions =
             $meeting->quizzes()
