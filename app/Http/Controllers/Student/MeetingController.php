@@ -105,9 +105,9 @@ class MeetingController extends Controller
                 'unlocked' => (
                     $meeting->is_active
                     &&
-                    $meeting->quiz?->is_active
+                    $quizAvailable
                     &&
-                    $quizCompleted
+                    $materialCompleted
                 ),
 
                 'completed' =>
@@ -251,14 +251,7 @@ class MeetingController extends Controller
                     'description' =>
                     $meeting->description,
 
-                    'opened' =>
-                    $meeting->opened_at &&
-                        $meeting->closed_at
-                        ? now()->between(
-                            $meeting->opened_at,
-                            $meeting->closed_at
-                        )
-                        : false,
+                    'opened' => $meeting->is_active,
 
                     'opened_at' =>
                     $meeting->opened_at
