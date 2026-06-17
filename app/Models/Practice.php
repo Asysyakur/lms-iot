@@ -10,6 +10,7 @@ class Practice extends Model
         'meeting_id',
         'instruction',
         'makecode_url',
+        'submission_type',
         'is_active',
     ];
 

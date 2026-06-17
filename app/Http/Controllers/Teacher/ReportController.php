@@ -123,6 +123,8 @@ class ReportController extends Controller
         Meeting $meeting
     ) {
 
+        $meeting->load('practice');
+
         $students = User::where(
             'role',
             'student'
@@ -195,6 +197,9 @@ class ReportController extends Controller
                     'practice' =>
                     $practice?->project_url ?? null,
 
+                    'practiceText' =>
+                    $practice?->submission_text ?? null,
+
                     'lkpd' =>
                     $lkpd?->file_path ?? null,
 
@@ -210,8 +215,13 @@ class ReportController extends Controller
             'teacher/reports/MeetingDetail',
             [
 
-                'meeting' =>
-                $meeting,
+                'meeting' => [
+
+                    ...$meeting->toArray(),
+
+                    'practiceType' =>
+                    $meeting->practice?->submission_type,
+                ],
 
                 'students' =>
                 $students,

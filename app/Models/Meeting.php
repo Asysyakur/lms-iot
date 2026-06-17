@@ -250,7 +250,10 @@ class Meeting extends Model
                 $quiz?->score ?? 0,
 
                 'practice' =>
-                $practice?->submission_link,
+                $practice?->project_url,
+
+                'practiceText' =>
+                $practice?->submission_text,
 
                 'practiceScore' =>
                 $practice?->score ?? 0,

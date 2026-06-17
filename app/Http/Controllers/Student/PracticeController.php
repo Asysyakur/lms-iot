@@ -63,12 +63,26 @@ class PracticeController extends Controller
         Meeting $meeting
     ) {
 
-        $request->validate([
+        $practice = $meeting->practice;
 
-            'project_url' => [
+        $type =
+            $practice->submission_type
+            ?? 'link';
+
+        $rules = [];
+
+        if ($type === 'link') {
+
+            $rules['project_url'] = [
+
                 'required',
                 'url',
-                function ($attribute, $value, $fail) {
+
+                function (
+                    $attribute,
+                    $value,
+                    $fail
+                ) {
 
                     if (
                         !str_contains(
@@ -78,17 +92,65 @@ class PracticeController extends Controller
                     ) {
 
                         $fail(
-                            'Link harus berasal dari MakeCode Microbit.'
+                            'Link harus berasal dari MakeCode.'
                         );
                     }
                 }
-            ],
-        ]);
+            ];
+        }
+
+        if ($type === 'text') {
+
+            $rules['submission_text'] = [
+
+                'required',
+                'string',
+                'min:10',
+            ];
+        }
+
+        if ($type === 'both') {
+
+            $rules['project_url'] = [
+
+                'required',
+                'url',
+
+                function (
+                    $attribute,
+                    $value,
+                    $fail
+                ) {
+
+                    if (
+                        !str_contains(
+                            $value,
+                            'makecode.microbit.org'
+                        )
+                    ) {
+
+                        $fail(
+                            'Link harus berasal dari MakeCode.'
+                        );
+                    }
+                }
+            ];
+
+            $rules['submission_text'] = [
+
+                'required',
+                'string',
+                'min:10',
+            ];
+        }
+
+        $request->validate(
+            $rules
+        );
 
         PracticeSubmission::updateOrCreate(
 
             [
-
                 'user_id' =>
                 auth()->id(),
 
@@ -100,6 +162,9 @@ class PracticeController extends Controller
 
                 'project_url' =>
                 $request->project_url,
+
+                'submission_text' =>
+                $request->submission_text,
 
                 'submitted_at' =>
                 now(),

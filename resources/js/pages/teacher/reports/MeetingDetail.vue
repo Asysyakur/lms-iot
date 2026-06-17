@@ -253,8 +253,7 @@ const formatAnswer =
               </th>
 
               <th class="px-4 py-3 text-left text-[11px] font-semibold whitespace-nowrap">
-
-                Link Praktikum
+                Praktikum
               </th>
 
               <th class="px-4 py-3 text-left text-[11px] font-semibold whitespace-nowrap">
@@ -352,18 +351,25 @@ student,
               </td>
 
               <!-- PRAKTIK -->
-              <td class="px-4 py-3">
+              <td class="min-w-[280px] px-4 py-3">
 
-                <a v-if="student.practice" :href="student.practice" target="_blank"
-                  class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-[11px] font-semibold text-blue-700 transition hover:bg-blue-200">
+                <!-- TYPE TEXT -->
+                <div v-if="meeting.practiceType === 'text'"
+                  class="max-w-xs whitespace-pre-wrap text-xs leading-relaxed">
+                  {{ student.practiceText || '-' }}
+                </div>
 
-                  Buka
+                <!-- TYPE LINK -->
+                <a v-else-if="student.practice" :href="student.practice" target="_blank"
+                  class="inline-flex rounded-full bg-blue-100 px-3 py-1 text-[11px] font-semibold text-blue-700">
+                  Buka Link
                 </a>
 
+                <!-- EMPTY -->
                 <span v-else class="text-slate-400">
-
                   -
                 </span>
+
               </td>
 
               <!-- SCORE PRAKTIK -->
@@ -401,12 +407,12 @@ student,
 
                   <div v-for="(
 answer,
-          answerIndex
+  answerIndex
       ) in (
-            Array.isArray(student.evaluation)
-              ? student.evaluation
-              : JSON.parse(student.evaluation)
-          )" :key="answerIndex" class="rounded-xl border border-slate-200 bg-slate-50 p-3">
+    Array.isArray(student.evaluation)
+      ? student.evaluation
+      : JSON.parse(student.evaluation)
+  )" :key="answerIndex" class="rounded-xl border border-slate-200 bg-slate-50 p-3">
 
                     <!-- NUMBER -->
                     <div

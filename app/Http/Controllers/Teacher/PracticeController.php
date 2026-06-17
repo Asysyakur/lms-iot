@@ -12,12 +12,18 @@ class PracticeController extends Controller
     {
         Practice::updateOrCreate(
             [
-                'meeting_id' => $request->meeting_id,
+                'meeting_id' =>
+                $request->meeting_id
             ],
             [
-                'instruction' => $request->instruction,
+                'instruction' =>
+                $request->instruction,
 
-                'makecode_url' => $request->makecode_url,
+                'makecode_url' =>
+                $request->makecode_url,
+
+                'submission_type' =>
+                $request->submission_type ?? 'link',
             ]
         );
 

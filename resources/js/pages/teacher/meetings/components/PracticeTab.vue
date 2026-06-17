@@ -30,6 +30,10 @@ const form = useForm({
   makecode_url:
     props.meeting.practice
       ?.makecode_url ?? '',
+
+  submission_type:
+    props.meeting.practice
+      ?.submission_type ?? 'link',
 });
 
 watch(
@@ -46,6 +50,10 @@ watch(
     form.makecode_url =
       meeting.practice
         ?.makecode_url ?? '';
+
+    form.submission_type =
+      meeting.practice
+        ?.submission_type ?? 'link';
   },
   {
     immediate: true,
@@ -136,8 +144,8 @@ const togglePractice =
 
       <!-- STATUS -->
       <button @click="togglePractice" class="rounded-lg px-3 py-2 text-xs font-semibold transition" :class="meeting.practice?.is_active
-          ? 'bg-emerald-500 text-white hover:bg-emerald-600'
-          : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+        ? 'bg-emerald-500 text-white hover:bg-emerald-600'
+        : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
         ">
 
         {{
@@ -163,16 +171,47 @@ const togglePractice =
           class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-purple-500" />
       </div>
 
-      <!-- MAKECODE -->
+      <!-- SUBMISSION TYPE -->
       <div>
 
         <label class="mb-2 block text-sm font-semibold text-slate-700">
 
+          Tipe Pengumpulan
+
+        </label>
+
+        <select v-model="form.submission_type"
+          class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-purple-500">
+
+          <option value="link">
+            Link MakeCode
+          </option>
+
+          <option value="text">
+            Jawaban Teks
+          </option>
+
+          <option value="both">
+            Link + Jawaban Teks
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- MAKECODE -->
+      <div v-if="
+        form.submission_type !==
+        'text'
+      ">
+
+        <label class="mb-2 block text-sm font-semibold text-slate-700">
           Link MakeCode
         </label>
 
         <input v-model="form.makecode_url" type="text" placeholder="https://makecode.microbit.org/..."
           class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-purple-500" />
+
       </div>
 
       <!-- BUTTON -->
