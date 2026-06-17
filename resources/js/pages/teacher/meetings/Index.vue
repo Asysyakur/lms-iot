@@ -26,6 +26,24 @@ defineOptions({
   layout: TeacherSidebarLayout,
 });
 
+const materialSection = ref<HTMLElement | null>(null);
+const quizSection = ref<HTMLElement | null>(null);
+const practiceSection = ref<HTMLElement | null>(null);
+const lkpdSection = ref<HTMLElement | null>(null);
+const evaluationSection = ref<HTMLElement | null>(null);
+
+const scrollToSection = (
+  section: HTMLElement | null
+) => {
+
+  if (!section) return;
+
+  section.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  });
+};
+
 const props = defineProps<{
   meetings: any[];
 }>();
@@ -314,27 +332,69 @@ const resetMeetingForm =
               " @click="
                 activeMeeting = meeting
                 " @edit="
-                editMeeting(meeting)
-                " @delete="
-                removeMeeting(meeting)
-                " class="flex-[0_0_220px]" />
+                  editMeeting(meeting)
+                  " @delete="
+                    removeMeeting(meeting)
+                    " class="flex-[0_0_220px]" />
           </div>
         </div>
       </div>
     </section>
 
+    <div v-if="activeMeeting"
+      class="sticky top-16 lg:top-4 z-40 mb-4 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+      <div class="flex gap-2 overflow-x-auto whitespace-nowrap justify-center">
+
+        <button @click="scrollToSection(materialSection)"
+          class="rounded-lg bg-blue-100 px-3 py-2 text-sm font-medium text-blue-700">
+          Materi
+        </button>
+
+        <button @click="scrollToSection(quizSection)"
+          class="rounded-lg bg-purple-100 px-3 py-2 text-sm font-medium text-purple-700">
+          Kuis
+        </button>
+
+        <button @click="scrollToSection(practiceSection)"
+          class="rounded-lg bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700">
+          Praktik
+        </button>
+
+        <button @click="scrollToSection(lkpdSection)"
+          class="rounded-lg bg-cyan-100 px-3 py-2 text-sm font-medium text-cyan-700">
+          LKPD
+        </button>
+
+        <button @click="scrollToSection(evaluationSection)"
+          class="rounded-lg bg-emerald-100 px-3 py-2 text-sm font-medium text-emerald-700">
+          Evaluasi
+        </button>
+
+      </div>
+    </div>
+
     <!-- CONTENT -->
     <div v-if="activeMeeting" class="space-y-4">
 
-      <MaterialTab :meeting="activeMeeting" />
+      <div ref="materialSection" class="scroll-mt-28">
+        <MaterialTab :meeting="activeMeeting" />
+      </div>
 
-      <QuizTab :meeting="activeMeeting" />
+      <div ref="quizSection" 1 class="scroll-mt-28">
+        <QuizTab :meeting="activeMeeting" />
+      </div>
 
-      <PracticeTab :meeting="activeMeeting" />
+      <div ref="practiceSection" class="scroll-mt-28">
+        <PracticeTab :meeting="activeMeeting" />
+      </div>
 
-      <LkpdTab :meeting="activeMeeting" />
+      <div ref="lkpdSection" class="scroll-mt-28">
+        <LkpdTab :meeting="activeMeeting" />
+      </div>
 
-      <EvaluationTab :meeting="activeMeeting" />
+      <div ref="evaluationSection">
+        <EvaluationTab :meeting="activeMeeting" />
+      </div>
     </div>
 
     <!-- EMPTY -->
