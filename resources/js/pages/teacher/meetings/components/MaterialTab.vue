@@ -373,7 +373,7 @@ const toggleMaterial =
           <button type="button" @click="
             form.reflection_question.push('')
             "
-            class="rounded-lg bg-blue-100 px-3 py-2 text-xs font-semibold text-blue-700 transition hover:bg-blue-200">
+            class="rounded-lg bg-slate-100 px-4 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-200">
 
             + Tambah
           </button>
@@ -414,7 +414,7 @@ const toggleMaterial =
       <div class="pt-2">
 
         <button @click="submit" :disabled="form.processing"
-          class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50">
+          class="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50">
 
           <Save class="h-4 w-4" />
 

@@ -223,6 +223,10 @@ const submitting =
         {{ currentQuestion.question }}
       </h2>
 
+      <!-- CODE -->
+      <pre v-if="currentQuestion.code"
+        class="mt-4 overflow-x-auto rounded-xl bg-slate-900 p-4 text-sm leading-relaxed text-emerald-300"><code>{{ currentQuestion.code }}</code></pre>
+
       <!-- OPTIONS -->
       <div class="mt-5 space-y-3">
 

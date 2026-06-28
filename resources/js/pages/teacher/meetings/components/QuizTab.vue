@@ -394,7 +394,7 @@ const toggleQuizMeeting =
       <div class="pt-1">
 
         <button @click="submit" :disabled="form.processing"
-          class="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50">
+          class="inline-flex items-center gap-2 rounded-lg bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-200 disabled:opacity-50">
 
           <Plus class="h-4 w-4" />
 

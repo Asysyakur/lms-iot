@@ -18,32 +18,28 @@ const props = defineProps<{
   <div class="space-y-4">
 
     <!-- HEADER -->
-    <section class="rounded-xl bg-white p-4 shadow-sm">
+    <section
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
-      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div class="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10" />
 
-        <div>
+      <div class="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
-          <h1 class="text-lg font-bold text-slate-800">
-
-            Monitoring dan Laporan
-          </h1>
-
-          <p class="mt-1 text-xs text-slate-500">
-
-            Pilih laporan berdasarkan aktivitas siswa.
-          </p>
-        </div>
-
+        <h1 class="text-2xl font-bold">
+          Manajemen Pertemuan
+        </h1>
+        <!-- BUTTON -->
         <a href="/teacher/reports/export" target="_blank"
           class="inline-flex items-center justify-center rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100">
 
           Download Ringkasan
         </a>
       </div>
+    </section>
+    <section class="rounded-xl bg-white p-4 shadow-sm">
 
       <!-- MENU -->
-      <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
 
         <Link v-for="menu in props.menus" :key="menu.id" :href="menu.href"
           class="group rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md">
@@ -77,7 +73,7 @@ const props = defineProps<{
     </section>
 
     <!-- STATUS -->
-    <section class="grid gap-4 lg:grid-cols-2">
+    <section class="flex flex-col ">
 
       <!-- PROGRESS -->
       <div class="rounded-xl bg-white p-4 shadow-sm">
@@ -99,12 +95,7 @@ const props = defineProps<{
                 {{ meeting.title }}
               </span>
 
-              <span class="text-[11px] font-semibold" :class="meeting.percentage >= 80
-                  ? 'text-emerald-600'
-                  : meeting.percentage >= 50
-                    ? 'text-blue-600'
-                    : 'text-orange-600'
-                ">
+              <span class="text-[11px] font-semibold text-emerald-500">
 
                 {{ meeting.percentage }}%
               </span>
@@ -113,15 +104,10 @@ const props = defineProps<{
             <!-- BAR -->
             <div class="h-2 overflow-hidden rounded-full bg-slate-100">
 
-              <div class="h-full rounded-full transition-all duration-500" :class="meeting.percentage >= 80
-                  ? 'bg-emerald-500'
-                  : meeting.percentage >= 50
-                    ? 'bg-blue-500'
-                    : 'bg-orange-500'
-                " :style="{
-                  width:
-                    meeting.percentage + '%'
-                }" />
+              <div class="h-full rounded-full transition-all duration-500 bg-emerald-500" :style="{
+                width:
+                  meeting.percentage + '%'
+              }" />
             </div>
           </div>
 
@@ -133,27 +119,6 @@ const props = defineProps<{
           </div>
         </div>
       </div>
-
-      <!-- NOTES -->
-      <div class="rounded-xl bg-white p-4 shadow-sm">
-
-        <h2 class="text-sm font-bold text-slate-800">
-
-          Catatan Penilaian Manual
-        </h2>
-
-        <div class="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-4 text-sm leading-relaxed text-slate-600">
-
-          Nilai pemantik, praktik,
-          dan evaluasi dapat diisi
-          manual oleh guru dengan
-          rentang 1–100. Total nilai
-          dihitung otomatis dari
-          nilai pemantik, refleksi,
-          kuis, dan praktik.
-        </div>
-      </div>
-
     </section>
 
   </div>

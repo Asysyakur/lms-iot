@@ -30,6 +30,8 @@ const form = useForm({
 
   question: '',
 
+  code: '',
+
   option_a: '',
   option_b: '',
   option_c: '',
@@ -54,6 +56,9 @@ watch(
 
     form.question =
       question.question;
+
+    form.code =
+      question.code ?? '';
 
     form.option_a =
       question.option_a;
@@ -187,6 +192,27 @@ const submit = () => {
 
         <textarea v-model="form.question" rows="4" placeholder="Masukkan pertanyaan..."
           class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-500" />
+      </div>
+
+      <!-- CODE -->
+      <div>
+
+        <label class="mb-2 block text-xs font-semibold text-slate-700">
+
+          Kode Program
+          <span class="font-normal text-slate-400">
+            (opsional)
+          </span>
+        </label>
+
+        <textarea v-model="form.code" rows="6" placeholder="Tempel kode program di sini jika soal membutuhkan..."
+          class="w-full rounded-xl border border-slate-200 bg-slate-900 px-4 py-3 font-mono text-sm text-emerald-300 outline-none transition focus:border-emerald-500" />
+
+        <p class="mt-1.5 text-xs text-slate-400">
+
+          Kode akan ditampilkan terpisah
+          dari teks soal pada tampilan siswa.
+        </p>
       </div>
 
       <!-- OPTIONS -->

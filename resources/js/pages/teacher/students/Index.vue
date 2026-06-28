@@ -354,13 +354,7 @@ const removeStudent =
 
       <div class="relative z-10">
 
-        <div class="inline-flex rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider">
-
-          Manajemen Siswa
-        </div>
-
-        <h1 class="mt-3 text-2xl font-bold">
-
+        <h1 class="text-2xl font-bold">
           Kelola Akun
         </h1>
       </div>
@@ -643,7 +637,7 @@ const removeStudent =
           <tbody>
 
             <tr v-for="(
-              student,
+student,
                 index
               ) in sortedStudents" :key="student.id" class="border-b border-slate-100 transition hover:bg-slate-50">
 

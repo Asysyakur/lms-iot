@@ -21,6 +21,8 @@ class QuestionController extends Controller
 
             'question' => $request->question,
 
+            'code' => $request->code,
+
             'type' => $request->question_type,
 
             'option_a' => $request->option_a,
@@ -42,6 +44,8 @@ class QuestionController extends Controller
     ) {
         $question->update([
             'question' => $request->question,
+
+            'code' => $request->code,
 
             'type' => $request->question_type,
 

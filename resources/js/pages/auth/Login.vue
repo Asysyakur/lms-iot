@@ -55,26 +55,32 @@ const submit = () => {
                 <div
                     class="relative z-10 flex w-full flex-col items-center justify-center px-12 text-center text-white">
 
-                    <h1 class="text-5xl font-black leading-tight">
-                        Bit-Learn
-                    </h1>
-
-                    <img :src="Logo" alt="Illustration"
-                        class="mt-6 h-48 w-auto rounded-2xl shadow-xl object-contain" />
+                    <div class="flex items-center gap-3">
+                        <img :src="Logo" alt="Illustration" class="h-20 w-auto rounded-lg shadow-xl object-contain" />
+                        <h1 class="text-5xl font-black leading-tight">
+                            Bit-Learn
+                        </h1>
+                    </div>
 
                     <p class="mt-6 max-w-xl text-base leading-relaxed text-sky-100">
-                        Platform pembelajaran interaktif
-                        untuk eksplorasi IoT dan
-                        Micro:bit.
-                    </p>
+                        Platform Pembelajaran Internet of Things dan Micro:Bit </p>
 
                     <div class="mt-10 flex flex-wrap justify-center gap-3">
                         <div class="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs backdrop-blur">
-                            Interactive Learning
+                            Materi
                         </div>
 
                         <div class="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs backdrop-blur">
-                            LMS IoT
+                            Kuis
+                        </div>
+                        <div class="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs backdrop-blur">
+                            Praktik
+                        </div>
+                        <div class="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs backdrop-blur">
+                            LKPD
+                        </div>
+                        <div class="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs backdrop-blur">
+                            Evaluasi
                         </div>
                     </div>
                 </div>
@@ -156,9 +162,6 @@ const submit = () => {
                             <p v-if="form.errors.password" class="mt-2 text-sm font-medium text-red-500">
                                 {{ form.errors.password }}
                             </p>
-                            <a href="#" class="text-sm font-medium text-blue-600 hover:underline">
-                                Lupa password?
-                            </a>
                         </div>
 
                         <!-- REMEMBER -->

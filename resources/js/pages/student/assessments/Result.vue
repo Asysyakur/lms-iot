@@ -115,6 +115,10 @@ const getOptionText = (
             }}
           </h3>
 
+          <!-- CODE -->
+          <pre v-if="answer.question.code"
+            class="mt-3 overflow-x-auto rounded-xl bg-slate-900 p-4 text-sm leading-relaxed text-emerald-300"><code>{{ answer.question.code }}</code></pre>
+
           <!-- ANSWERS -->
           <div class="mt-4 grid gap-3 md:grid-cols-2">
 

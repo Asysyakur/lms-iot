@@ -191,7 +191,7 @@ const toggleEvaluation =
       <div class="pt-1">
 
         <button @click="submit" :disabled="form.processing"
-          class="inline-flex items-center gap-2 rounded-lg bg-rose-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-rose-600 disabled:opacity-50">
+          class="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50">
 
           <Save class="h-4 w-4" />
 

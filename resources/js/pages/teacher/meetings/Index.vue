@@ -2,7 +2,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import {
+  ChevronLeft,
+  ChevronRight,
+  BookOpen,
+  HelpCircle,
+  Code2,
+  ClipboardList,
+  CheckCircle2,
+} from 'lucide-vue-next';
 
 import TeacherSidebarLayout from '@/layouts/teacher/TeacherSidebarLayout.vue';
 
@@ -274,58 +282,33 @@ const resetMeetingForm =
   <div class="space-y-4">
 
     <!-- HEADER -->
-    <section class="rounded-xl bg-white p-4 shadow-sm">
+    <section
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
-      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div class="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10" />
 
-        <!-- LEFT -->
-        <div>
+      <div class="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
-          <h1 class="text-2xl font-bold text-slate-800">
-
-            Manajemen Pertemuan
-          </h1>
-
-          <p class="mt-1 text-sm text-slate-500">
-
-            Kelola materi, kuis,
-            praktik, LKPD,
-            dan evaluasi pembelajaran.
-          </p>
-        </div>
-
+        <h1 class="text-2xl font-bold">
+          Manajemen Pertemuan
+        </h1>
         <!-- BUTTON -->
         <button @click="showMeetingModal = true"
-          class="rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600">
+          class="rounded-lg bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-200">
 
           + Tambah Pertemuan
         </button>
       </div>
-
+    </section>
+    <section class="rounded-xl bg-white p-4 shadow-sm">
       <!-- SLIDER -->
       <div v-if="meetings.length" class="mt-5">
-
-        <!-- CONTROL -->
-        <div class="mb-3 flex justify-end gap-2">
-
-          <button type="button" @click="slideMeetings('left')"
-            class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:border-emerald-300 hover:text-emerald-600">
-
-            <ChevronLeft class="h-4 w-4" />
-          </button>
-
-          <button type="button" @click="slideMeetings('right')"
-            class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:border-emerald-300 hover:text-emerald-600">
-
-            <ChevronRight class="h-4 w-4" />
-          </button>
-        </div>
 
         <!-- CARDS -->
         <div class="overflow-hidden">
 
           <div ref="meetingSlider"
-            class="flex gap-3 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            class="flex gap-3 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none]">
 
             <MeetingCard v-for="meeting in meetings" :key="meeting.id" :meeting="meeting" :active="activeMeeting?.id ===
               meeting.id
@@ -342,31 +325,36 @@ const resetMeetingForm =
     </section>
 
     <div v-if="activeMeeting"
-      class="sticky top-16 lg:top-4 z-40 mb-4 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
-      <div class="flex gap-2 overflow-x-auto whitespace-nowrap justify-center">
+      class="sticky top-16 lg:top-4 z-40 mb-4 rounded-2xl bg-slate-100 p-1.5 shadow-sm">
+      <div class="flex justify-center gap-1 overflow-x-auto whitespace-nowrap">
 
         <button @click="scrollToSection(materialSection)"
-          class="rounded-lg bg-blue-100 px-3 py-2 text-sm font-medium text-blue-700">
+          class="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white hover:text-slate-800 hover:shadow-sm">
+          <BookOpen class="h-4 w-4 text-blue-500" />
           Materi
         </button>
 
         <button @click="scrollToSection(quizSection)"
-          class="rounded-lg bg-purple-100 px-3 py-2 text-sm font-medium text-purple-700">
+          class="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white hover:text-slate-800 hover:shadow-sm">
+          <HelpCircle class="h-4 w-4 text-purple-500" />
           Kuis
         </button>
 
         <button @click="scrollToSection(practiceSection)"
-          class="rounded-lg bg-amber-100 px-3 py-2 text-sm font-medium text-amber-700">
+          class="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white hover:text-slate-800 hover:shadow-sm">
+          <Code2 class="h-4 w-4 text-amber-500" />
           Praktik
         </button>
 
         <button @click="scrollToSection(lkpdSection)"
-          class="rounded-lg bg-cyan-100 px-3 py-2 text-sm font-medium text-cyan-700">
+          class="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white hover:text-slate-800 hover:shadow-sm">
+          <ClipboardList class="h-4 w-4 text-cyan-500" />
           LKPD
         </button>
 
         <button @click="scrollToSection(evaluationSection)"
-          class="rounded-lg bg-emerald-100 px-3 py-2 text-sm font-medium text-emerald-700">
+          class="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white hover:text-slate-800 hover:shadow-sm">
+          <CheckCircle2 class="h-4 w-4 text-emerald-500" />
           Evaluasi
         </button>
 

@@ -16,7 +16,8 @@ defineOptions({
   <div class="space-y-4">
 
     <!-- HEADER -->
-    <section class="rounded-xl bg-linear-to-r from-blue-600 to-cyan-600 p-4 text-white shadow-sm">
+    <section
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
       <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
@@ -121,7 +122,7 @@ defineOptions({
               <td class="px-4 py-3">
 
                 <div
-                  class="inline-flex min-w-[48px] items-center justify-center rounded-lg bg-emerald-100 px-3 py-1.5 text-sm font-bold text-emerald-700">
+                  class="inline-flex min-w-[48px] items-center justify-center rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-bold text-slate-700">
 
                   {{
                     student.posttest_score ?? '-'
@@ -133,8 +134,8 @@ defineOptions({
               <td class="px-4 py-3">
 
                 <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold" :class="student.pretest_status === 'Selesai'
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-slate-100 text-slate-500'
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : 'bg-slate-100 text-slate-500'
                   ">
 
                   {{ student.pretest_status }}
@@ -145,8 +146,8 @@ defineOptions({
               <td class="px-4 py-3">
 
                 <span class="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold" :class="student.posttest_status === 'Selesai'
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : 'bg-slate-100 text-slate-500'
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : 'bg-slate-100 text-slate-500'
                   ">
 
                   {{ student.posttest_status }}

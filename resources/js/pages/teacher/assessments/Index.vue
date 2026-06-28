@@ -31,10 +31,6 @@ const title = isPretest
   ? 'Pre-test'
   : 'Post-test';
 
-const colorClass = isPretest
-  ? 'from-blue-700 to-cyan-500'
-  : 'from-emerald-600 to-teal-500';
-
 const handleEdit = (
   question: any
 ) => {
@@ -48,21 +44,15 @@ const handleEdit = (
   <div class="space-y-4">
 
     <!-- HEADER -->
-    <section :class="colorClass"
-      class="relative overflow-hidden rounded-xl bg-linear-to-r px-5 py-4 text-white shadow-sm">
+    <section
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
       <div class="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10" />
 
       <div class="relative z-10">
 
-        <!-- BADGE -->
-        <span class="rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide">
-
-          Pengaturan Assessment
-        </span>
-
         <!-- TITLE -->
-        <h1 class="mt-3 text-2xl font-bold">
+        <h1 class="text-2xl font-bold">
 
           Pengaturan {{ title }}
         </h1>
