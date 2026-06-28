@@ -78,7 +78,7 @@ const submitEvaluation =
 
     <!-- HEADER -->
     <section
-      class="relative overflow-hidden rounded-xl bg-linear-to-r from-violet-700 to-purple-500 px-5 py-4 text-white shadow-sm">
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
       <div class="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10" />
 
@@ -149,12 +149,12 @@ const submitEvaluation =
 
           <!-- ANSWER -->
           <textarea v-model="answers[index]" rows="5" placeholder="Tuliskan jawabanmu..."
-            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-violet-500" />
+            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-500" />
         </div>
 
         <!-- BUTTON -->
         <button @click="submitEvaluation"
-          class="flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-violet-700 to-purple-500 px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90">
+          class="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50">
 
           <SendHorizonal class="h-4 w-4" />
 

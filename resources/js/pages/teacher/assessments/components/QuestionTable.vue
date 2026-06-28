@@ -169,7 +169,7 @@ question,
             </td>
 
             <!-- QUESTION -->
-            <td class="max-w-md px-4 py-3 text-sm font-medium leading-relaxed text-slate-800">
+            <td class="max-w-md px-4 py-3 text-sm font-medium leading-relaxed whitespace-pre-line text-slate-800">
 
               {{ question.question }}
             </td>

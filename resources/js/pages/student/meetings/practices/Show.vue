@@ -14,7 +14,7 @@ import {
   FlaskConical,
   ExternalLink,
   Link as LinkIcon,
-  Lock,
+  CircleAlert,
   CheckCircle2,
 } from 'lucide-vue-next';
 
@@ -185,7 +185,7 @@ const submitPractice =
 
     <!-- HEADER -->
     <section
-      class="relative overflow-hidden rounded-xl bg-linear-to-r from-emerald-700 to-cyan-600 px-5 py-4 text-white shadow-sm">
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
       <div class="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10" />
 
@@ -212,95 +212,6 @@ const submitPractice =
           MakeCode lalu kumpulkan link
           proyekmu.
         </p>
-      </div>
-    </section>
-
-    <!-- FLOW -->
-    <section class="rounded-xl bg-white p-4 shadow-sm">
-
-      <div class="flex items-center">
-
-        <!-- MATERI -->
-        <div class="flex flex-col items-center">
-
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
-
-            ✓
-          </div>
-
-          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
-
-            Materi
-          </p>
-        </div>
-
-        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-emerald-500" />
-
-        <!-- REFLEKSI -->
-        <div class="flex flex-col items-center">
-
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
-
-            ✓
-          </div>
-
-          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
-
-            Refleksi
-          </p>
-        </div>
-
-        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-emerald-500" />
-
-        <!-- QUIZ -->
-        <div class="flex flex-col items-center">
-
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
-
-            ✓
-          </div>
-
-          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
-
-            Kuis
-          </p>
-        </div>
-
-        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-blue-500" />
-
-        <!-- PRACTICE -->
-        <div class="flex flex-col items-center">
-
-          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
-
-            4
-          </div>
-
-          <p class="mt-2 text-[10px] font-semibold text-blue-600">
-
-            Praktik
-          </p>
-        </div>
-
-        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-slate-200" />
-
-        <!-- LKPD -->
-        <div class="flex flex-col items-center">
-
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-500">
-
-            5
-          </div>
-
-          <p class="mt-2 text-[10px] font-semibold text-slate-500">
-
-            LKPD
-          </p>
-        </div>
       </div>
     </section>
 
@@ -390,7 +301,7 @@ const submitPractice =
 
         <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-100">
 
-          <Lock class="h-4 w-4 text-amber-600" />
+          <CircleAlert class="h-4 w-4 text-amber-600" />
         </div>
 
         <div class="text-amber-600 text-xs">

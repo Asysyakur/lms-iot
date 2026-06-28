@@ -9,7 +9,7 @@ import StudentSidebarLayout from '@/layouts/student/StudentSidebarLayout.vue';
 import {
   FileSpreadsheet,
   CheckCircle2,
-  ExternalLink,
+  Download,
   Upload,
   Lock,
   FileText,
@@ -253,7 +253,7 @@ const submitLkpd = async () => {
 
     <!-- HEADER -->
     <section
-      class="relative overflow-hidden rounded-xl bg-linear-to-r from-orange-600 to-amber-500 px-5 py-4 text-white shadow-sm">
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
       <div class="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/10" />
 
@@ -271,101 +271,12 @@ const submitLkpd = async () => {
           {{ props.meeting.title }}
         </h1>
 
-        <p class="mt-1 max-w-2xl text-sm text-orange-100">
+        <p class="mt-1 max-w-2xl text-sm text-emerald-100">
 
           Kerjakan LKPD berdasarkan hasil
           praktik lalu upload file
           pengerjaanmu.
         </p>
-      </div>
-    </section>
-
-    <!-- FLOW -->
-    <section class="rounded-xl bg-white p-4 shadow-sm">
-
-      <div class="flex items-center">
-
-        <!-- MATERI -->
-        <div class="flex flex-col items-center">
-
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
-
-            ✓
-          </div>
-
-          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
-
-            Materi
-          </p>
-        </div>
-
-        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-emerald-500" />
-
-        <!-- REFLEKSI -->
-        <div class="flex flex-col items-center">
-
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
-
-            ✓
-          </div>
-
-          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
-
-            Refleksi
-          </p>
-        </div>
-
-        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-emerald-500" />
-
-        <!-- KUIS -->
-        <div class="flex flex-col items-center">
-
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
-
-            ✓
-          </div>
-
-          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
-
-            Kuis
-          </p>
-        </div>
-
-        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-emerald-500" />
-
-        <!-- PRAKTIK -->
-        <div class="flex flex-col items-center">
-
-          <div
-            class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
-
-            ✓
-          </div>
-
-          <p class="mt-2 text-[10px] font-semibold text-emerald-600">
-
-            Praktik
-          </p>
-        </div>
-
-        <div class="mx-2 mb-5 h-[3px] flex-1 rounded-full bg-orange-500" />
-
-        <!-- LKPD -->
-        <div class="flex flex-col items-center">
-
-          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">
-
-            5
-          </div>
-
-          <p class="mt-2 text-[10px] font-semibold text-orange-600">
-
-            LKPD
-          </p>
-        </div>
       </div>
     </section>
 
@@ -399,7 +310,7 @@ const submitLkpd = async () => {
           class="flex items-start gap-3 rounded-xl border border-slate-200 p-3">
 
           <div
-            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-orange-500 text-[11px] font-bold text-white">
+            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-500 text-[11px] font-bold text-white">
 
             {{ index + 1 }}
           </div>
@@ -442,7 +353,7 @@ const submitLkpd = async () => {
         <a v-if="templateLink" :href="templateLink" target="_blank"
           class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700">
 
-          <ExternalLink class="h-4 w-4" />
+          <Download class="h-4 w-4" />
 
           Buka Template
         </a>
@@ -467,9 +378,9 @@ const submitLkpd = async () => {
               Template LKPD
             </h2>
 
-            <p class="mt-1 text-xs text-emerald-600">
+            <p class="mt-1 text-xs text-green-600">
 
-              Download template LKPD dari guru.
+              Unduh template LKPD dari guru.
             </p>
           </div>
         </div>
@@ -477,9 +388,9 @@ const submitLkpd = async () => {
         <a :href="templateFileUrl" target="_blank"
           class="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700">
 
-          <ExternalLink class="h-4 w-4" />
+          <Download class="h-4 w-4" />
 
-          Download Template
+          Unduh Template
         </a>
       </div>
     </section>
@@ -525,12 +436,12 @@ const submitLkpd = async () => {
 
         <!-- DROPZONE -->
         <div @drop="handleDrop" @dragover="handleDragOver" @dragleave="handleDragLeave" :class="isDragging
-          ? 'border-orange-500 bg-orange-100'
-          : 'border-orange-300 bg-orange-50'
+          ? 'border-blue-500 bg-blue-100'
+          : 'border-blue-300 bg-blue-50'
           "
           class="flex flex-col items-center justify-center rounded-xl border-2 border-dashed px-5 py-10 text-center transition">
 
-          <Upload class="mb-3 h-9 w-9 text-orange-500" />
+          <Upload class="mb-3 h-9 w-9 text-blue-500" />
 
           <h3 class="text-sm font-bold text-slate-700">
 
@@ -546,7 +457,7 @@ const submitLkpd = async () => {
           <input ref="fileInput" type="file" class="hidden" accept=".pdf,.doc,.docx" @change="handleFileChange" />
 
           <button type="button" @click="fileInput?.click()"
-            class="mt-4 rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-600">
+            class="mt-4 rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600">
 
             Pilih File
           </button>
@@ -624,7 +535,7 @@ const submitLkpd = async () => {
         <div class="flex justify-end">
 
           <button @click="submitLkpd" :disabled="!canSubmit" :class="canSubmit
-            ? 'bg-orange-500 hover:bg-orange-600'
+            ? 'bg-emerald-500 hover:bg-emerald-600'
             : 'cursor-not-allowed bg-slate-300 text-slate-500'
             " class="rounded-lg px-4 py-2 text-sm font-semibold text-white transition">
 
@@ -651,13 +562,7 @@ const submitLkpd = async () => {
     </section>
 
     <!-- FOOTER -->
-    <section class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-
-      <a :href="`/student/meetings/${props.meeting.id}/practice`"
-        class="rounded-lg border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50">
-
-        ← Kembali ke Praktik
-      </a>
+    <section class="flex flex-col gap-3 lg:flex-row lg:justify-end">
 
       <a v-if="
         evalOpened &&

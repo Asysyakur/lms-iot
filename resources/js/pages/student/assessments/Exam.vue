@@ -219,7 +219,7 @@ const submitting =
         Soal {{ currentQuestionIndex + 1 }}
       </p>
 
-      <h2 class="text-[15px] font-semibold leading-relaxed text-slate-800 md:text-lg">
+      <h2 class="whitespace-pre-line text-[15px] font-semibold leading-relaxed text-slate-800 md:text-lg">
         {{ currentQuestion.question }}
       </h2>
 

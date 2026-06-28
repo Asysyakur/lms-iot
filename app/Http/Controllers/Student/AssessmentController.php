@@ -43,6 +43,7 @@ class AssessmentController extends Controller
             ->count();
 
         $latestResult = $results
+            ->where('status', 'submitted')
             ->sortByDesc('created_at')
             ->first();
 
@@ -484,6 +485,11 @@ class AssessmentController extends Controller
                 'student_id',
                 Auth::id()
             )
+            ->where(
+                'status',
+                'submitted'
+            )
+            ->latest('submitted_at')
             ->firstOrFail();
 
         return Inertia::render(

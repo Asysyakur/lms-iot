@@ -489,7 +489,7 @@ watch(
     <div class="space-y-4">
 
         <!-- HEADER -->
-        <section class="relative overflow-hidden rounded-xl bg-[#173B74] px-4 py-3 text-white shadow-sm">
+        <section class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
             <div class="absolute right-0 top-0 h-28 w-28 rounded-full bg-cyan-400/10" />
 
@@ -550,7 +550,7 @@ watch(
                     </div>
                 </div>
 
-                <span class="rounded-full bg-purple-100 px-2 py-1 text-[10px] font-semibold text-purple-700">
+                <span class="rounded-full bg-red-100 px-2 py-1 text-[10px] font-semibold text-red-700">
 
                     Wajib
                 </span>
@@ -572,7 +572,7 @@ watch(
                 <div class="flex justify-end">
 
                     <button :disabled="triggerAnswer.trim() === ''" @click="saveTriggerAnswer" :class="triggerAnswer.trim() !== ''
-                        ? 'bg-purple-600 hover:bg-purple-700'
+                        ? 'bg-emerald-500 hover:bg-emerald-600'
                         : 'cursor-not-allowed bg-slate-200 text-slate-500'
                         " class="rounded-lg px-4 py-2 text-xs font-semibold text-white transition">
 
@@ -656,7 +656,7 @@ watch(
                     </p>
                 </div>
 
-                <span class="rounded-full bg-purple-100 px-2 py-1 text-[10px] font-semibold text-purple-700">
+                <span class="rounded-full bg-red-100 px-2 py-1 text-[10px] font-semibold text-red-700">
 
                     Wajib
                 </span>
@@ -679,7 +679,7 @@ watch(
                 <div class="flex justify-end">
 
                     <button :disabled="!reflectionCompleted || readingProgress < 70" @click="saveReflection" :class="reflectionCompleted && readingProgress >= 70
-                        ? 'bg-purple-600 hover:bg-purple-700'
+                        ? 'bg-emerald-500 hover:bg-emerald-600'
                         : 'cursor-not-allowed bg-slate-200 text-slate-500'
                         " class="rounded-lg px-4 py-2 text-xs font-semibold text-white transition">
 

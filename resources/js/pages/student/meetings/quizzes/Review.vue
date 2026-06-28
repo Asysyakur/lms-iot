@@ -75,7 +75,7 @@ const canContinue =
   <div class="space-y-4">
 
     <!-- HEADER -->
-    <section class="relative overflow-hidden rounded-xl bg-[#173B74] px-5 py-4 text-white shadow-sm">
+    <section class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
       <div class="absolute right-0 top-0 h-32 w-32 rounded-full bg-cyan-400/10" />
 
@@ -83,12 +83,6 @@ const canContinue =
 
         <!-- LEFT -->
         <div>
-
-          <span class="rounded-full bg-blue-100 px-2.5 py-1 text-[10px] font-semibold text-blue-700">
-
-            Hasil Kuis
-          </span>
-
           <h1 class="mt-3 text-2xl font-bold">
 
             Review Jawaban
@@ -165,7 +159,7 @@ const canContinue =
       <!-- ATTEMPTS -->
       <div class="rounded-xl bg-white p-4 shadow-sm">
 
-        <h2 class="text-3xl font-bold text-purple-500">
+        <h2 class="text-3xl font-bold text-blue-500">
 
           {{ props.attempts }}/3
         </h2>

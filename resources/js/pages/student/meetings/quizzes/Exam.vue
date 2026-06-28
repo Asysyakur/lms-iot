@@ -155,7 +155,7 @@ const submitQuiz =
 
     <!-- HEADER -->
     <section
-      class="rounded-xl bg-[#173B74] px-5 py-4 text-white shadow-sm">
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
       <div
         class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">

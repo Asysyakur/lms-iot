@@ -83,35 +83,20 @@ const hasOtherOngoingAssessment =
   <div class="space-y-4">
 
     <!-- HEADER -->
-    <section class="relative overflow-hidden rounded-2xl bg-[#173B74] px-5 py-4 text-white shadow-lg">
+    <section
+      class="relative overflow-hidden rounded-xl bg-linear-to-r from-[#173B74] via-[#114084] to-emerald-500 px-5 py-4 text-white shadow-sm">
 
-      <div class="absolute right-0 top-0 h-28 w-28 rounded-full bg-cyan-400/10" />
+      <div class="absolute right-0 top-0 h-44 w-44 rounded-full bg-white/10" />
 
       <div>
-
-        <span :class="isPretest
-          ? 'bg-blue-100 text-blue-700'
-          : 'bg-emerald-100 text-emerald-700'
-          " class="rounded-full px-2.5 py-1 text-[10px] font-semibold">
-
-          {{ props.assessment.title }}
-        </span>
-
-        <h1 class="mt-3 text-2xl font-bold md:text-3xl">
+        <h1 class="text-2xl font-bold md:text-3xl">
           {{ props.assessment.title }}
         </h1>
-
-        <p class="mt-1 text-sm text-slate-300">
-          {{ props.assessment.description }}
-        </p>
       </div>
     </section>
 
     <!-- CONTENT -->
-    <div class="grid gap-4" :class="!isPretest
-      ? 'xl:grid-cols-2'
-      : 'xl:grid-cols-1'
-      ">
+    <div class="grid gap-4 xl:grid-cols-2">
 
       <!-- REQUIREMENTS -->
       <div v-if="!isPretest" class="rounded-xl bg-white p-4 shadow-sm">
@@ -185,24 +170,24 @@ const hasOtherOngoingAssessment =
         </div>
 
         <!-- RULES -->
-        <div v-if="isPretest" class="mt-5 rounded-xl bg-slate-50 p-3">
-
-          <h3 class="mb-3 text-sm font-bold text-slate-700">
-
-            Ketentuan Tambahan
-          </h3>
-
-          <div class="space-y-2.5">
-
-            <div v-for="rule in pretestRules" :key="rule" class="flex items-start gap-2">
-
-              <div class="mt-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500" />
-
-              <span class="text-sm text-slate-600">
-
-                {{ rule }}
-              </span>
-            </div>
+      </div>
+      <div v-if="isPretest" class="rounded-xl bg-white p-4 shadow-sm">
+  
+        <h3 class="mb-3 text-sm font-bold text-slate-700">
+  
+          Ketentuan Tambahan
+        </h3>
+  
+        <div class="space-y-2.5">
+  
+          <div v-for="rule in pretestRules" :key="rule" class="flex items-start gap-2">
+  
+            <CheckCircle2 class="mt-0.5 h-4 w-4 text-emerald-500" />
+  
+            <span class="text-sm text-slate-600">
+  
+              {{ rule }}
+            </span>
           </div>
         </div>
       </div>

@@ -109,7 +109,7 @@ const getOptionText = (
         <div class="p-4">
 
           <!-- QUESTION -->
-          <h3 class="text-[15px] font-semibold text-slate-800">
+          <h3 class="whitespace-pre-line text-[15px] font-semibold text-slate-800">
             {{
               answer.question.question
             }}
