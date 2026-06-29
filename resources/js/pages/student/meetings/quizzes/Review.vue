@@ -21,6 +21,7 @@ const props = defineProps<{
 
   reviews: {
     question: string;
+    code?: string | null;
     student: string;
     correct: string;
     isCorrect: boolean;
@@ -231,6 +232,10 @@ const canContinue =
 
           {{ review.question }}
         </p>
+
+        <!-- CODE -->
+        <pre v-if="review.code"
+          class="mt-3 overflow-x-auto rounded-xl bg-slate-900 p-4 text-sm leading-relaxed text-emerald-300"><code>{{ review.code }}</code></pre>
 
         <!-- ANSWERS -->
         <div class="mt-4 grid gap-3 md:grid-cols-2">

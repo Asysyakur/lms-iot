@@ -17,10 +17,10 @@ class QuizController extends Controller
 
         $quizAvailable =
             $meeting->quizzes()
-            ->where('is_active', true)
-            ->exists();
+                ->where('is_active', true)
+                ->exists();
 
-        if (!$quizAvailable) {
+        if (! $quizAvailable) {
 
             return redirect()
                 ->route(
@@ -34,48 +34,44 @@ class QuizController extends Controller
                 'user_id',
                 auth()->id()
             )
-            ->where(
-                'meeting_id',
-                $meeting->id
-            )
-            ->where(
-                'passed',
-                true
-            )
-            ->latest()
-            ->first();
+                ->where(
+                    'meeting_id',
+                    $meeting->id
+                )
+                ->where(
+                    'passed',
+                    true
+                )
+                ->latest()
+                ->first();
 
         if ($passedAttempt) {
 
             return redirect()->route(
                 'student.meeting.quiz.review',
                 [
-                    'meeting' =>
-                    $meeting->id,
+                    'meeting' => $meeting->id,
 
-                    'attempt' =>
-                    $passedAttempt->id,
+                    'attempt' => $passedAttempt->id,
                 ]
             );
         }
 
         $questions =
             $meeting->quizzes()
-            ->where(
-                'is_active',
-                true
-            )
-            ->get();
+                ->where(
+                    'is_active',
+                    true
+                )
+                ->get();
 
         return Inertia::render(
             'student/meetings/quizzes/Exam',
             [
 
-                'meeting' =>
-                $meeting,
+                'meeting' => $meeting,
 
-                'questions' =>
-                $questions,
+                'questions' => $questions,
             ]
         );
     }
@@ -98,17 +94,16 @@ class QuizController extends Controller
                 'user_id',
                 auth()->id()
             )
-            ->where(
-                'meeting_id',
-                $meeting->id
-            )
-            ->count();
+                ->where(
+                    'meeting_id',
+                    $meeting->id
+                )
+                ->count();
 
         if ($attemptCount >= 3) {
 
             return response()->json([
-                'message' =>
-                'Kesempatan quiz habis.'
+                'message' => 'Kesempatan quiz habis.',
             ], 403);
         }
 
@@ -119,8 +114,7 @@ class QuizController extends Controller
 
                 'meeting_id' => $meeting->id,
 
-                'total_questions' =>
-                $questions->count(),
+                'total_questions' => $questions->count(),
 
                 'attempt_number' => $attemptCount + 1,
             ]);
@@ -141,17 +135,13 @@ class QuizController extends Controller
 
             QuizAnswer::create([
 
-                'quiz_attempt_id' =>
-                $attempt->id,
+                'quiz_attempt_id' => $attempt->id,
 
-                'quiz_id' =>
-                $question->id,
+                'quiz_id' => $question->id,
 
-                'selected_answer' =>
-                $selected,
+                'selected_answer' => $selected,
 
-                'is_correct' =>
-                $isCorrect,
+                'is_correct' => $isCorrect,
             ]);
         }
 
@@ -161,17 +151,13 @@ class QuizController extends Controller
 
         $attempt->update([
 
-            'score' =>
-            $score,
+            'score' => $score,
 
-            'correct_answers' =>
-            $correct,
+            'correct_answers' => $correct,
 
-            'passed' =>
-            $score >= 80,
+            'passed' => $score >= 80,
 
-            'submitted_at' =>
-            now(),
+            'submitted_at' => now(),
         ]);
 
         return response()->json([
@@ -190,7 +176,7 @@ class QuizController extends Controller
     ) {
 
         $attempt->load([
-            'answers.quiz'
+            'answers.quiz',
         ]);
 
         $reviews =
@@ -204,21 +190,19 @@ class QuizController extends Controller
 
                 return [
 
-                    'question' =>
-                    $answer->quiz->question,
+                    'question' => $answer->quiz->question,
 
-                    'student' =>
-                    $studentAnswer
-                        ? $studentAnswer . '. ' .
-                        $answer->quiz->{'option_' . strtolower($studentAnswer)}
+                    'code' => $answer->quiz->code,
+
+                    'student' => $studentAnswer
+                        ? $studentAnswer.'. '.
+                        $answer->quiz->{'option_'.strtolower($studentAnswer)}
                         : '-',
 
-                    'correct' =>
-                    $correctAnswer . '. ' .
-                        $answer->quiz->{'option_' . strtolower($correctAnswer)},
+                    'correct' => $correctAnswer.'. '.
+                        $answer->quiz->{'option_'.strtolower($correctAnswer)},
 
-                    'isCorrect' =>
-                    $answer->is_correct,
+                    'isCorrect' => $answer->is_correct,
                 ];
             });
 
@@ -226,24 +210,18 @@ class QuizController extends Controller
             'student/meetings/quizzes/Review',
             [
 
-                'meetingId' =>
-                $meeting->id,
+                'meetingId' => $meeting->id,
 
-                'score' =>
-                $attempt->score,
+                'score' => $attempt->score,
 
-                'correctAnswers' =>
-                $attempt->correct_answers,
+                'correctAnswers' => $attempt->correct_answers,
 
-                'wrongAnswers' =>
-                $attempt->total_questions -
+                'wrongAnswers' => $attempt->total_questions -
                     $attempt->correct_answers,
 
-                'attempts' =>
-                $attempt->attempt_number,
+                'attempts' => $attempt->attempt_number,
 
-                'reviews' =>
-                $reviews,
+                'reviews' => $reviews,
             ]
         );
     }

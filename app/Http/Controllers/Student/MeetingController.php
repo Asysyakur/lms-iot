@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\EvaluationSubmission;
+use App\Models\MaterialProgress;
 use App\Models\Meeting;
+use App\Models\MeetingFeedback;
+use App\Models\PracticeSubmission;
 use Inertia\Inertia;
 
 class MeetingController extends Controller
@@ -39,8 +43,28 @@ class MeetingController extends Controller
 
         $quizAvailable =
             $meeting->quizzes()
-            ->where('is_active', true)
-            ->exists();
+                ->where('is_active', true)
+                ->exists();
+
+        $materialProgress =
+            MaterialProgress::where('user_id', $userId)
+                ->where('meeting_id', $meeting->id)
+                ->first();
+
+        $practice =
+            PracticeSubmission::where('user_id', $userId)
+                ->where('meeting_id', $meeting->id)
+                ->first();
+
+        $evaluation =
+            EvaluationSubmission::where('user_id', $userId)
+                ->where('meeting_id', $meeting->id)
+                ->first();
+
+        $feedback =
+            MeetingFeedback::where('user_id', $userId)
+                ->where('meeting_id', $meeting->id)
+                ->first();
 
         $steps = [
 
@@ -55,8 +79,7 @@ class MeetingController extends Controller
 
                 'title' => 'Materi',
 
-                'description' =>
-                'Pelajari materi...',
+                'description' => 'Pelajari materi...',
 
                 'icon' => 'BookOpen',
 
@@ -72,11 +95,9 @@ class MeetingController extends Controller
                     $meeting->material?->is_active
                 ),
 
-                'completed' =>
-                $materialCompleted,
+                'completed' => $materialCompleted,
 
-                'href' =>
-                "/student/meetings/{$meeting->id}/material",
+                'href' => "/student/meetings/{$meeting->id}/material",
             ],
 
             /*
@@ -90,11 +111,9 @@ class MeetingController extends Controller
 
                 'title' => 'Kuis',
 
-                'description' =>
-                'Kerjakan kuis...',
+                'description' => 'Kerjakan kuis...',
 
-                'icon' =>
-                'ClipboardCheck',
+                'icon' => 'ClipboardCheck',
 
                 'active' => (
                     $meeting->is_active
@@ -110,11 +129,9 @@ class MeetingController extends Controller
                     $materialCompleted
                 ),
 
-                'completed' =>
-                $quizCompleted,
+                'completed' => $quizCompleted,
 
-                'href' =>
-                "/student/meetings/{$meeting->id}/quiz",
+                'href' => "/student/meetings/{$meeting->id}/quiz",
             ],
 
             /*
@@ -126,11 +143,9 @@ class MeetingController extends Controller
             [
                 'id' => 3,
 
-                'title' =>
-                'Praktik Mandiri',
+                'title' => 'Praktik Mandiri',
 
-                'description' =>
-                'Lakukan praktik...',
+                'description' => 'Lakukan praktik...',
 
                 'icon' => 'Code2',
 
@@ -148,11 +163,9 @@ class MeetingController extends Controller
                     $quizCompleted
                 ),
 
-                'completed' =>
-                $practiceCompleted,
+                'completed' => $practiceCompleted,
 
-                'href' =>
-                "/student/meetings/{$meeting->id}/practice",
+                'href' => "/student/meetings/{$meeting->id}/practice",
             ],
 
             /*
@@ -166,11 +179,9 @@ class MeetingController extends Controller
 
                 'title' => 'LKPD',
 
-                'description' =>
-                'Kerjakan LKPD...',
+                'description' => 'Kerjakan LKPD...',
 
-                'icon' =>
-                'FileSpreadsheet',
+                'icon' => 'FileSpreadsheet',
 
                 'active' => (
                     $meeting->is_active
@@ -186,11 +197,9 @@ class MeetingController extends Controller
                     $practiceCompleted
                 ),
 
-                'completed' =>
-                $lkpdCompleted,
+                'completed' => $lkpdCompleted,
 
-                'href' =>
-                "/student/meetings/{$meeting->id}/lkpd",
+                'href' => "/student/meetings/{$meeting->id}/lkpd",
             ],
 
             /*
@@ -202,14 +211,11 @@ class MeetingController extends Controller
             [
                 'id' => 5,
 
-                'title' =>
-                'Evaluasi',
+                'title' => 'Evaluasi',
 
-                'description' =>
-                'Kerjakan evaluasi...',
+                'description' => 'Kerjakan evaluasi...',
 
-                'icon' =>
-                'ClipboardList',
+                'icon' => 'ClipboardList',
 
                 'active' => (
                     $meeting->is_active
@@ -225,11 +231,9 @@ class MeetingController extends Controller
                     $lkpdCompleted
                 ),
 
-                'completed' =>
-                $evaluationCompleted,
+                'completed' => $evaluationCompleted,
 
-                'href' =>
-                "/student/meetings/{$meeting->id}/evaluation",
+                'href' => "/student/meetings/{$meeting->id}/evaluation",
             ],
         ];
 
@@ -239,29 +243,23 @@ class MeetingController extends Controller
 
                 'meeting' => [
 
-                    'id' =>
-                    $meeting->id,
+                    'id' => $meeting->id,
 
-                    'title' =>
-                    $meeting->title,
+                    'title' => $meeting->title,
 
-                    'subtitle' =>
-                    $meeting->subtitle,
+                    'subtitle' => $meeting->subtitle,
 
-                    'description' =>
-                    $meeting->description,
+                    'description' => $meeting->description,
 
                     'opened' => $meeting->is_active,
 
-                    'opened_at' =>
-                    $meeting->opened_at
+                    'opened_at' => $meeting->opened_at
                         ? $meeting->opened_at->format(
                             'd M Y H:i'
                         )
                         : '-',
 
-                    'closed_at' =>
-                    $meeting->closed_at
+                    'closed_at' => $meeting->closed_at
                         ? $meeting->closed_at->format(
                             'd M Y H:i'
                         )
@@ -269,6 +267,17 @@ class MeetingController extends Controller
                 ],
 
                 'steps' => $steps,
+
+                'scores' => [
+
+                    'trigger' => $materialProgress?->trigger_score,
+
+                    'practice' => $practice?->score,
+
+                    'evaluation' => $evaluation?->score,
+                ],
+
+                'feedback' => $feedback?->feedback,
             ]
         );
     }

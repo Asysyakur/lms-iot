@@ -18,6 +18,8 @@ class QuizController extends Controller
 
             'question' => 'required|string',
 
+            'code' => 'nullable|string',
+
             'option_a' => 'required|string',
             'option_b' => 'required|string',
             'option_c' => 'required|string',
@@ -25,6 +27,11 @@ class QuizController extends Controller
 
             'answer' => 'required|in:A,B,C,D',
         ]);
+
+        $validated['is_active'] = Quiz::where(
+            'meeting_id',
+            $validated['meeting_id']
+        )->value('is_active') ?? false;
 
         $quiz = Quiz::create($validated);
 
@@ -42,6 +49,8 @@ class QuizController extends Controller
     ) {
         $validated = $request->validate([
             'question' => 'required|string',
+
+            'code' => 'nullable|string',
 
             'option_a' => 'required|string',
             'option_b' => 'required|string',
@@ -89,7 +98,7 @@ class QuizController extends Controller
         }
 
         $isActive =
-            !$quizzes->first()->is_active;
+            ! $quizzes->first()->is_active;
 
         Quiz::where(
             'meeting_id',

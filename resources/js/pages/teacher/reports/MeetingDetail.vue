@@ -76,8 +76,22 @@ const form = useForm({
         evaluationScore:
           student.evaluationScore
           || 0,
+
+        feedback:
+          student.feedback
+          || '',
       }),
     ),
+});
+
+const selectedFormStudent = computed(() => {
+
+  return form.students.find(
+    (formStudent: any) =>
+      formStudent.id ===
+      selectedStudent.value?.id,
+  );
+
 });
 
 const saveScores =
@@ -806,6 +820,32 @@ student,
             <div v-else class="p-5 text-sm text-slate-400">
 
               Belum ada jawaban evaluasi.
+
+            </div>
+
+          </section>
+
+          <!-- Feedback -->
+          <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+            <div class="border-b bg-slate-50 px-5 py-3">
+
+              <h3 class="font-semibold text-slate-800">
+                Feedback untuk Siswa
+              </h3>
+
+            </div>
+
+            <div v-if="selectedFormStudent" class="p-5">
+
+              <textarea v-model="selectedFormStudent.feedback" rows="4"
+                placeholder="Tulis catatan atau masukan untuk siswa pada pertemuan ini..."
+                class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-500" />
+
+              <p class="mt-2 text-xs text-slate-400">
+                Feedback akan tampil di halaman overview pertemuan siswa. Klik
+                "Simpan Nilai" untuk menyimpan.
+              </p>
 
             </div>
 

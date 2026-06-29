@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Teacher;
 
-use App\Http\Controllers\Controller;
-
-use App\Models\Meeting;
-use App\Models\User;
 use App\Exports\FullReportExport;
-use App\Exports\PrePostReportExport;
 use App\Exports\MeetingDetailExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PrePostReportExport;
+use App\Http\Controllers\Controller;
+use App\Models\EvaluationSubmission;
+use App\Models\MaterialProgress;
+use App\Models\Meeting;
+use App\Models\MeetingFeedback;
+use App\Models\PracticeSubmission;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -36,9 +39,9 @@ class ReportController extends Controller
 
                 $completedStudents =
                     $meeting->evaluationSubmissions
-                    ->pluck('user_id')
-                    ->unique()
-                    ->count();
+                        ->pluck('user_id')
+                        ->unique()
+                        ->count();
 
                 $percentage =
                     $totalStudents > 0
@@ -49,14 +52,11 @@ class ReportController extends Controller
 
                 return [
 
-                    'id' =>
-                    $meeting->id,
+                    'id' => $meeting->id,
 
-                    'title' =>
-                    $meeting->title,
+                    'title' => $meeting->title,
 
-                    'percentage' =>
-                    $percentage,
+                    'percentage' => $percentage,
                 ];
             }
         );
@@ -66,43 +66,33 @@ class ReportController extends Controller
             [
                 'id' => 'prepost',
 
-                'title' =>
-                'Hasil Pre-test & Post-test',
+                'title' => 'Hasil Pre-test & Post-test',
 
-                'description' =>
-                'Lihat nilai pre-test dan post-test siswa.',
+                'description' => 'Lihat nilai pre-test dan post-test siswa.',
 
                 'icon' => '📄',
 
-                'href' =>
-                '/teacher/reports/assessments',
+                'href' => '/teacher/reports/assessments',
 
-                'color' =>
-                'from-blue-500 to-cyan-500',
-            ]
+                'color' => 'from-blue-500 to-cyan-500',
+            ],
         ];
 
         foreach ($meetings as $meeting) {
 
             $menus[] = [
 
-                'id' =>
-                'meeting-' . $meeting->id,
+                'id' => 'meeting-'.$meeting->id,
 
-                'title' =>
-                'Hasil ' . $meeting->title,
+                'title' => 'Hasil '.$meeting->title,
 
-                'description' =>
-                'Monitoring aktivitas siswa.',
+                'description' => 'Monitoring aktivitas siswa.',
 
-                'icon' =>
-                (string) $meeting->meeting_number,
+                'icon' => (string) $meeting->meeting_number,
 
-                'href' =>
-                '/teacher/reports/meetings/' . $meeting->id,
+                'href' => '/teacher/reports/meetings/'.$meeting->id,
 
-                'color' =>
-                'from-emerald-500 to-teal-500',
+                'color' => 'from-emerald-500 to-teal-500',
             ];
         }
 
@@ -110,11 +100,9 @@ class ReportController extends Controller
             'teacher/reports/Index',
             [
 
-                'menus' =>
-                $menus,
+                'menus' => $menus,
 
-                'meetingProgress' =>
-                $meetingProgress,
+                'meetingProgress' => $meetingProgress,
             ]
         );
     }
@@ -124,6 +112,13 @@ class ReportController extends Controller
     ) {
 
         $meeting->load('practice');
+
+        $feedbacks = MeetingFeedback::where(
+            'meeting_id',
+            $meeting->id
+        )
+            ->get()
+            ->keyBy('user_id');
 
         $students = User::where(
             'role',
@@ -137,77 +132,66 @@ class ReportController extends Controller
                 'quizAttempts',
             ])
             ->get()
-            ->map(function ($student) use ($meeting) {
+            ->map(function ($student) use ($meeting, $feedbacks) {
                 $materialProgress =
                     $student->materialProgress
-                    ->where('meeting_id', $meeting->id)
-                    ->first();
+                        ->where('meeting_id', $meeting->id)
+                        ->first();
 
                 $quizAttempt =
                     $student->quizAttempts
-                    ->where('meeting_id', $meeting->id)
-                    ->first();
+                        ->where('meeting_id', $meeting->id)
+                        ->first();
 
                 $practice =
                     $student->practiceSubmissions
-                    ->where('meeting_id', $meeting->id)
-                    ->first();
+                        ->where('meeting_id', $meeting->id)
+                        ->first();
 
                 $lkpd =
                     $student->lkpdSubmissions
-                    ->where('meeting_id', $meeting->id)
-                    ->first();
+                        ->where('meeting_id', $meeting->id)
+                        ->first();
 
                 $evaluation =
                     $student->evaluationSubmissions
-                    ->where('meeting_id', $meeting->id)
-                    ->first();
+                        ->where('meeting_id', $meeting->id)
+                        ->first();
 
                 return [
 
-                    'id' =>
-                    $student->id,
+                    'id' => $student->id,
 
-                    'name' =>
-                    $student->name,
+                    'name' => $student->name,
 
-                    'triggerAnswer' =>
-                    $materialProgress?->trigger_answer ?? "Belum",
+                    'triggerAnswer' => $materialProgress?->trigger_answer ?? 'Belum',
 
-                    'triggerScore' =>
-                    $materialProgress?->trigger_score ?? 0,
+                    'triggerScore' => $materialProgress?->trigger_score ?? 0,
 
-                    'accessTime' =>
-                    $materialProgress
+                    'accessTime' => $materialProgress
                         ? gmdate(
                             'H:i:s',
                             $materialProgress->duration_seconds
                         )
                         : '00:00:00',
 
-                    'reflectionAnswer' =>
-                    $materialProgress?->reflection_answers ?? "[Belum]",
+                    'reflectionAnswer' => $materialProgress?->reflection_answers ?? '[Belum]',
 
-                    'quiz' =>
-                    $quizAttempt?->score ?? 0,
+                    'quiz' => $quizAttempt?->score ?? 0,
 
-                    'practiceScore' =>
-                    $practice?->score ?? 0,
+                    'practiceScore' => $practice?->score ?? 0,
 
-                    'practice' =>
-                    $practice?->project_url ?? null,
+                    'practice' => $practice?->project_url ?? null,
 
-                    'practiceText' =>
-                    $practice?->submission_text ?? null,
+                    'practiceText' => $practice?->submission_text ?? null,
 
-                    'lkpd' =>
-                    $lkpd?->file_path ?? null,
+                    'lkpd' => $lkpd?->file_path ?? null,
 
-                    'evaluation' =>
-                    $evaluation?->answers ?? null,
+                    'evaluation' => $evaluation?->answers ?? null,
 
-                    'evaluationScore' =>
-                    $evaluation?->score ?? 0,
+                    'evaluationScore' => $evaluation?->score ?? 0,
+
+                    'feedback' => $feedbacks->get($student->id)?->feedback ?? '',
                 ];
             });
 
@@ -219,12 +203,10 @@ class ReportController extends Controller
 
                     ...$meeting->toArray(),
 
-                    'practiceType' =>
-                    $meeting->practice?->submission_type,
+                    'practiceType' => $meeting->practice?->submission_type,
                 ],
 
-                'students' =>
-                $students,
+                'students' => $students,
             ]
         );
     }
@@ -249,46 +231,39 @@ class ReportController extends Controller
 
                 $pretest =
                     $student->assessmentResults
-                    ->first(function ($result) {
+                        ->first(function ($result) {
 
-                        return
-                            $result->assessment?->type
-                            === 'pretest';
-                    });
+                            return
+                                $result->assessment?->type
+                                === 'pretest';
+                        });
 
                 $posttest =
                     $student->assessmentResults
-                    ->first(function ($result) {
+                        ->first(function ($result) {
 
-                        return
-                            $result->assessment?->type
-                            === 'posttest';
-                    });
+                            return
+                                $result->assessment?->type
+                                === 'posttest';
+                        });
 
                 return [
 
-                    'id' =>
-                    $student->id,
+                    'id' => $student->id,
 
-                    'name' =>
-                    $student->name,
+                    'name' => $student->name,
 
-                    'class' =>
-                    $student->class,
+                    'class' => $student->class,
 
-                    'pretest_score' =>
-                    $pretest?->score,
+                    'pretest_score' => $pretest?->score,
 
-                    'posttest_score' =>
-                    $posttest?->score,
+                    'posttest_score' => $posttest?->score,
 
-                    'pretest_status' =>
-                    $pretest
+                    'pretest_status' => $pretest
                         ? 'Selesai'
                         : 'Belum',
 
-                    'posttest_status' =>
-                    $posttest
+                    'posttest_status' => $posttest
                         ? 'Selesai'
                         : 'Belum',
                 ];
@@ -298,8 +273,7 @@ class ReportController extends Controller
             'teacher/reports/PrePostReport',
             [
 
-                'students' =>
-                $students,
+                'students' => $students,
             ]
         );
     }
@@ -320,22 +294,21 @@ class ReportController extends Controller
         */
 
             $materialProgress =
-                \App\Models\MaterialProgress::where(
+                MaterialProgress::where(
                     'user_id',
                     $studentData['id']
                 )
-                ->where(
-                    'meeting_id',
-                    $meeting->id
-                )
-                ->first();
+                    ->where(
+                        'meeting_id',
+                        $meeting->id
+                    )
+                    ->first();
 
             if ($materialProgress) {
 
                 $materialProgress->update([
 
-                    'trigger_score' =>
-                    $studentData['triggerScore'] ?? 0,
+                    'trigger_score' => $studentData['triggerScore'] ?? 0,
                 ]);
             }
 
@@ -346,22 +319,21 @@ class ReportController extends Controller
         */
 
             $practice =
-                \App\Models\PracticeSubmission::where(
+                PracticeSubmission::where(
                     'user_id',
                     $studentData['id']
                 )
-                ->where(
-                    'meeting_id',
-                    $meeting->id
-                )
-                ->first();
+                    ->where(
+                        'meeting_id',
+                        $meeting->id
+                    )
+                    ->first();
 
             if ($practice) {
 
                 $practice->update([
 
-                    'score' =>
-                    $studentData['practiceScore'] ?? 0,
+                    'score' => $studentData['practiceScore'] ?? 0,
                 ]);
             }
 
@@ -372,24 +344,39 @@ class ReportController extends Controller
         */
 
             $evaluation =
-                \App\Models\EvaluationSubmission::where(
+                EvaluationSubmission::where(
                     'user_id',
                     $studentData['id']
                 )
-                ->where(
-                    'meeting_id',
-                    $meeting->id
-                )
-                ->first();
+                    ->where(
+                        'meeting_id',
+                        $meeting->id
+                    )
+                    ->first();
 
             if ($evaluation) {
 
                 $evaluation->update([
 
-                    'score' =>
-                    $studentData['evaluationScore'] ?? 0,
+                    'score' => $studentData['evaluationScore'] ?? 0,
                 ]);
             }
+
+            /*
+        |--------------------------------------------------------------------------
+        | FEEDBACK
+        |--------------------------------------------------------------------------
+        */
+
+            MeetingFeedback::updateOrCreate(
+                [
+                    'meeting_id' => $meeting->id,
+                    'user_id' => $studentData['id'],
+                ],
+                [
+                    'feedback' => $studentData['feedback'] ?? null,
+                ]
+            );
         }
 
         return back()->with(
@@ -420,7 +407,7 @@ class ReportController extends Controller
 
         return Excel::download(
             new MeetingDetailExport($meeting),
-            'laporan-' . $meeting->title . '.xlsx'
+            'laporan-'.$meeting->title.'.xlsx'
         );
     }
 }

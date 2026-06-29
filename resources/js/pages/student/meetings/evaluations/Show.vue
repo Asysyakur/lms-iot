@@ -84,14 +84,8 @@ const submitEvaluation =
 
       <div class="relative z-10">
 
-        <!-- BADGE -->
-        <span class="rounded-full bg-white/20 px-2.5 py-1 text-[10px] font-semibold">
-
-          Evaluasi
-        </span>
-
         <!-- TITLE -->
-        <h1 class="mt-3 text-2xl font-bold">
+        <h1 class="text-2xl font-bold">
 
           Evaluasi Pertemuan
           {{

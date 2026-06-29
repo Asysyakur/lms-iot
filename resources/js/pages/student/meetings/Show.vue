@@ -31,6 +31,12 @@ interface Step {
 const props = defineProps<{
   meeting: any;
   steps: Step[];
+  scores: {
+    trigger: number | null;
+    practice: number | null;
+    evaluation: number | null;
+  };
+  feedback: string | null;
 }>();
 
 const meeting = props.meeting;
@@ -150,6 +156,69 @@ const firstStep =
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- NILAI -->
+    <section class="rounded-xl bg-white p-4 shadow-sm">
+
+      <h2 class="mb-4 text-[15px] font-bold text-slate-800">
+
+        Nilai Kamu
+      </h2>
+
+      <div class="grid gap-3 md:grid-cols-3">
+
+        <!-- PEMANTIK -->
+        <div class="rounded-xl border border-slate-200 p-4">
+
+          <p class="text-xs text-slate-500">
+            Nilai Pemantik
+          </p>
+
+          <h3 class="mt-1 text-2xl font-bold text-blue-600">
+            {{ scores.trigger ?? '-' }}
+          </h3>
+        </div>
+
+        <!-- PRAKTIKUM -->
+        <div class="rounded-xl border border-slate-200 p-4">
+
+          <p class="text-xs text-slate-500">
+            Nilai Praktikum
+          </p>
+
+          <h3 class="mt-1 text-2xl font-bold text-emerald-600">
+            {{ scores.practice ?? '-' }}
+          </h3>
+        </div>
+
+        <!-- EVALUASI -->
+        <div class="rounded-xl border border-slate-200 p-4">
+
+          <p class="text-xs text-slate-500">
+            Nilai Evaluasi
+          </p>
+
+          <h3 class="mt-1 text-2xl font-bold text-violet-600">
+            {{ scores.evaluation ?? '-' }}
+          </h3>
+        </div>
+      </div>
+
+      <!-- FEEDBACK -->
+      <div class="mt-4 rounded-xl border p-4" :class="feedback
+        ? 'border-amber-200 bg-amber-50'
+        : 'border-slate-200 bg-slate-50'
+        ">
+
+        <p class="text-xs font-semibold" :class="feedback ? 'text-amber-700' : 'text-slate-500'">
+          Feedback dari Guru
+        </p>
+
+        <p class="mt-1.5 text-sm leading-relaxed" :class="feedback ? 'text-amber-800' : 'text-slate-400'">
+          {{ feedback || 'Belum ada feedback dari guru untuk pertemuan ini.' }}
+        </p>
       </div>
     </section>
 

@@ -36,6 +36,7 @@ const form = useForm({
     props.meeting.id,
 
   question: '',
+  code: '',
 
   option_a: '',
   option_b: '',
@@ -88,6 +89,9 @@ const editQuiz =
 
     form.question =
       quiz.question;
+
+    form.code =
+      quiz.code ?? '';
 
     form.option_a =
       quiz.option_a;
@@ -338,6 +342,27 @@ const toggleQuizMeeting =
           class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-500" />
       </div>
 
+      <!-- CODE -->
+      <div>
+
+        <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+          Kode Program
+          <span class="font-normal text-slate-400">
+            (opsional)
+          </span>
+        </label>
+
+        <textarea v-model="form.code" rows="6" placeholder="Tempel kode program di sini jika soal membutuhkan..."
+          class="w-full rounded-lg border border-slate-200 bg-slate-900 px-4 py-3 font-mono text-sm text-emerald-300 outline-none transition focus:border-emerald-500" />
+
+        <p class="mt-1.5 text-xs text-slate-400">
+
+          Kode akan ditampilkan terpisah
+          dari teks soal pada tampilan siswa.
+        </p>
+      </div>
+
       <!-- OPTIONS -->
       <div class="grid gap-3 md:grid-cols-2">
 
@@ -429,6 +454,10 @@ const toggleQuizMeeting =
 
                 {{ quiz.question }}
               </h4>
+
+              <!-- CODE -->
+              <pre v-if="quiz.code"
+                class="mt-2 overflow-x-auto rounded-lg bg-slate-900 p-3 text-xs leading-relaxed text-emerald-300"><code>{{ quiz.code }}</code></pre>
 
               <p class="mt-2 text-xs text-slate-500">
 
