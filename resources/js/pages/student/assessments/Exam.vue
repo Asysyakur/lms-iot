@@ -111,14 +111,6 @@ const selectAnswer = async (option: string) => {
     question_id: currentQuestion.value.id,
     answer: option,
   });
-
-  if (
-    currentQuestionIndex.value <
-    totalQuestions - 1
-  ) {
-
-    currentQuestionIndex.value++;
-  }
 };
 
 const nextQuestion = () => {

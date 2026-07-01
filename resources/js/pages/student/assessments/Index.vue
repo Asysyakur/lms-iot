@@ -172,20 +172,20 @@ const hasOtherOngoingAssessment =
         <!-- RULES -->
       </div>
       <div v-if="isPretest" class="rounded-xl bg-white p-4 shadow-sm">
-  
+
         <h3 class="mb-3 text-sm font-bold text-slate-700">
-  
+
           Ketentuan Tambahan
         </h3>
-  
+
         <div class="space-y-2.5">
-  
+
           <div v-for="rule in pretestRules" :key="rule" class="flex items-start gap-2">
-  
+
             <CheckCircle2 class="mt-0.5 h-4 w-4 text-emerald-500" />
-  
+
             <span class="text-sm text-slate-600">
-  
+
               {{ rule }}
             </span>
           </div>
@@ -323,15 +323,6 @@ const hasOtherOngoingAssessment =
           <template v-else>
 
             <div class="flex flex-wrap items-center gap-3">
-
-              <div class="text-xs text-slate-500">
-
-                Kesempatan tersisa:
-                <span class="font-bold">
-                  {{ props.remainingAttempts }}
-                </span>
-              </div>
-
               <div class="flex flex-wrap items-center gap-3">
                 <!-- ATTEMPT -->
                 <div class="text-xs text-slate-500">
