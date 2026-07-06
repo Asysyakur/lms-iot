@@ -2,116 +2,27 @@
 
 namespace App\Exports;
 
-use App\Models\User;
+use App\Exports\Sheets\AssessmentDetailSheet;
+use App\Exports\Sheets\PrePostSummarySheet;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithStyles;
-
-class PrePostReportExport implements
-    FromCollection,
-    WithHeadings,
-    ShouldAutoSize,
-    WithStyles
+class PrePostReportExport implements WithMultipleSheets
 {
-    public function collection()
-    {
-        return User::with(
-            'assessmentResults'
-        )
-            ->where(
-                'role',
-                'student'
-            )
-            ->get()
-            ->map(function ($student) {
-
-                $pretest =
-                    $student
-                    ->assessmentResults
-                    ->where(
-                        'assessment_id',
-                        1
-                    )
-                    ->first();
-
-                $posttest =
-                    $student
-                    ->assessmentResults
-                    ->where(
-                        'assessment_id',
-                        2
-                    )
-                    ->first();
-
-                return [
-
-                    'Nama Siswa' =>
-                    $student->name,
-
-                    'Nilai Pre-test' =>
-                    $pretest?->score ?? '-',
-
-                    'Nilai Post-test' =>
-                    $posttest?->score ?? '-',
-
-                    'Status Pre-test' =>
-                    $pretest?->status
-                        ?? 'Belum',
-
-                    'Status Post-test' =>
-                    $posttest?->status
-                        ?? 'Belum',
-                ];
-            });
-    }
-
-    public function headings(): array
+    public function sheets(): array
     {
         return [
 
-            'Nama Siswa',
+            new PrePostSummarySheet,
 
-            'Nilai Pre-test',
+            new AssessmentDetailSheet(
+                'pretest',
+                'Detail Pre-test'
+            ),
 
-            'Nilai Post-test',
-
-            'Status Pre-test',
-
-            'Status Post-test',
-        ];
-    }
-
-    public function styles(
-        Worksheet $sheet
-    ) {
-
-        return [
-
-            /**
-             * HEADER
-             */
-            1 => [
-
-                'font' => [
-                    'bold' => true,
-                    'color' => [
-                        'rgb' => 'FFFFFF'
-                    ],
-                ],
-
-                'fill' => [
-
-                    'fillType' => 'solid',
-
-                    'startColor' => [
-                        'rgb' => '173B74'
-                    ],
-                ],
-            ],
+            new AssessmentDetailSheet(
+                'posttest',
+                'Detail Post-test'
+            ),
         ];
     }
 }
