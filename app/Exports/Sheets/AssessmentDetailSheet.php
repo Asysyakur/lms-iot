@@ -8,11 +8,12 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class AssessmentDetailSheet implements FromCollection, ShouldAutoSize, WithHeadings, WithStyles, WithTitle
+class AssessmentDetailSheet implements FromCollection, ShouldAutoSize, WithHeadings, WithStrictNullComparison, WithStyles, WithTitle
 {
     protected ?Assessment $assessment;
 
@@ -81,7 +82,7 @@ class AssessmentDetailSheet implements FromCollection, ShouldAutoSize, WithHeadi
 
                     $row['No '.($index + 1)] =
                         $answer
-                        ? ($answer->is_correct ? 'Benar' : 'Salah')
+                        ? ($answer->is_correct ? 1 : 0)
                         : '-';
                 }
 

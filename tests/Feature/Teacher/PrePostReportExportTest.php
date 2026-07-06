@@ -93,8 +93,8 @@ test('teacher can export pre/post test report with per-question answer detail', 
                 $student->name
             );
 
-            expect($row['No 1'])->toBe('Benar');
-            expect($row['No 2'])->toBe('Salah');
+            expect($row['No 1'])->toBe(1);
+            expect($row['No 2'])->toBe(0);
 
             return true;
         }
