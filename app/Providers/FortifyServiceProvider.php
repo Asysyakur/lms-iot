@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\Fortify\CreateNewUser;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -16,8 +18,9 @@ class FortifyServiceProvider extends ServiceProvider
     public function register(): void
     {
         // Fix: Bind LoginViewResponse contract to inertia response
-        $this->app->singleton(\Laravel\Fortify\Contracts\LoginViewResponse::class, function () {
-            return new class implements \Laravel\Fortify\Contracts\LoginViewResponse {
+        $this->app->singleton(LoginViewResponse::class, function () {
+            return new class implements LoginViewResponse
+            {
                 public function toResponse($request)
                 {
                     return inertia('auth/Login');
@@ -47,6 +50,12 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(function () {
             return inertia('auth/Login');
         });
+
+        Fortify::registerView(function () {
+            return inertia('auth/Register');
+        });
+
+        Fortify::createUsersUsing(CreateNewUser::class);
 
         /*
         |--------------------------------------------------------------------------

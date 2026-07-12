@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { register } from '@/routes';
 import Logo from '@/../../public/LOGO.png';
 
 defineOptions({
@@ -171,6 +172,14 @@ const submit = () => {
 
                             Ingat saya
                         </label>
+
+                        <!-- REGISTER LINK -->
+                        <p class="text-center text-sm text-slate-500">
+                            Belum punya akun?
+                            <Link :href="register()" class="font-semibold text-teal-600 hover:underline">
+                                Daftar di sini
+                            </Link>
+                        </p>
 
                         <!-- BUTTON -->
                         <button type="submit" :disabled="form.processing"
