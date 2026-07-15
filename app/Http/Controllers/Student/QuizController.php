@@ -14,6 +14,10 @@ class QuizController extends Controller
     public function exam(
         Meeting $meeting
     ) {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
 
         $quizAvailable =
             $meeting->quizzes()
@@ -80,6 +84,10 @@ class QuizController extends Controller
         Request $request,
         Meeting $meeting
     ) {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
 
         $answers =
             $request->answers;
@@ -174,6 +182,15 @@ class QuizController extends Controller
         Meeting $meeting,
         QuizAttempt $attempt
     ) {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
+
+        abort_unless(
+            $attempt->user_id === auth()->id(),
+            403
+        );
 
         $attempt->load([
             'answers.quiz',

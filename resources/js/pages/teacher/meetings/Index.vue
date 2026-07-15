@@ -54,6 +54,7 @@ const scrollToSection = (
 
 const props = defineProps<{
   meetings: any[];
+  classOptions: string[];
 }>();
 
 const meetings = ref(
@@ -78,6 +79,8 @@ const meetingForm = useForm({
   description: '',
 
   meeting_number: 1,
+
+  target_class: '',
 });
 
 const createMeeting =
@@ -175,6 +178,9 @@ const editMeeting = (
 
   meetingForm.description =
     meeting.description;
+
+  meetingForm.target_class =
+    meeting.target_class ?? '';
 
   showMeetingModal.value =
     true;
@@ -274,6 +280,9 @@ const resetMeetingForm =
       1;
 
     meetingForm.description =
+      '';
+
+    meetingForm.target_class =
       '';
   };
 </script>
@@ -476,6 +485,26 @@ const resetMeetingForm =
           <textarea v-model="meetingForm.description
             " rows="4" placeholder="Contoh: Materi pengenalan tentang Micro:bit"
             class="w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-500" />
+        </div>
+
+        <!-- CLASS -->
+        <div>
+
+          <label class="mb-2 block text-sm font-semibold text-slate-700">
+
+            Kelas Target
+          </label>
+
+          <select v-model="meetingForm.target_class"
+            class="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-emerald-500">
+            <option value="">
+              Semua kelas
+            </option>
+
+            <option v-for="item in props.classOptions" :key="item" :value="item">
+              {{ item }}
+            </option>
+          </select>
         </div>
 
         <!-- BUTTON -->

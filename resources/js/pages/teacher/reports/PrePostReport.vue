@@ -67,6 +67,11 @@ defineOptions({
 
               <th class="px-4 py-3 text-left text-[11px] font-semibold whitespace-nowrap">
 
+                Kelas
+              </th>
+
+              <th class="px-4 py-3 text-left text-[11px] font-semibold whitespace-nowrap">
+
                 Nilai Pre-test
               </th>
 
@@ -104,6 +109,12 @@ defineOptions({
               <td class="px-4 py-3 text-sm font-semibold whitespace-nowrap text-slate-700">
 
                 {{ student.name }}
+              </td>
+
+              <!-- CLASS -->
+              <td class="px-4 py-3 text-sm whitespace-nowrap text-slate-600">
+
+                {{ student.class }}
               </td>
 
               <!-- PRETEST -->
@@ -159,7 +170,7 @@ defineOptions({
             <!-- EMPTY -->
             <tr v-if="!students.length">
 
-              <td colspan="6" class="px-4 py-10 text-center text-sm text-slate-500">
+              <td colspan="7" class="px-4 py-10 text-center text-sm text-slate-500">
 
                 Belum ada data nilai
               </td>

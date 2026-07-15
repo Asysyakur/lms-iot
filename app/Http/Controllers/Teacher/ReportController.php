@@ -29,16 +29,29 @@ class ReportController extends Controller
             ->orderBy('meeting_number')
             ->get();
 
-        $totalStudents = User::where(
-            'role',
-            'student'
-        )->count();
-
         $meetingProgress = $meetings->map(
-            function ($meeting) use ($totalStudents) {
+            function ($meeting) {
+
+                $studentIds =
+                    User::where(
+                        'role',
+                        'student'
+                    )
+                    ->when(
+                        $meeting->target_class,
+                        fn($query) =>
+                        $query->where(
+                            'class',
+                            $meeting->target_class
+                        )
+                    )
+                    ->pluck('id');
+
+                $totalStudents = $studentIds->count();
 
                 $completedStudents =
                     $meeting->evaluationSubmissions
+                        ->whereIn('user_id', $studentIds->all())
                         ->pluck('user_id')
                         ->unique()
                         ->count();
@@ -55,6 +68,7 @@ class ReportController extends Controller
                     'id' => $meeting->id,
 
                     'title' => $meeting->title,
+                    'class' => $meeting->target_class ?? 'Semua kelas',
 
                     'percentage' => $percentage,
                 ];
@@ -69,6 +83,7 @@ class ReportController extends Controller
                 'title' => 'Hasil Pre-test & Post-test',
 
                 'description' => 'Lihat nilai pre-test dan post-test siswa.',
+                'class' => 'Semua kelas',
 
                 'icon' => '📄',
 
@@ -87,6 +102,7 @@ class ReportController extends Controller
                 'title' => 'Hasil '.$meeting->title,
 
                 'description' => 'Monitoring aktivitas siswa.',
+                'class' => $meeting->target_class ?? 'Semua kelas',
 
                 'icon' => (string) $meeting->meeting_number,
 
@@ -124,6 +140,14 @@ class ReportController extends Controller
             'role',
             'student'
         )
+            ->when(
+                $meeting->target_class,
+                fn($query) =>
+                $query->where(
+                    'class',
+                    $meeting->target_class
+                )
+            )
             ->with([
                 'materialProgress',
                 'practiceSubmissions',
@@ -163,6 +187,7 @@ class ReportController extends Controller
                     'id' => $student->id,
 
                     'name' => $student->name,
+                    'class' => $student->class ?? '-',
 
                     'triggerAnswer' => $materialProgress?->trigger_answer ?? 'Belum',
 
@@ -202,6 +227,7 @@ class ReportController extends Controller
                 'meeting' => [
 
                     ...$meeting->toArray(),
+                    'class' => $meeting->target_class ?? 'Semua kelas',
 
                     'practiceType' => $meeting->practice?->submission_type,
                 ],
@@ -223,29 +249,42 @@ class ReportController extends Controller
             'role',
             'student'
         )
-            ->with([
-                'assessmentResults.assessment',
-            ])
             ->get()
             ->map(function ($student) {
 
                 $pretest =
-                    $student->assessmentResults
-                        ->first(function ($result) {
-
-                            return
-                                $result->assessment?->type
-                                === 'pretest';
-                        });
+                    \App\Models\AssessmentResult::with('assessment')
+                        ->where(
+                            'student_id',
+                            $student->id
+                        )
+                        ->whereHas(
+                            'assessment',
+                            fn($query) =>
+                            $query->where(
+                                'type',
+                                'pretest'
+                            )->forStudentClass($student->class)
+                        )
+                        ->latest()
+                        ->first();
 
                 $posttest =
-                    $student->assessmentResults
-                        ->first(function ($result) {
-
-                            return
-                                $result->assessment?->type
-                                === 'posttest';
-                        });
+                    \App\Models\AssessmentResult::with('assessment')
+                        ->where(
+                            'student_id',
+                            $student->id
+                        )
+                        ->whereHas(
+                            'assessment',
+                            fn($query) =>
+                            $query->where(
+                                'type',
+                                'posttest'
+                            )->forStudentClass($student->class)
+                        )
+                        ->latest()
+                        ->first();
 
                 return [
 

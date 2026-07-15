@@ -3,7 +3,6 @@
 
 <script setup lang="ts">
 import {
-  computed,
   watch,
 } from 'vue';
 
@@ -18,6 +17,7 @@ import {
 
 const props = defineProps<{
   type: 'pretest' | 'posttest';
+  selectedClass: string;
   editingQuestion?: any;
 }>();
 
@@ -25,6 +25,7 @@ const form = useForm({
   id: null,
 
   type: props.type,
+  target_class: props.selectedClass,
 
   question_type: 'multiple_choice',
 
@@ -103,6 +104,9 @@ const submit = () => {
           form.type =
             props.type;
 
+          form.target_class =
+            props.selectedClass;
+
           form.id = null;
         },
       },
@@ -126,6 +130,9 @@ const submit = () => {
 
         form.type =
           props.type;
+
+        form.target_class =
+          props.selectedClass;
       },
     },
   );

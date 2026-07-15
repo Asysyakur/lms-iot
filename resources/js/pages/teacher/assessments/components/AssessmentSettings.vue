@@ -16,10 +16,13 @@ const props = defineProps<{
   type: 'pretest' | 'posttest';
 
   assessment?: any;
+  classOptions: string[];
+  selectedClass: string;
 }>();
 
 const form = useForm({
   type: props.type,
+  target_class: props.selectedClass || '',
 
   open_date:
     props.assessment?.open_date ?? '',
@@ -33,6 +36,11 @@ const form = useForm({
   attempts:
     props.assessment?.attempts ?? 1,
 });
+
+const navigateClass = () => {
+  window.location.href =
+    `/teacher/assessments/${props.type}?class=${encodeURIComponent(form.target_class)}`;
+};
 
 const submit = () => {
 
@@ -124,6 +132,24 @@ const submit = () => {
           assessment.
         </p>
       </div>
+    </div>
+
+    <!-- CLASS -->
+    <div class="mb-4">
+      <label class="mb-2 block text-xs font-semibold text-slate-700">
+        Kelas Target
+      </label>
+
+      <select v-model="form.target_class" @change="navigateClass"
+        class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500">
+        <option value="">
+          Semua kelas
+        </option>
+
+        <option v-for="item in classOptions" :key="item" :value="item">
+          {{ item }}
+        </option>
+      </select>
     </div>
 
     <!-- CONTENT -->

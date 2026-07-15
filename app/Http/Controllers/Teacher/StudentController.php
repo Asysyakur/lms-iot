@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\SchoolClasses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -28,6 +29,7 @@ class StudentController extends Controller
                 Rule::requiredIf(
                     $request->role === 'student'
                 ),
+                Rule::in(SchoolClasses::options()),
             ],
 
             'username' => [
@@ -99,6 +101,7 @@ class StudentController extends Controller
                 Rule::requiredIf(
                     $request->role === 'student'
                 ),
+                Rule::in(SchoolClasses::options()),
             ],
 
             'username' => [

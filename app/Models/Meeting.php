@@ -19,6 +19,7 @@ class Meeting extends Model
 {
     protected $fillable = [
         'meeting_number',
+        'target_class',
         'title',
         'description',
         'status',
@@ -163,12 +164,27 @@ class Meeting extends Model
             ->exists();
     }
 
+    public function isAccessibleTo(?string $class): bool
+    {
+        return $this->target_class === null
+            || $this->target_class === $class;
+    }
+
     public function students()
     {
-        return User::where(
+        $students = User::where(
             'role',
             'student'
-        )->get()->map(function ($student) {
+        );
+
+        if ($this->target_class) {
+            $students->where(
+                'class',
+                $this->target_class
+            );
+        }
+
+        return $students->get()->map(function ($student) {
 
             /**
              * MATERIAL

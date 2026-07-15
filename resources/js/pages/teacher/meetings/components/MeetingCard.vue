@@ -63,6 +63,10 @@ const toggleMeeting =
           {{ meeting.meeting_number }}
         </p>
 
+        <p class="mt-1 text-[11px] text-slate-500">
+          {{ meeting.target_class ?? 'Semua kelas' }}
+        </p>
+
         <!-- TOGGLE -->
         <button @click.stop="toggleMeeting(meeting)"
           class="mt-3 rounded-lg px-3 py-1.5 text-[11px] font-semibold transition" :class="meeting.is_active

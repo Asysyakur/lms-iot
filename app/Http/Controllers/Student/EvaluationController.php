@@ -13,6 +13,10 @@ class EvaluationController extends Controller
     public function show(
         Meeting $meeting
     ) {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
         $meeting->load([
             'evaluation',
         ]);
@@ -60,6 +64,10 @@ class EvaluationController extends Controller
         Request $request,
         Meeting $meeting
     ) {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
 
         $request->validate([
 

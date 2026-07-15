@@ -47,23 +47,25 @@ class HandleInertiaRequests extends Middleware
     // }
     public function share(Request $request): array
     {
+        $user = $request->user();
+
         return array_merge(
             parent::share($request),
             [
-
-                'sidebarMeetings' =>
-                Meeting::with([
-                    'material',
-                    'quizzes',
-                    'practice',
-                    'lkpd',
-                ])
-                    ->orderBy('id')
-                    ->get()
-                    ->map(function ($meeting) {
-
-                        return [
-
+                'sidebarMeetings' => $user?->role === 'student'
+                    ? Meeting::with([
+                        'material',
+                        'quizzes',
+                        'practice',
+                        'lkpd',
+                    ])
+                        ->orderBy('id')
+                        ->get()
+                        ->filter(function ($meeting) use ($user) {
+                            return $meeting->isAccessibleTo($user?->class);
+                        })
+                        ->map(function ($meeting) {
+                            return [
                             'id' => $meeting->id,
 
                             'title' => $meeting->title,
@@ -215,7 +217,9 @@ class HandleInertiaRequests extends Middleware
                                 ],
                             ],
                         ];
-                    }),
+                        })
+                        ->values()
+                    : [],
             ]
         );
     }

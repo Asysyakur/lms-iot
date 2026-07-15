@@ -57,6 +57,10 @@ const props = defineProps<{
             {{ menu.title }}
           </h2>
 
+          <p class="mt-1 text-[11px] font-medium text-slate-500">
+            {{ menu.class }}
+          </p>
+
           <!-- DESCRIPTION -->
           <p class="mt-1.5 text-[11px] leading-relaxed text-slate-500">
 
@@ -93,6 +97,10 @@ const props = defineProps<{
               <span class="text-sm font-semibold text-slate-700">
 
                 {{ meeting.title }}
+              </span>
+
+              <span class="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold text-slate-600">
+                {{ meeting.class }}
               </span>
 
               <span class="text-[11px] font-semibold text-emerald-500">

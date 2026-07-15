@@ -3,6 +3,7 @@
 namespace App\Exports\Sheets;
 
 use App\Models\Assessment;
+use App\Models\AssessmentResult;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -25,10 +26,9 @@ class AssessmentDetailSheet implements FromCollection, ShouldAutoSize, WithHeadi
     ) {
 
         $this->assessment =
-            Assessment::where(
-                'type',
-                $this->type
-            )->first();
+            Assessment::where('type', $this->type)
+                ->orderByRaw('CASE WHEN target_class IS NULL THEN 0 ELSE 1 END')
+                ->first();
 
         $this->questions =
             $this->assessment
@@ -49,20 +49,24 @@ class AssessmentDetailSheet implements FromCollection, ShouldAutoSize, WithHeadi
             'role',
             'student'
         )
-            ->with([
-                'assessmentResults' => function ($query) {
-
-                    $query->where(
-                        'assessment_id',
-                        $this->assessment->id
-                    )->with('answers');
-                },
-            ])
             ->get()
             ->map(function ($student) {
 
                 $result =
-                    $student->assessmentResults
+                    AssessmentResult::with('answers')
+                        ->where(
+                            'student_id',
+                            $student->id
+                        )
+                        ->whereHas(
+                            'assessment',
+                            fn($query) =>
+                            $query->where(
+                                'type',
+                                $this->type
+                            )->forStudentClass($student->class)
+                        )
+                        ->latest()
                         ->first();
 
                 $answers =
@@ -73,6 +77,7 @@ class AssessmentDetailSheet implements FromCollection, ShouldAutoSize, WithHeadi
                 $row = [
 
                     'Nama Siswa' => $student->name,
+                    'Kelas' => $student->class ?? '-',
                 ];
 
                 foreach ($this->questions as $index => $question) {
@@ -94,6 +99,7 @@ class AssessmentDetailSheet implements FromCollection, ShouldAutoSize, WithHeadi
     {
         $headings = [
             'Nama Siswa',
+            'Kelas',
         ];
 
         foreach ($this->questions as $index => $question) {

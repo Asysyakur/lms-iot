@@ -276,11 +276,6 @@ Route::middleware([
         [AssessmentController::class, 'index']
     );
 
-    Route::post(
-        '/assessments/settings',
-        [AssessmentController::class, 'saveSettings']
-    );
-
     Route::put(
         '/assessments/settings',
         [AssessmentController::class, 'saveSettings']

@@ -310,6 +310,10 @@ const openDetail =
             Monitoring aktivitas siswa
             pada {{ props.meeting.title }}.
           </p>
+
+          <p class="mt-1 text-xs text-emerald-100">
+            Kelas: {{ props.meeting.class }}
+          </p>
         </div>
 
         <div class="flex flex-wrap gap-2">
@@ -625,6 +629,16 @@ student,
 
               <p class="mt-2 text-sm font-semibold text-slate-800">
                 {{ selectedStudent.name }}
+              </p>
+            </div>
+
+            <div>
+              <p class="text-xs font-medium uppercase tracking-wide text-slate-500">
+                Kelas
+              </p>
+
+              <p class="mt-2 text-sm font-semibold text-slate-800">
+                {{ selectedStudent.class || '-' }}
               </p>
             </div>
 

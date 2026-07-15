@@ -12,6 +12,11 @@ class PracticeController extends Controller
 {
     public function show(Meeting $meeting)
     {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
+
         $meeting->load([
             'practice',
             'lkpd',
@@ -62,6 +67,10 @@ class PracticeController extends Controller
         Request $request,
         Meeting $meeting
     ) {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
 
         $practice = $meeting->practice;
 

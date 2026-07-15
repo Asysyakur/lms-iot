@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use App\Support\SchoolClasses;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -14,15 +15,6 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @var array<int, string>
      */
-    protected const CLASS_OPTIONS = [
-        'X TKJ-T-1',
-        'X TKJ-T-2',
-        'XI TKJ-T-1',
-        'XI TKJ-T-2',
-        'XII TKJ-T-1',
-        'XII TKJ-T-2',
-    ];
-
     /**
      * Validate and create a newly self-registered student account.
      *
@@ -33,7 +25,7 @@ class CreateNewUser implements CreatesNewUsers
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', Rule::unique(User::class, 'username')],
-            'class' => ['required', Rule::in(self::CLASS_OPTIONS)],
+            'class' => ['required', Rule::in(SchoolClasses::options())],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ])->validate();
 

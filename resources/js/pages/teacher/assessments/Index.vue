@@ -22,6 +22,8 @@ const props = defineProps<{
   type: 'pretest' | 'posttest';
   questions: any[];
   assessment: any;
+  classOptions: string[];
+  selectedClass: string;
 }>();
 
 const isPretest =
@@ -64,12 +66,19 @@ const handleEdit = (
 
       <!-- SETTINGS -->
       <div class="xl:col-span-5">
-        <AssessmentSettings :type="props.type" :assessment="props.assessment" />
+        <AssessmentSettings
+          :type="props.type"
+          :assessment="props.assessment"
+          :class-options="props.classOptions"
+          :selected-class="props.selectedClass" />
       </div>
 
       <!-- FORM -->
       <div class="xl:col-span-7">
-        <QuestionForm :type="props.type" :editing-question="editingQuestion" />
+        <QuestionForm
+          :type="props.type"
+          :selected-class="props.selectedClass"
+          :editing-question="editingQuestion" />
       </div>
     </section>
 

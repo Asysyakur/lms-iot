@@ -14,6 +14,21 @@ use Carbon\Carbon;
 
 class AssessmentController extends Controller
 {
+    private function resolveAssessment(string $type): Assessment
+    {
+        $assessment = Assessment::with('questions')
+            ->where('type', $type)
+            ->forStudentClass(auth()->user()?->class)
+            ->firstOrFail();
+
+        abort_unless(
+            $assessment->isAccessibleTo(auth()->user()?->class),
+            403
+        );
+
+        return $assessment;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | EXAM PAGE
@@ -22,11 +37,7 @@ class AssessmentController extends Controller
 
     public function index($type)
     {
-        $assessment = Assessment::with(
-            'questions'
-        )
-            ->where('type', $type)
-            ->firstOrFail();
+        $assessment = $this->resolveAssessment($type);
 
         $results = AssessmentResult::where(
             'assessment_id',
@@ -156,11 +167,7 @@ class AssessmentController extends Controller
 
     public function exam($type)
     {
-        $assessment = Assessment::with(
-            'questions'
-        )
-            ->where('type', $type)
-            ->firstOrFail();
+        $assessment = $this->resolveAssessment($type);
 
         /*
     |--------------------------------------------------------------------------
@@ -369,13 +376,28 @@ class AssessmentController extends Controller
             $validated['question_id']
         );
 
+        $result = AssessmentResult::where(
+            'id',
+            $validated['assessment_result_id']
+        )
+            ->where(
+                'student_id',
+                Auth::id()
+            )
+            ->firstOrFail();
+
+        abort_unless(
+            $result->assessment_id === $question->assessment_id,
+            403
+        );
+
         $isCorrect =
             $validated['answer'] === $question->answer;
 
         $answer = AssessmentAnswer::updateOrCreate(
             [
                 'assessment_result_id' =>
-                $validated['assessment_result_id'],
+                $result->id,
 
                 'question_id' =>
                 $validated['question_id'],
@@ -406,9 +428,16 @@ class AssessmentController extends Controller
 
         $result = AssessmentResult::with(
             'answers'
-        )->findOrFail(
-            $validated['result_id']
-        );
+        )
+            ->where(
+                'id',
+                $validated['result_id']
+            )
+            ->where(
+                'student_id',
+                Auth::id()
+            )
+            ->firstOrFail();
 
         /*
     |--------------------------------------------------------------------------
@@ -469,10 +498,7 @@ class AssessmentController extends Controller
 
     public function result($type)
     {
-        $assessment = Assessment::where(
-            'type',
-            $type
-        )->firstOrFail();
+        $assessment = $this->resolveAssessment($type);
 
         $result = AssessmentResult::with([
             'answers.question',

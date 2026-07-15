@@ -14,6 +14,11 @@ class MeetingController extends Controller
 {
     public function show(Meeting $meeting)
     {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
+
         $userId = auth()->id();
 
         $materialCompleted =

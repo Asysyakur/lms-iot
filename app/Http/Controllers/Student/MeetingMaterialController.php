@@ -12,6 +12,11 @@ class MeetingMaterialController extends Controller
 {
     public function show(Meeting $meeting)
     {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
+
         $meeting->load('material');
 
         if (
@@ -82,6 +87,10 @@ class MeetingMaterialController extends Controller
         Request $request,
         Meeting $meeting
     ) {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
 
         $progress =
             MaterialProgress::firstOrCreate([
@@ -144,6 +153,10 @@ class MeetingMaterialController extends Controller
     public function startReading(
         Meeting $meeting
     ) {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
 
         MaterialProgress::updateOrCreate(
             [
@@ -166,6 +179,10 @@ class MeetingMaterialController extends Controller
     public function heartbeat(
         Meeting $meeting
     ) {
+        abort_unless(
+            $meeting->isAccessibleTo(auth()->user()?->class),
+            403
+        );
 
         $progress =
             MaterialProgress::firstOrCreate(

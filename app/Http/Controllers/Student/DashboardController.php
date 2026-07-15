@@ -37,10 +37,23 @@ class DashboardController extends Controller
                 $q->where(
                     'type',
                     'pretest'
-                )
+                )->forStudentClass($user->class)
             )
             ->latest()
             ->first();
+
+        $meetings =
+            Meeting::with([
+                'material',
+                'practice',
+                'lkpd',
+                'evaluation',
+            ])->get()->filter(function ($meeting) use ($user) {
+                return $meeting->isAccessibleTo($user->class);
+            });
+
+        $accessibleMeetingIds =
+            $meetings->pluck('id');
 
         /*
         |--------------------------------------------------------------------------
@@ -54,6 +67,10 @@ class DashboardController extends Controller
                     'user_id',
                     $user->id
                 )
+                    ->whereIn(
+                        'meeting_id',
+                        $accessibleMeetingIds->all()
+                    )
                     ->where(
                         'passed',
                         true
@@ -86,14 +103,6 @@ class DashboardController extends Controller
 
         $completedActivities = 0;
 
-        $meetings =
-            Meeting::with([
-                'material',
-                'practice',
-                'lkpd',
-                'evaluation',
-            ])->get();
-
         foreach ($meetings as $meeting) {
 
             /*
@@ -110,6 +119,10 @@ class DashboardController extends Controller
                     MaterialProgress::where(
                         'user_id',
                         $user->id
+                    )
+                    ->whereIn(
+                        'meeting_id',
+                        $accessibleMeetingIds->all()
                     )
                     ->where(
                         'meeting_id',
@@ -142,6 +155,10 @@ class DashboardController extends Controller
                         'user_id',
                         $user->id
                     )
+                    ->whereIn(
+                        'meeting_id',
+                        $accessibleMeetingIds->all()
+                    )
                     ->where(
                         'meeting_id',
                         $meeting->id
@@ -168,6 +185,10 @@ class DashboardController extends Controller
                         'user_id',
                         $user->id
                     )
+                    ->whereIn(
+                        'meeting_id',
+                        $accessibleMeetingIds->all()
+                    )
                     ->where(
                         'meeting_id',
                         $meeting->id
@@ -193,6 +214,10 @@ class DashboardController extends Controller
                     EvaluationSubmission::where(
                         'user_id',
                         $user->id
+                    )
+                    ->whereIn(
+                        'meeting_id',
+                        $accessibleMeetingIds->all()
                     )
                     ->where(
                         'meeting_id',
@@ -319,6 +344,10 @@ class DashboardController extends Controller
                 'user_id',
                 $user->id
             )
+            ->whereIn(
+                'meeting_id',
+                $accessibleMeetingIds->all()
+            )
             ->where(
                 'reading_progress',
                 '>=',
@@ -348,7 +377,12 @@ class DashboardController extends Controller
             PracticeSubmission::where(
                 'user_id',
                 $user->id
-            )->count();
+            )
+            ->whereIn(
+                'meeting_id',
+                $accessibleMeetingIds->all()
+            )
+            ->count();
 
         if ($practiceCount > 0) {
 
@@ -372,7 +406,12 @@ class DashboardController extends Controller
             LkpdSubmission::where(
                 'user_id',
                 $user->id
-            )->count();
+            )
+            ->whereIn(
+                'meeting_id',
+                $accessibleMeetingIds->all()
+            )
+            ->count();
 
         if ($lkpdCount > 0) {
 
@@ -396,7 +435,12 @@ class DashboardController extends Controller
             EvaluationSubmission::where(
                 'user_id',
                 $user->id
-            )->count();
+            )
+            ->whereIn(
+                'meeting_id',
+                $accessibleMeetingIds->all()
+            )
+            ->count();
 
         if ($evaluationCount > 0) {
 

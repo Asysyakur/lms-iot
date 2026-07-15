@@ -2,6 +2,7 @@
 
 namespace App\Exports\Sheets;
 
+use App\Models\AssessmentResult;
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -26,26 +27,44 @@ class PrePostSummarySheet implements FromCollection, ShouldAutoSize, WithHeading
             ->map(function ($student) {
 
                 $pretest =
-                    $student->assessmentResults
-                        ->first(function ($result) {
-
-                            return
-                                $result->assessment?->type
-                                === 'pretest';
-                        });
+                    AssessmentResult::with('assessment')
+                        ->where(
+                            'student_id',
+                            $student->id
+                        )
+                        ->whereHas(
+                            'assessment',
+                            fn($query) =>
+                            $query->where(
+                                'type',
+                                'pretest'
+                            )->forStudentClass($student->class)
+                        )
+                        ->latest()
+                        ->first();
 
                 $posttest =
-                    $student->assessmentResults
-                        ->first(function ($result) {
-
-                            return
-                                $result->assessment?->type
-                                === 'posttest';
-                        });
+                    AssessmentResult::with('assessment')
+                        ->where(
+                            'student_id',
+                            $student->id
+                        )
+                        ->whereHas(
+                            'assessment',
+                            fn($query) =>
+                            $query->where(
+                                'type',
+                                'posttest'
+                            )->forStudentClass($student->class)
+                        )
+                        ->latest()
+                        ->first();
 
                 return [
 
                     'Nama Siswa' => $student->name,
+
+                    'Kelas' => $student->class ?? '-',
 
                     'Nilai Pre-test' => $pretest?->score ?? '-',
 
@@ -63,6 +82,7 @@ class PrePostSummarySheet implements FromCollection, ShouldAutoSize, WithHeading
         return [
 
             'Nama Siswa',
+            'Kelas',
 
             'Nilai Pre-test',
 
