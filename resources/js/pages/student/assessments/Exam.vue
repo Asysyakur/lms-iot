@@ -95,6 +95,10 @@ const progress = computed(() => {
   return (answeredCount.value / totalQuestions) * 100;
 });
 
+const canSubmit = computed(() => {
+  return totalQuestions > 0 && answeredCount.value === totalQuestions;
+});
+
 const isFirstQuestion = computed(() => {
   return currentQuestionIndex.value === 0;
 });
@@ -134,6 +138,11 @@ const submitExam = async (
 ) => {
 
   if (submitting.value) {
+    return;
+  }
+
+  if (!canSubmit.value) {
+    window.alert('Jawab semua soal terlebih dahulu sebelum mengumpulkan assessment.');
     return;
   }
 
@@ -336,14 +345,18 @@ const submitting =
         </div>
 
         <!-- SUBMIT -->
-        <button @click="submitExam(true)" :disabled="submitting"
-          class="mt-6 w-full rounded-xl py-2.5 text-sm font-semibold transition" :class="submitting
+        <button @click="submitExam(true)" :disabled="submitting || !canSubmit"
+          class="mt-6 w-full rounded-xl py-2.5 text-sm font-semibold transition" :class="submitting || !canSubmit
             ? 'cursor-not-allowed bg-slate-200 text-slate-500'
             : 'bg-red-50 text-red-600 hover:bg-red-100'
             ">
 
           Selesai dan Kumpulkan
         </button>
+
+        <p v-if="!canSubmit" class="mt-2 text-center text-xs text-slate-500">
+          Jawab semua soal untuk dapat mengumpulkan assessment.
+        </p>
       </div>
     </div>
   </div>

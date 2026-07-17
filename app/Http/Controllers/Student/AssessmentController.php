@@ -426,9 +426,10 @@ class AssessmentController extends Controller
             'result_id' => 'required',
         ]);
 
-        $result = AssessmentResult::with(
-            'answers'
-        )
+        $result = AssessmentResult::with([
+            'answers',
+            'assessment.questions',
+        ])
             ->where(
                 'id',
                 $validated['result_id']
@@ -453,6 +454,18 @@ class AssessmentController extends Controller
                 'message' =>
                 'Assessment sudah selesai.'
             ], 403);
+        }
+
+        $totalQuestions = $result->assessment->questions->count();
+        $answeredQuestions = $result->answers
+            ->pluck('question_id')
+            ->unique()
+            ->count();
+
+        if ($answeredQuestions < $totalQuestions) {
+            return response()->json([
+                'message' => 'Semua soal harus dijawab sebelum assessment dikumpulkan.',
+            ], 422);
         }
 
         $correct =
