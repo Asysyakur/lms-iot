@@ -243,12 +243,18 @@ class ReportController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function assessments()
+    public function assessments(Request $request)
     {
+        $selectedClass = $request->string('class')->trim()->toString() ?: null;
+
         $students = User::where(
             'role',
             'student'
         )
+            ->when(
+                $selectedClass,
+                fn ($query) => $query->where('class', $selectedClass)
+            )
             ->get()
             ->map(function ($student) {
 
@@ -313,6 +319,14 @@ class ReportController extends Controller
             [
 
                 'students' => $students,
+                'classes' => User::where('role', 'student')
+                    ->whereNotNull('class')
+                    ->where('class', '!=', '')
+                    ->distinct()
+                    ->orderBy('class')
+                    ->pluck('class')
+                    ->values(),
+                'selectedClass' => $selectedClass,
             ]
         );
     }
@@ -432,11 +446,16 @@ class ReportController extends Controller
         );
     }
 
-    public function exportAssessment()
+    public function exportAssessment(Request $request)
     {
+        $class = $request->string('class')->trim()->toString() ?: null;
+        $filename = $class
+            ? 'laporan-pretest-posttest-'.str($class)->slug().'.xlsx'
+            : 'laporan-pretest-posttest.xlsx';
+
         return Excel::download(
-            new PrePostReportExport,
-            'laporan-pretest-posttest.xlsx'
+            new PrePostReportExport($class),
+            $filename
         );
     }
 

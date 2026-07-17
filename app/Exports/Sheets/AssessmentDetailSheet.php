@@ -22,12 +22,20 @@ class AssessmentDetailSheet implements FromCollection, ShouldAutoSize, WithHeadi
 
     public function __construct(
         protected string $type,
-        protected string $sheetTitle
+        protected string $sheetTitle,
+        protected ?string $class = null
     ) {
 
         $this->assessment =
             Assessment::where('type', $this->type)
-                ->orderByRaw('CASE WHEN target_class IS NULL THEN 0 ELSE 1 END')
+                ->when(
+                    $this->class,
+                    fn ($query) => $query->forStudentClass($this->class)
+                )
+                ->when(
+                    ! $this->class,
+                    fn ($query) => $query->orderByRaw('CASE WHEN target_class IS NULL THEN 0 ELSE 1 END')
+                )
                 ->first();
 
         $this->questions =
@@ -49,6 +57,10 @@ class AssessmentDetailSheet implements FromCollection, ShouldAutoSize, WithHeadi
             'role',
             'student'
         )
+            ->when(
+                $this->class,
+                fn ($query) => $query->where('class', $this->class)
+            )
             ->get()
             ->map(function ($student) {
 
@@ -58,14 +70,7 @@ class AssessmentDetailSheet implements FromCollection, ShouldAutoSize, WithHeadi
                             'student_id',
                             $student->id
                         )
-                        ->whereHas(
-                            'assessment',
-                            fn($query) =>
-                            $query->where(
-                                'type',
-                                $this->type
-                            )->forStudentClass($student->class)
-                        )
+                        ->where('assessment_id', $this->assessment->id)
                         ->latest()
                         ->first();
 

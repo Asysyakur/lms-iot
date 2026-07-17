@@ -2,10 +2,31 @@
 
 <script setup lang="ts">
 import TeacherSidebarLayout from '@/layouts/teacher/TeacherSidebarLayout.vue';
+import { router } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
 
 const props = defineProps<{
   students: any[];
+  classes: string[];
+  selectedClass: string | null;
 }>();
+
+const selectedClass = ref(props.selectedClass ?? '');
+
+const exportUrl = computed(() => {
+  const params = new URLSearchParams();
+
+  if (selectedClass.value) params.set('class', selectedClass.value);
+
+  const query = params.toString();
+  return `/teacher/reports/assessments/export${query ? `?${query}` : ''}`;
+});
+
+const filterByClass = () => {
+  router.get('/teacher/reports/assessments', selectedClass.value
+    ? { class: selectedClass.value }
+    : {}, { preserveState: true, preserveScroll: true });
+};
 
 defineOptions({
   layout: TeacherSidebarLayout,
@@ -34,12 +55,20 @@ defineOptions({
           </p>
         </div>
 
-        <!-- EXPORT -->
-        <a href="/teacher/reports/assessments/export"
-          class="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-slate-100">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <select v-model="selectedClass" @change="filterByClass"
+            class="rounded-lg border-0 bg-white px-3 py-2 text-sm font-medium text-slate-700 outline-none ring-1 ring-white/40">
+            <option value="">Semua kelas</option>
+            <option v-for="className in classes" :key="className" :value="className">
+              {{ className }}
+            </option>
+          </select>
 
-          Download Excel
-        </a>
+          <a :href="exportUrl"
+            class="inline-flex items-center justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-slate-100">
+            Download Excel{{ selectedClass ? ` — ${selectedClass}` : '' }}
+          </a>
+        </div>
       </div>
     </section>
 

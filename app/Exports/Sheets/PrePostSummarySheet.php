@@ -14,6 +14,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class PrePostSummarySheet implements FromCollection, ShouldAutoSize, WithHeadings, WithStrictNullComparison, WithStyles, WithTitle
 {
+    public function __construct(
+        protected ?string $class = null
+    ) {}
+
     public function collection()
     {
         return User::with(
@@ -22,6 +26,10 @@ class PrePostSummarySheet implements FromCollection, ShouldAutoSize, WithHeading
             ->where(
                 'role',
                 'student'
+            )
+            ->when(
+                $this->class,
+                fn ($query) => $query->where('class', $this->class)
             )
             ->get()
             ->map(function ($student) {
