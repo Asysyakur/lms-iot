@@ -231,7 +231,7 @@ const submitting =
       <!-- OPTIONS -->
       <div class="mt-5 space-y-3">
 
-        <button v-for="option in ['A', 'B', 'C', 'D']" :key="option" @click="selectAnswer(option)"
+        <button v-for="option in ['A', 'B', 'C', 'D', 'E']" :key="option" @click="selectAnswer(option)"
           class="w-full rounded-xl border p-3 text-left transition" :class="answers[currentQuestion.id] === option
             ? 'border-blue-600 bg-blue-50'
             : 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'

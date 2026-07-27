@@ -369,7 +369,7 @@ class AssessmentController extends Controller
 
             'question_id' => 'required',
 
-            'answer' => 'required|in:A,B,C,D',
+            'answer' => 'required|in:A,B,C,D,E',
         ]);
 
         $question = Question::findOrFail(

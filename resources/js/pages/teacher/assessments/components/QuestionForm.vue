@@ -74,7 +74,7 @@ watch(
       question.option_d;
 
     form.option_e =
-      question.option_e;
+      question.option_e ?? '';
 
     form.answer =
       question.answer;

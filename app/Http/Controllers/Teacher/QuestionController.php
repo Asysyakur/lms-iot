@@ -60,6 +60,7 @@ class QuestionController extends Controller
             'option_b' => $request->option_b,
             'option_c' => $request->option_c,
             'option_d' => $request->option_d,
+            'option_e' => $request->option_e,
 
             'answer' => $request->answer,
 
@@ -88,6 +89,7 @@ class QuestionController extends Controller
             'option_b' => $request->option_b,
             'option_c' => $request->option_c,
             'option_d' => $request->option_d,
+            'option_e' => $request->option_e,
 
             'answer' => $request->answer,
         ]);
