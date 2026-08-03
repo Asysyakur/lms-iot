@@ -165,6 +165,7 @@ class ReportController extends Controller
                 $quizAttempt =
                     $student->quizAttempts
                         ->where('meeting_id', $meeting->id)
+                        ->sortByDesc('score')
                         ->first();
 
                 $practice =
