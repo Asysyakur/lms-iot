@@ -25,7 +25,8 @@ return new class extends Migration
                     ->constrained()
                     ->cascadeOnDelete();
 
-                $table->text('project_url');
+                $table->text('project_url')
+                    ->nullable();
 
                 $table->timestamp('submitted_at')
                     ->nullable();

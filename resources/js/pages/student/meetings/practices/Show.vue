@@ -69,7 +69,7 @@ const instructions =
 
     return props.practice.instruction
       .split('\n')
-      .filter(item =>
+      .filter((item: string) =>
         item.trim() !== ''
       );
 
@@ -165,14 +165,18 @@ const submitPractice =
 
       error: (error: any) => {
 
-        return (
-          error.response?.data?.errors
-            ?.project_url?.[0]
+        const errors = error.response?.data?.errors;
 
-          ||
+        if (errors) {
 
-          'Link tidak valid'
-        );
+          if (errors.project_url?.[0]) return errors.project_url[0];
+
+          if (errors.submission_text?.[0]) return errors.submission_text[0];
+
+        }
+
+        return error.response?.data?.message || 'Gagal mengumpulkan praktikum';
+
       },
     });
 

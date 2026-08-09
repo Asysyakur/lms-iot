@@ -170,10 +170,10 @@ class PracticeController extends Controller
             [
 
                 'project_url' =>
-                $request->project_url,
+                $type === 'text' ? null : $request->project_url,
 
                 'submission_text' =>
-                $request->submission_text,
+                $type === 'link' ? null : $request->submission_text,
 
                 'submitted_at' =>
                 now(),
